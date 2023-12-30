@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>647610816436-v2n4vjp3eg7panj8og4tq9g03eu770gt.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.647610816436-v2n4vjp3eg7panj8og4tq9g03eu770gt</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCl785XeHBpbU-BAKQakyGRrBZ9W_Ls7Vo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>647610816436</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.benchPeace</string>
+	<key>PROJECT_ID</key>
+	<string>benchpeace-c747e</string>
+	<key>STORAGE_BUCKET</key>
+	<string>benchpeace-c747e.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:647610816436:ios:df33c7eb521e74641484e1</string>
+</dict>
+</plist>
