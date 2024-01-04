@@ -31,8 +31,6 @@ struct ContentView: View {
             VStack {
                 Button {
                     if dispalayMapType == .standard {
-                        dispalayMapType = .satellite
-                    }else if dispalayMapType == .satellite {
                         dispalayMapType = .hybrid
                     }else{
                         dispalayMapType = .standard
@@ -48,7 +46,7 @@ struct ContentView: View {
                 
                 Button {
                     // 現在地に戻る
-                    
+                    print("現在地へ戻る")
                 }label: {
                     Image(systemName: "location.fill")
                         .resizable()
@@ -56,6 +54,7 @@ struct ContentView: View {
                 }
                 .padding(.trailing, 20.0)
                 .padding(.bottom, 30.0)
+
                 
             }
             

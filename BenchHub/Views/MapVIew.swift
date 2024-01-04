@@ -6,10 +6,10 @@
 //
 import SwiftUI
 import MapKit
+import CoreLocation
 
 enum MapType {
     case standard // 標準
-    case satellite // 衛生写真
     case hybrid // 衛生写真+交通機関ラベル
 }
 
@@ -22,14 +22,12 @@ struct MapView: View {
     // キーワードから取得した緯度経度
     @State var targetCoordinate = CLLocationCoordinate2D()
     // 表示するマップの位置
-    @State var cameraPosition: MapCameraPosition = .automatic 
+    @State var cameraPosition: MapCameraPosition = .automatic
     // 表示するマップのスタイル
     var mapStyle: MapStyle {
         switch mapType {
         case .standard:
             return MapStyle.standard()
-        case .satellite:
-            return MapStyle.imagery()
         case .hybrid:
             return MapStyle.hybrid()
         }
@@ -80,5 +78,5 @@ struct MapView: View {
 }
 
 #Preview {
-    MapView(searchKey: "渋谷駅",mapType: .satellite)
+    MapView(searchKey: "渋谷駅",mapType: .standard)
 }
