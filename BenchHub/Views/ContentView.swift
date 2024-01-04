@@ -28,25 +28,41 @@ struct ContentView: View {
         ZStack(alignment: .bottomTrailing){
             MapView(searchKey: displaySearchKey , mapType: dispalayMapType)
             
-            Button {
-                if dispalayMapType == .standard {
-                    dispalayMapType = .satellite
-                }else if dispalayMapType == .satellite {
-                    dispalayMapType = .hybrid
-                }else{
-                    dispalayMapType = .standard
+            VStack {
+                Button {
+                    if dispalayMapType == .standard {
+                        dispalayMapType = .satellite
+                    }else if dispalayMapType == .satellite {
+                        dispalayMapType = .hybrid
+                    }else{
+                        dispalayMapType = .standard
+                    }
+                }label: {
+                    Image(systemName: "map.circle")
+                        .resizable()
+                        .frame(width: 35.0,height: 35.0)
                 }
-            }label: {
-                Image(systemName: "map.circle")
-                    .resizable()
-                    .frame(width: 35.0,height: 35.0)
+                .padding(.trailing, 20.0)
+                .padding(.bottom, 35.0)
+                
+                
+                Button {
+                    // 現在地に戻る
+                    
+                }label: {
+                    Image(systemName: "location.fill")
+                        .resizable()
+                        .frame(width: 35.0,height: 35.0)
+                }
+                .padding(.trailing, 20.0)
+                .padding(.bottom, 30.0)
+                
             }
-            .padding(.trailing, 20.0)
-            .padding(.bottom, 30.0)
+            
         }
     }
 }
-    
-    #Preview {
-        ContentView()
-    }
+
+#Preview {
+    ContentView()
+}

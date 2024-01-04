@@ -22,8 +22,7 @@ struct MapView: View {
     // キーワードから取得した緯度経度
     @State var targetCoordinate = CLLocationCoordinate2D()
     // 表示するマップの位置
-    @State var cameraPosition: MapCameraPosition = .automatic
-    
+    @State var cameraPosition: MapCameraPosition = .automatic 
     // 表示するマップのスタイル
     var mapStyle: MapStyle {
         switch mapType {
