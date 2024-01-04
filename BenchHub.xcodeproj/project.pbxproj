@@ -10,6 +10,7 @@
 		243F8C532B407E6000478644 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 243F8C522B407E6000478644 /* FirebaseFirestore */; };
 		243F8C552B407E6000478644 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 243F8C542B407E6000478644 /* FirebaseFirestoreCombine-Community */; };
 		243F8C572B407E6000478644 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 243F8C562B407E6000478644 /* FirebaseFirestoreSwift */; };
+		2451A8972B46FB4B006E0929 /* MapVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2451A8962B46FB4B006E0929 /* MapVIew.swift */; };
 		24A71B382B3DCDEB0050A556 /* BenchHubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A71B372B3DCDEB0050A556 /* BenchHubApp.swift */; };
 		24A71B3A2B3DCDEB0050A556 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A71B392B3DCDEB0050A556 /* ContentView.swift */; };
 		24A71B3C2B3DCDEC0050A556 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24A71B3B2B3DCDEC0050A556 /* Assets.xcassets */; };
@@ -19,8 +20,6 @@
 		24A71B552B3DCDEC0050A556 /* BenchHubUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A71B542B3DCDEC0050A556 /* BenchHubUITestsLaunchTests.swift */; };
 		24A992C52B4077C7005EBC5E /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 24A992C42B4077C7005EBC5E /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		24A992C72B407AB8005EBC5E /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 24A992C62B407AB8005EBC5E /* FirebaseFirestore */; };
-		24A992CD2B407D6B005EBC5E /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A992CC2B407D6B005EBC5E /* PostModel.swift */; };
-		24A992D02B407DA1005EBC5E /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A992CF2B407DA1005EBC5E /* MapViewModel.swift */; };
 		24A992D22B407DCB005EBC5E /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 24A992D12B407DCB005EBC5E /* FirebaseFirestore */; };
 		24A992D42B407DF9005EBC5E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 24A992D32B407DF9005EBC5E /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
@@ -43,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2451A8962B46FB4B006E0929 /* MapVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVIew.swift; sourceTree = "<group>"; };
 		24A71B342B3DCDEB0050A556 /* BenchHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BenchHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24A71B372B3DCDEB0050A556 /* BenchHubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchHubApp.swift; sourceTree = "<group>"; };
 		24A71B392B3DCDEB0050A556 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -53,8 +53,6 @@
 		24A71B4E2B3DCDEC0050A556 /* BenchHubUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BenchHubUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		24A71B522B3DCDEC0050A556 /* BenchHubUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchHubUITests.swift; sourceTree = "<group>"; };
 		24A71B542B3DCDEC0050A556 /* BenchHubUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchHubUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		24A992CC2B407D6B005EBC5E /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
-		24A992CF2B407DA1005EBC5E /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		24A992D32B407DF9005EBC5E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,12 +110,12 @@
 		24A71B362B3DCDEB0050A556 /* BenchHub */ = {
 			isa = PBXGroup;
 			children = (
+				24A71B372B3DCDEB0050A556 /* BenchHubApp.swift */,
 				24A992D32B407DF9005EBC5E /* GoogleService-Info.plist */,
 				24A992CB2B407D55005EBC5E /* Service */,
 				24A992CA2B407D4D005EBC5E /* ViewModels */,
 				24A992C92B407D44005EBC5E /* Models */,
 				24A992C82B407D29005EBC5E /* Views */,
-				24A71B372B3DCDEB0050A556 /* BenchHubApp.swift */,
 				24A71B3B2B3DCDEC0050A556 /* Assets.xcassets */,
 				24A71B3D2B3DCDEC0050A556 /* Preview Content */,
 			);
@@ -153,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				24A71B392B3DCDEB0050A556 /* ContentView.swift */,
+				2451A8962B46FB4B006E0929 /* MapVIew.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -160,7 +159,6 @@
 		24A992C92B407D44005EBC5E /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				24A992CC2B407D6B005EBC5E /* PostModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -168,7 +166,6 @@
 		24A992CA2B407D4D005EBC5E /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				24A992CF2B407DA1005EBC5E /* MapViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -323,9 +320,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				24A71B3A2B3DCDEB0050A556 /* ContentView.swift in Sources */,
-				24A992CD2B407D6B005EBC5E /* PostModel.swift in Sources */,
+				2451A8972B46FB4B006E0929 /* MapVIew.swift in Sources */,
 				24A71B382B3DCDEB0050A556 /* BenchHubApp.swift in Sources */,
-				24A992D02B407DA1005EBC5E /* MapViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

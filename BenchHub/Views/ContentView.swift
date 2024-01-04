@@ -7,23 +7,46 @@
 
 import SwiftUI
 
-import SwiftUI
-import MapKit
-
 struct ContentView: View {
-    @ObservedObject var viewModel = MapViewModel()
-
+    // 入力中の文字列を保持する状態変数
+    @State var inputText: String = ""
+    // 検索キーワードを保持する状態変数、初期値は"東京駅"
+    @State var displaySearchKey: String = "東京駅"
+    // マップ種類　最初は標準
+    @State var dispalayMapType: MapType = .standard
+    
     var body: some View {
-        Map(coordinateRegion: .constant(MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 35.6895, longitude: 139.6917), // 例: 東京の座標
-            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-        )), annotationItems: viewModel.posts) { post in
-            MapMarker(coordinate: post.locationCoordinate)
+        // テキストフィールド
+        TextField("キーワード", text: $inputText, prompt: Text("地名を入力してください"))
+        // 入力が完了した時
+            .onSubmit {
+                displaySearchKey = inputText
+            }
+        
+            .padding()
+        
+        ZStack(alignment: .bottomTrailing){
+            MapView(searchKey: displaySearchKey , mapType: dispalayMapType)
+            
+            Button {
+                if dispalayMapType == .standard {
+                    dispalayMapType = .satellite
+                }else if dispalayMapType == .satellite {
+                    dispalayMapType = .hybrid
+                }else{
+                    dispalayMapType = .standard
+                }
+            }label: {
+                Image(systemName: "map.circle")
+                    .resizable()
+                    .frame(width: 35.0,height: 35.0)
+            }
+            .padding(.trailing, 20.0)
+            .padding(.bottom, 30.0)
         }
     }
 }
-
-
-#Preview {
-    ContentView()
-}
+    
+    #Preview {
+        ContentView()
+    }
