@@ -10,6 +10,7 @@ import MapKit
 
 struct ContentView: View {
     @State var position: MapCameraPosition = .automatic
+    @State var isShowSheet: Bool = false
     
     var body: some View {
         Map() {
@@ -22,8 +23,12 @@ struct ContentView: View {
                             .padding(5)
                     }
                     .onTapGesture {
-                        // sheet表示
+                        print(location.description)
+                        isShowSheet = true
                     }
+                    .sheet(isPresented: $isShowSheet, content: {
+                        DetailView(mapInfo: location)
+                    })
                 }
             }
             

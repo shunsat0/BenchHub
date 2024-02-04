@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		24057C8A2B6F6FA000503984 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24057C892B6F6FA000503984 /* ContentView.swift */; };
 		24057C8C2B6F6FE400503984 /* MapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24057C8B2B6F6FE400503984 /* MapModel.swift */; };
+		24057C8E2B6FE08200503984 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24057C8D2B6FE08200503984 /* DetailView.swift */; };
 		24A71B382B3DCDEB0050A556 /* BenchHubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A71B372B3DCDEB0050A556 /* BenchHubApp.swift */; };
 		24A71B3C2B3DCDEC0050A556 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24A71B3B2B3DCDEC0050A556 /* Assets.xcassets */; };
 		24A71B3F2B3DCDEC0050A556 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24A71B3E2B3DCDEC0050A556 /* Preview Assets.xcassets */; };
@@ -37,6 +38,7 @@
 /* Begin PBXFileReference section */
 		24057C892B6F6FA000503984 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		24057C8B2B6F6FE400503984 /* MapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapModel.swift; sourceTree = "<group>"; };
+		24057C8D2B6FE08200503984 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		24A71B342B3DCDEB0050A556 /* BenchHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BenchHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24A71B372B3DCDEB0050A556 /* BenchHubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchHubApp.swift; sourceTree = "<group>"; };
 		24A71B3B2B3DCDEC0050A556 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 				24057C892B6F6FA000503984 /* ContentView.swift */,
 				24A71B3B2B3DCDEC0050A556 /* Assets.xcassets */,
 				24A71B3D2B3DCDEC0050A556 /* Preview Content */,
+				24057C8D2B6FE08200503984 /* DetailView.swift */,
 			);
 			path = BenchHub;
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24057C8A2B6F6FA000503984 /* ContentView.swift in Sources */,
+				24057C8E2B6FE08200503984 /* DetailView.swift in Sources */,
 				24057C8C2B6F6FE400503984 /* MapModel.swift in Sources */,
 				24A71B382B3DCDEB0050A556 /* BenchHubApp.swift in Sources */,
 			);
