@@ -9,13 +9,25 @@ import SwiftUI
 import MapKit
 
 struct ContentView: View {
+    @State var position: MapCameraPosition = .automatic
     
     var body: some View {
         Map() {
             ForEach(MockData.mapData) { location in
-                Marker(location.name, coordinate: location.coordinate)
-                    .tint(.blue)
-            } 
+                Annotation(location.name, coordinate: location.coordinate) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(.orange)
+                        Text("🪑")
+                            .padding(5)
+                    }
+                    .onTapGesture {
+                        // sheet表示
+                    }
+                }
+            }
+            
+            
         }
     }
 }
