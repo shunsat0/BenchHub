@@ -13,6 +13,13 @@ enum MapType {
     case hybrid // 衛生写真+交通機関ラベル
 }
 
+let spotlist = [
+    Spot (latitude: 35.6834843, longitude: 139.7644207),
+    Spot (latitude: 35.6790079, longitude: 139.7675881),
+    Spot (latitude: 35.6780057, longitude: 139.7631035)
+]
+
+
 struct MapView: View {
     // 検索ワード
     let searchKey: String
@@ -36,7 +43,14 @@ struct MapView: View {
     var body: some View {
         Map(position: $cameraPosition){
             // マップにピンを表示
-            //Marker(searchKey, coordinate:  targetCoordinate)
+            Marker(searchKey, coordinate:  targetCoordinate)
+            
+        }
+        .mapControls {
+            //MapScaleView()
+            MapUserLocationButton(
+                
+            )
         }
         // マップのスタイルを反映
         .mapStyle(mapStyle)
@@ -57,7 +71,7 @@ struct MapView: View {
                 // 結果が存在する時は1件目を取り出す
                 if let mapItems = response?.mapItems,
                    
-                   let mapItem = mapItems.first {
+                    let mapItem = mapItems.first {
                     // 位置情報から緯度経度をtargetCoodinateに取り出す
                     targetCoordinate = mapItem.placemark.coordinate
                     

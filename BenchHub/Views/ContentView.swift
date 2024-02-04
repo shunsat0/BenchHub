@@ -5,60 +5,42 @@
 //  Created by Shun Sato on 2023/12/29.
 //
 
+//
+//  ContentView.swift
+//  MapMarkerSample
+//
+//  Created by yoshiyuki oshige on 2022/09/09.
+//
+
 import SwiftUI
+import MapKit
 
 struct ContentView: View {
-    // 入力中の文字列を保持する状態変数
-    @State var inputText: String = ""
-    // 検索キーワードを保持する状態変数、初期値は"東京駅"
-    @State var displaySearchKey: String = "東京駅"
-    // マップ種類　最初は標準
-    @State var dispalayMapType: MapType = .standard
+    // 指す座標の配列
+    let spotlist = [
+        Spot(lat: 35.6834843, long: 139.7644207),
+        Spot(lat: 35.6790079, long: 139.7675881),
+        Spot(lat: 35.6780057, long: 139.7631035)
+    ]
+    
+    // 領域を指定する
+    @State var region = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(
+            latitude: 35.6805702,   // 緯度
+            longitude: 139.7676359  // 経度
+        ),
+        latitudinalMeters: 1000.0, // 南北距離
+        longitudinalMeters: 1000.0  // 東西距離
+    )
     
     var body: some View {
-        // テキストフィールド
-        TextField("キーワード", text: $inputText, prompt: Text("地名を入力してください"))
-        // 入力が完了した時
-            .onSubmit {
-                displaySearchKey = inputText
-            }
-        
-            .padding()
-        
-        ZStack(alignment: .bottomTrailing){
-            MapView(searchKey: displaySearchKey , mapType: dispalayMapType)
-            
-            VStack {
-                Button {
-                    if dispalayMapType == .standard {
-                        dispalayMapType = .hybrid
-                    }else{
-                        dispalayMapType = .standard
-                    }
-                }label: {
-                    Image(systemName: "map.circle")
-                        .resizable()
-                        .frame(width: 35.0,height: 35.0)
-                }
-                .padding(.trailing, 20.0)
-                .padding(.bottom, 35.0)
-                
-                
-                Button {
-                    // 現在地に戻る
-                    print("現在地へ戻る")
-                }label: {
-                    Image(systemName: "location.fill")
-                        .resizable()
-                        .frame(width: 35.0,height: 35.0)
-                }
-                .padding(.trailing, 20.0)
-                .padding(.bottom, 30.0)
-
-                
-            }
-            
+        Map(coordinateRegion: $region,
+            annotationItems: spotlist)
+        { spot in
+            MapMarker(coordinate: spot.coordinate,
+                      tint: .blue)
         }
+        .edgesIgnoringSafeArea(.all)
     }
 }
 
