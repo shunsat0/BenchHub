@@ -10,13 +10,15 @@ import MapKit
 
 struct ContentView: View {
     @StateObject var viewModel = MapDataViewModel()
+    @StateObject var detailViewModel = DetailViewModel()
+        
     @State var position: MapCameraPosition = .automatic
     @State var isShowSheet: Bool = false
     
     var body: some View {
         Map() {
-            ForEach(viewModel.mapData) { location in
-                Annotation(location.name, coordinate: location.coordinate) {
+            ForEach(viewModel.mapData) { mapInfo in
+                Annotation(mapInfo.name, coordinate: mapInfo.coordinate) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 5)
                             .fill(.orange)
@@ -24,16 +26,16 @@ struct ContentView: View {
                             .padding(5)
                     }
                     .onTapGesture {
-                        print(location.description)
+                        detailViewModel.selectedFramework = mapInfo
                         isShowSheet = true
                     }
                     .sheet(isPresented: $isShowSheet, content: {
-                        DetailView(mapInfo: location)
+                        DetailView(mapInfo: detailViewModel.selectedFramework!)
                     })
                 }
             }
         }
-        .onAppear {            
+        .onAppear {
             Task {
                 await viewModel.fetchData()
             }
