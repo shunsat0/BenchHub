@@ -14,7 +14,7 @@ struct TestView: View {
     
     func fetchData() async {
         do {
-            let snapshot = try await db.collection("users").getDocuments()
+            let snapshot = try await db.collection("benchData").getDocuments()
             for document in snapshot.documents {
                 print("\(document.documentID) => \(document.data())")
             }
