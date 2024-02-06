@@ -9,12 +9,13 @@ import SwiftUI
 import MapKit
 
 struct ContentView: View {
+    @StateObject var viewModel = MapDataViewModel()
     @State var position: MapCameraPosition = .automatic
     @State var isShowSheet: Bool = false
     
     var body: some View {
         Map() {
-            ForEach(MockData.mapData) { location in
+            ForEach(viewModel.mapData) { location in
                 Annotation(location.name, coordinate: location.coordinate) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 5)
@@ -31,11 +32,15 @@ struct ContentView: View {
                     })
                 }
             }
-            
-            
+        }
+        .onAppear {            
+            Task {
+                await viewModel.fetchData()
+            }
         }
     }
 }
+
 
 #Preview {
     ContentView()

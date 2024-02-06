@@ -45,6 +45,6 @@ struct DetailView: View {
     }
 }
 
-#Preview {
-    DetailView(mapInfo: MockData.sample)
-}
+//#Preview {
+//    DetailView(mapInfo: MockData.sample)
+//}
