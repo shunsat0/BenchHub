@@ -20,7 +20,6 @@ struct DetailView: View {
                 
                 Button(action: {
                     dismiss()
-                    // isShowSheetをfalseにするには、やっぱViewModel必要かな
                 }, label: {
                     Text("閉じる")
                 })
@@ -29,15 +28,57 @@ struct DetailView: View {
             
             Spacer()
             
-            Text(mapInfo.name)
+//            Text(mapInfo.name)
+//                .font(.largeTitle)
+            Text("公園")
                 .font(.largeTitle)
             
-            Image("bench")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 200,height: 150)
+            TabView {
+                ForEach(1...3, id: \.self) { _ in
+                    Image("bench")
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                    
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 20)
+//                                .stroke(Color.black, lineWidth: 0.5)
+//                        )
+                }
+            }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
             
-            Text(mapInfo.description)
+            Spacer()
+            
+            TabView {
+                ForEach(1...3, id: \.self) { _ in
+                    
+                    VStack {
+                        HStack {
+                            Text("無題")
+                            Spacer()
+                            Text("1年前")
+                        }
+                        .padding(.horizontal)
+                        
+                        HStack {
+                            Text("★★★★⭐︎")
+                                .foregroundStyle(.orange)
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        
+                        Text("サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト")
+                            .font(.body)
+                            .foregroundStyle(.primary)
+                        .padding()
+                    }
+                    .frame(width: 350, height: 250)
+                    .background(.regularMaterial)
+                    .cornerRadius(20)
+                }
+            }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
             
             Spacer()
         }
@@ -45,6 +86,6 @@ struct DetailView: View {
     }
 }
 
-//#Preview {
-//    DetailView(mapInfo: MockData.sample)
-//}
+#Preview {
+    DetailView(mapInfo: MockData.sample)
+}
