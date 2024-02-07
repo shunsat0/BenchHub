@@ -10,7 +10,6 @@
 		24057C8A2B6F6FA000503984 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24057C892B6F6FA000503984 /* ContentView.swift */; };
 		24057C8C2B6F6FE400503984 /* MapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24057C8B2B6F6FE400503984 /* MapModel.swift */; };
 		24057C8E2B6FE08200503984 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24057C8D2B6FE08200503984 /* DetailView.swift */; };
-		24057C902B725D9200503984 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 24057C8F2B725D9200503984 /* GoogleService-Info.plist */; };
 		24057C932B725E1A00503984 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 24057C922B725E1A00503984 /* FirebaseAnalytics */; };
 		24057C952B725E1A00503984 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 24057C942B725E1A00503984 /* FirebaseAnalyticsOnDeviceConversion */; };
 		24057C972B725E1A00503984 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 24057C962B725E1A00503984 /* FirebaseAnalyticsSwift */; };
@@ -26,6 +25,7 @@
 		24A71B492B3DCDEC0050A556 /* BenchHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A71B482B3DCDEC0050A556 /* BenchHubTests.swift */; };
 		24A71B532B3DCDEC0050A556 /* BenchHubUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A71B522B3DCDEC0050A556 /* BenchHubUITests.swift */; };
 		24A71B552B3DCDEC0050A556 /* BenchHubUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A71B542B3DCDEC0050A556 /* BenchHubUITestsLaunchTests.swift */; };
+		24D759382B73D20100A426DC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 24D759372B73D20100A426DC /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,7 +49,6 @@
 		24057C892B6F6FA000503984 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		24057C8B2B6F6FE400503984 /* MapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapModel.swift; sourceTree = "<group>"; };
 		24057C8D2B6FE08200503984 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
-		24057C8F2B725D9200503984 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		24057CA02B7274CC00503984 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		247EB06B2B727C530003CFD3 /* MapDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataViewModel.swift; sourceTree = "<group>"; };
 		247EB06D2B728F4C0003CFD3 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
@@ -62,6 +61,7 @@
 		24A71B4E2B3DCDEC0050A556 /* BenchHubUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BenchHubUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		24A71B522B3DCDEC0050A556 /* BenchHubUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchHubUITests.swift; sourceTree = "<group>"; };
 		24A71B542B3DCDEC0050A556 /* BenchHubUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchHubUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		24D759372B73D20100A426DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "View/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,12 +145,12 @@
 		24A71B362B3DCDEB0050A556 /* BenchHub */ = {
 			isa = PBXGroup;
 			children = (
+				24D759372B73D20100A426DC /* GoogleService-Info.plist */,
 				24A71B372B3DCDEB0050A556 /* BenchHubApp.swift */,
 				247EB0682B727BE80003CFD3 /* Model */,
 				247EB0692B727BF30003CFD3 /* ViewModel */,
 				247EB06A2B727BFF0003CFD3 /* View */,
 				24A71B3B2B3DCDEC0050A556 /* Assets.xcassets */,
-				24057C8F2B725D9200503984 /* GoogleService-Info.plist */,
 				24A71B3D2B3DCDEC0050A556 /* Preview Content */,
 			);
 			path = BenchHub;
@@ -298,7 +298,7 @@
 			files = (
 				24A71B3F2B3DCDEC0050A556 /* Preview Assets.xcassets in Resources */,
 				24A71B3C2B3DCDEC0050A556 /* Assets.xcassets in Resources */,
-				24057C902B725D9200503984 /* GoogleService-Info.plist in Resources */,
+				24D759382B73D20100A426DC /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

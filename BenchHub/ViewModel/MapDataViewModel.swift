@@ -20,7 +20,7 @@ class MapDataViewModel: ObservableObject {
             for document in snapshot.documents {
                 let data = document.data()
                 let name = data["name"] as? String ?? ""
-                let geoPoint = data["coordinate"] as? GeoPoint ?? GeoPoint(latitude: 0, longitude: 0)
+                let geoPoint = data["geopoint"] as? GeoPoint ?? GeoPoint(latitude: 0, longitude: 0)
                 let latitude = geoPoint.latitude
                 let longitude = geoPoint.longitude
                 let imageName = "bench"
@@ -34,6 +34,7 @@ class MapDataViewModel: ObservableObject {
                         reviews.append(Review(description: description, rating: rating,title: title))
                     }
                 }
+                
 
                 let model = MapModel(latitude: latitude, longitude: longitude, name: name, ImageName: imageName, reviews: reviews)
                 DispatchQueue.main.async {
