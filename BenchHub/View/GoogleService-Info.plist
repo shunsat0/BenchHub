@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyDVT6wHiSPI3unJCgocGbf95C4jssrqSAY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>121717180647</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.shunsato.BenchHub</string>
+	<key>PROJECT_ID</key>
+	<string>benchhub-e9fca</string>
+	<key>STORAGE_BUCKET</key>
+	<string>benchhub-e9fca.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:121717180647:ios:4aa5a46b0b587241c33a42</string>
+</dict>
+</plist>
