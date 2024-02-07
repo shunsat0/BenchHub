@@ -9,12 +9,10 @@ import SwiftUI
 
 struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
-    
-    var mapInfo: MapModel
+    var selectedMapInfo: MapModel
     
     var body: some View {
         VStack {
-            
             HStack {
                 Spacer()
                 
@@ -28,57 +26,15 @@ struct DetailView: View {
             
             Spacer()
             
-//            Text(mapInfo.name)
-//                .font(.largeTitle)
-            Text("公園")
+            Text(selectedMapInfo.name)
                 .font(.largeTitle)
             
-            TabView {
-                ForEach(1...3, id: \.self) { _ in
-                    Image("bench")
-                        .resizable()
-                        .scaledToFit()
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                    
-//                        .overlay(
-//                            RoundedRectangle(cornerRadius: 20)
-//                                .stroke(Color.black, lineWidth: 0.5)
-//                        )
-                }
-            }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+            ImagesView()
             
             Spacer()
             
-            TabView {
-                ForEach(1...3, id: \.self) { _ in
-                    
-                    VStack {
-                        HStack {
-                            Text("無題")
-                            Spacer()
-                            Text("1年前")
-                        }
-                        .padding(.horizontal)
-                        
-                        HStack {
-                            Text("★★★★⭐︎")
-                                .foregroundStyle(.orange)
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                        
-                        Text("サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト")
-                            .font(.body)
-                            .foregroundStyle(.primary)
-                        .padding()
-                    }
-                    .frame(width: 350, height: 250)
-                    .background(.regularMaterial)
-                    .cornerRadius(20)
-                }
-            }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+            CommentView(mapInfo: selectedMapInfo)
+            
             
             Spacer()
         }
@@ -86,6 +42,82 @@ struct DetailView: View {
     }
 }
 
-#Preview {
-    DetailView(mapInfo: MockData.sample)
+struct ImagesView: View {
+    var body: some View {
+        TabView {
+            ForEach(1...3, id: \.self) { _ in
+                Image("bench")
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+            }
+        }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+    }
+}
+
+struct CommentView: View {
+    var mapInfo: MapModel
+    
+    var label = ""
+    
+    var maximumRating = 5
+    
+    var offImage: Image?
+    var onImage = Image(systemName: "star.fill")
+    
+    var offColor = Color.gray
+    var onColor = Color.yellow
+    
+    func image(for number: Int) -> Image {
+        if number > mapInfo.reviews[0].rating {
+            offImage ?? onImage
+        } else {
+            onImage
+        }
+    }
+    
+    var body: some View {
+        TabView {
+            ForEach(mapInfo.reviews, id: \.id) { review in
+                
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text(review.title)
+                        Spacer()
+                        Text("1年前")
+                    }
+                    .padding([.horizontal,.top])
+                    
+                    HStack {
+                        if label.isEmpty == false {
+                            Text(label)
+                        }
+                        
+                        ForEach(1..<maximumRating + 1, id: \.self) { number in
+                            image(for: number)
+                                .foregroundStyle(number > review.rating ? offColor : onColor)
+                        }
+                        
+                        Spacer()
+                    }
+                    .padding(.leading)
+                    
+                    Text(review.description)
+                        .font(.body)
+                        .foregroundStyle(.primary)
+                        .padding()
+                    
+                    Spacer()
+                }
+                .frame(width: 350, height: 250)
+                .background(.regularMaterial)
+                .cornerRadius(20)
+                
+                
+                
+            }
+        }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+    }
 }
