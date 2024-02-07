@@ -30,7 +30,7 @@ class MapDataViewModel: ObservableObject {
                     for reviewData in reviewsData {
                         let description = reviewData["description"] as? String ?? ""
                         let rating = reviewData["rating"] as? Int ?? 0
-                        let title = reviewData["description"] as? String ?? ""
+                        let title = reviewData["title"] as? String ?? ""
                         reviews.append(Review(description: description, rating: rating,title: title))
                     }
                 }
