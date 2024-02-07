@@ -30,7 +30,7 @@ struct ContentView: View {
                         isShowSheet = true
                     }
                     .sheet(isPresented: $isShowSheet, content: {
-                        DetailView(mapInfo: detailViewModel.selectedFramework!)
+                        DetailView(selectedMapInfo: detailViewModel.selectedFramework!)
                     })
                 }
             }
