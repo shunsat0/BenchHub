@@ -77,9 +77,10 @@ struct CommentView: View {
                         
                         if(review.evaluation == 0){
                             Image(systemName: "hand.thumbsup.fill")
-                                .foregroundColor(.accentColor)
+                                .foregroundColor(.orange)
                         }else {
                             Image(systemName: "hand.thumbsdown.fill")
+                                .foregroundColor(.orange)
                             
                         }
                     }
