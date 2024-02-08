@@ -14,27 +14,30 @@ struct DetailView: View {
     var body: some View {
         VStack {
             HStack {
+                Text(selectedMapInfo.name)
+                    .font(.largeTitle)
+                    .padding()
+                
                 Spacer()
                 
                 Button(action: {
                     dismiss()
                 }, label: {
+                    // アイコンに変える
                     Text("閉じる")
                 })
                 .padding()
             }
             
-            Spacer()
             
-            Text(selectedMapInfo.name)
-                .font(.largeTitle)
+            
+            Spacer()
             
             ImagesView()
             
             Spacer()
             
             CommentView(mapInfo: selectedMapInfo)
-            
             
             Spacer()
         }
@@ -59,49 +62,30 @@ struct ImagesView: View {
 struct CommentView: View {
     var mapInfo: MapModel
     
-    var label = ""
-    
-    var maximumRating = 5
-    
-    var offImage: Image?
-    var onImage = Image(systemName: "star.fill")
-    
-    var offColor = Color.gray
-    var onColor = Color.yellow
-    
-    func image(for number: Int) -> Image {
-        if number > mapInfo.reviews[0].rating {
-            offImage ?? onImage
-        } else {
-            onImage
-        }
-    }
-    
     var body: some View {
         TabView {
             ForEach(mapInfo.reviews, id: \.id) { review in
                 
                 VStack(alignment: .leading) {
-                    HStack {
-                        Text(review.title)
-                        Spacer()
-                        Text("1年前")
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text(review.title)
+                            Spacer()
+                            Text("1年前")
+                        }
+                        
+                        
+                        if(review.evaluation == 0){
+                            Image(systemName: "hand.thumbsup.fill")
+                                .foregroundColor(.accentColor)
+                        }else {
+                            Image(systemName: "hand.thumbsdown.fill")
+                            
+                        }
                     }
-                    .padding([.horizontal,.top])
+                    .padding([.leading,.trailing,.top])
                     
-                    HStack {
-                        if label.isEmpty == false {
-                            Text(label)
-                        }
-                        
-                        ForEach(1..<maximumRating + 1, id: \.self) { number in
-                            image(for: number)
-                                .foregroundStyle(number > review.rating ? offColor : onColor)
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.leading)
+                    
                     
                     Text(review.description)
                         .font(.body)
@@ -120,4 +104,8 @@ struct CommentView: View {
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
     }
+}
+
+#Preview {
+    DetailView(selectedMapInfo: MockData.sample)
 }
