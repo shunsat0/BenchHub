@@ -23,11 +23,11 @@ struct MapModel:Identifiable{
 struct Review: Identifiable,Hashable {
     let id = UUID()
     let description: String
-    let rating: Int
+    let evaluation: Int
     let title: String
 }
 
 
 struct MockData {
-    static let sample = MapModel(latitude: 35.561282, longitude: 139.711039, name: "西蒲田公園",ImageName: "bench", reviews: [Review(description: "test", rating: 2,title: "タイトル"),Review(description: "test2", rating: 5,title: "タイトル2")] )
+    static let sample = MapModel(latitude: 35.561282, longitude: 139.711039, name: "西蒲田公園",ImageName: "bench", reviews: [Review(description: "良い！", evaluation: 0,title: "良い！"),Review(description: "悪い！", evaluation: 1,title: "悪い！")] )
 }
