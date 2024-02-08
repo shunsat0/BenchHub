@@ -29,9 +29,12 @@ struct ContentView: View {
                         detailViewModel.selectedFramework = mapInfo
                         isShowSheet = true
                     }
-                    .sheet(isPresented: $isShowSheet, content: {
+                    .sheet(isPresented: $isShowSheet) {
                         DetailView(selectedMapInfo: detailViewModel.selectedFramework!)
-                    })
+                            .presentationDetents([ .medium, .large])
+                            //.presentationBackground(.regularMaterial)
+                            
+                    }
                 }
             }
         }
