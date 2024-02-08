@@ -23,8 +23,8 @@ struct DetailView: View {
                 Button(action: {
                     dismiss()
                 }, label: {
-                    // アイコンに変える
-                    Text("閉じる")
+                    Image(systemName: "xmark.circle")
+                        .foregroundColor(.primary)
                 })
                 .padding()
             }
