@@ -29,21 +29,50 @@ struct DetailView: View {
                 .padding()
             }
             
+struct ReviewAndDistanceView: View {
+    var body: some View {
+        HStack{
+            VStack(alignment: .leading) {
+                // ここタップしてもsheet出て評価できる
+                Text("10件の評価") // \(totalReviewCount)の評価
+                    .foregroundColor(.secondary)
+                    .font(.caption)
+                
+                HStack {
+                    
+                    Image(systemName: "hand.thumbsup.fill")
+                        .foregroundColor(.accentColor)
+                    
+                    Text("78%")
+                        .fontDesign(.monospaced)
+                        .fontWeight(.bold)
+                        .foregroundColor(.accentColor)
+                }
+            }
             
+            Divider()
             
-            Spacer()
-            
-            ImagesView()
-            
-            Spacer()
-            
-            CommentView(mapInfo: selectedMapInfo)
+            VStack(alignment: .leading) {
+                Text("距離")
+                    .foregroundColor(.secondary)
+                    .font(.caption)
+                
+                HStack {
+                    Image(systemName: "arrow.triangle.turn.up.right.diamond")
+                        .foregroundColor(.secondary)
+                    Text("300m") // \(distance)m
+                        .fontDesign(.monospaced)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
+                }
+            }
             
             Spacer()
         }
-        .padding()
     }
 }
+
+
 
 struct ImagesView: View {
     var body: some View {
