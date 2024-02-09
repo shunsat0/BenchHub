@@ -164,7 +164,7 @@ struct CommentView: View {
     
     // さらに表示を追加する
     var body: some View {
-        ScrollView(.horizontal) {
+        ScrollView(.horizontal,showsIndicators: false) {
             LazyHStack(spacing: 16) {
                 ForEach(mapInfo.reviews, id: \.id) { review in
                     
