@@ -144,16 +144,18 @@ struct ReviewAndDistanceView: View {
 
 struct ImagesView: View {
     var body: some View {
-        TabView {
-            ForEach(1...3, id: \.self) { _ in
-                Image("bench")
-                    .resizable()
-                    .scaledToFit()
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .frame(width: 200,height: 150)
+        ScrollView(.horizontal,showsIndicators: false) {
+            LazyHStack {
+                ForEach(1...3, id: \.self) { _ in
+                    Image("bench")
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .frame(width: 200,height: 280)
+                }
             }
         }
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+        
     }
 }
 
