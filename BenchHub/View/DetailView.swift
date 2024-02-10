@@ -64,9 +64,10 @@ struct DetailView: View {
                         .imageScale(.large)
                     }
                     .padding()
-                    .frame(width: 350, height: 50)
-                    .cornerRadius(10)
                 }
+                .frame(width: 350, height: 50)
+                .background(Color.component)
+                .cornerRadius(10)
 
                 ImagesView()
                 
@@ -82,9 +83,8 @@ struct PostReviewView: View {
         
         VStack {
             HStack {
-                VStack(alignment: .leading) {
-                    Text("居心地")
-                }
+                Text("居心地")
+                    .padding(.leading)
                 
                 Spacer()
                 
@@ -107,6 +107,7 @@ struct PostReviewView: View {
             .padding()
             
             Divider()
+                .padding([.horizontal])
             
             HStack {
                 Image(systemName: "camera.fill")
@@ -122,6 +123,7 @@ struct PostReviewView: View {
             .padding()
             
             Divider()
+                .padding([.horizontal])
             
             HStack {
                 Image(systemName: "camera.fill")
@@ -138,6 +140,7 @@ struct PostReviewView: View {
             .padding()
         }
         .frame(width: 350)
+        .background(Color.component)
         .cornerRadius(10)
         .padding()
     }
@@ -194,7 +197,7 @@ struct ReviewAndDistanceView: View {
                             Spacer()
                         }
                         .presentationDetents([.height(300)])
-                        .presentationBackground(.regularMaterial)
+                        .presentationBackground(Color.background)
                     }
                     
                 }
@@ -251,6 +254,7 @@ struct ImagesView: View {
                 Spacer()
             }
             .frame(width: 350, height: 50)
+            .background(Color.component)
             .cornerRadius(10)
             .onTapGesture {
                 print("tap")
@@ -302,14 +306,14 @@ struct CommentView: View {
                             Spacer()
                         }
                         .frame(width: 350, height: 180)
-                        
+                        .background(Color.component)
                         .cornerRadius(10)
                     }
                 }
             }
         } else {
             HStack {
-                Image(systemName: "camera.fill")
+                Image(systemName: "pencil")
                     .foregroundColor(.accentColor)
                     .padding(.leading)
                 Text("あなたの口コミを追加")
@@ -317,7 +321,7 @@ struct CommentView: View {
                 Spacer()
             }
             .frame(width: 350, height: 50)
-           
+            .background(Color.component)
             .cornerRadius(10)
             .onTapGesture {
                 print("tap")
