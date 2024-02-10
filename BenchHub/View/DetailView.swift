@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
+    @State private var isShowingSheet = false
     var selectedMapInfo: MapModel
     
     var body: some View {
@@ -28,50 +29,42 @@ struct DetailView: View {
                 
                 Divider()
                 
-                HStack {
-                    Text("この場所を評価")
-                        .font(.title3)
-                        .fontWeight(.bold)
-                    
-                    Spacer()
-                }
-                
-                VStack {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("居心地")
-                            Text("10件の評価") // \(totalReviewCount)の評価
-                                .foregroundColor(.secondary)
-                                .font(.caption)
-                        }
-                        
-                        Spacer()
-                        
-                        Group {
-                            Button(action: {
-                                
-                            }, label: {
-                                Image(systemName: "hand.thumbsup.circle.fill")
-                            })
-                            
-                            Button(action: {
-                                
-                            }, label: {
-                                Image(systemName: "hand.thumbsdown.circle.fill")
-                            })
-                        }
-                        .foregroundColor(.secondary)
-                        .imageScale(.large)
-                    }
-                    .padding()
-                }
-                .frame(width: 350, height: 50)
-                .background(Color.component)
-                .cornerRadius(10)
-
-                ImagesView()
+                ImagesView(mapInfo: selectedMapInfo)
                 
                 CommentView(mapInfo: selectedMapInfo)
+                
+                Button("\(Image(systemName: "square.and.pencil")) レビューを書く") {
+                    isShowingSheet = true
+                }
+                .sheet(isPresented: $isShowingSheet){
+                    VStack {
+                        HStack {
+                            Button(action: {
+                                isShowingSheet = false
+                            }, label: {
+                                Text("キャンセル")
+                                    .foregroundColor(.accentColor)
+                            })
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                isShowingSheet = false
+                            }, label: {
+                                Text("完了")
+                                    .foregroundColor(.accentColor)
+                            })
+                        }
+                        .padding()
+                        
+                        PostReviewView()
+                        
+                        Spacer()
+                    }
+                    .presentationDetents([.height(300)])
+                    .presentationBackground(Color.background)
+                }
+                .padding()
             }
         }
         .padding()
@@ -228,110 +221,69 @@ struct ReviewAndDistanceView: View {
 
 
 struct ImagesView: View {
-    // 仮の変変数
-    @State var isImage: Bool  = true
+    var mapInfo: MapModel
     
     var body: some View {
-        if(isImage) {
-            ScrollView(.horizontal,showsIndicators: false) {
-                LazyHStack {
-                    ForEach(1...3, id: \.self) { _ in
-                        Image("bench")
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(RoundedRectangle(cornerRadius: 20))
-                            .frame(width: 200,height: 280)
-                    }
+        ScrollView(.horizontal,showsIndicators: false) {
+            LazyHStack {
+                ForEach(1...3, id: \.self) { _ in
+                    Image(mapInfo.ImageName)
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .frame(width: 200,height: 280)
                 }
             }
-        } else {
-            HStack {
-                Image(systemName: "camera.fill")
-                    .foregroundColor(.accentColor)
-                    .padding(.leading)
-                Text("あなたの写真を追加")
-                    .foregroundColor(.accentColor)
-                Spacer()
-            }
-            .frame(width: 350, height: 50)
-            .background(Color.component)
-            .cornerRadius(10)
-            .onTapGesture {
-                print("tap")
-            }
         }
-        
-        
     }
 }
 
 struct CommentView: View {
     var mapInfo: MapModel
-    
-    @State var exsitsComment: Bool = true
-    
     // さらに表示を追加する
     var body: some View {
-        if(exsitsComment){
-            ScrollView(.horizontal,showsIndicators: false) {
-                LazyHStack(spacing: 16) {
-                    ForEach(mapInfo.reviews, id: \.id) { review in
-                        
+        ScrollView(.horizontal,showsIndicators: false) {
+            LazyHStack(spacing: 16) {
+                ForEach(mapInfo.reviews, id: \.id) { review in
+                    
+                    VStack(alignment: .leading) {
                         VStack(alignment: .leading) {
-                            VStack(alignment: .leading) {
-                                HStack {
-                                    Text(review.title)
-                                    Spacer()
-                                    Text("1年前")
-                                }
-                                
-                                if(review.evaluation == 0){
-                                    Image(systemName: "hand.thumbsup.fill")
-                                        .foregroundColor(.orange)
-                                }else {
-                                    Image(systemName: "hand.thumbsdown.fill")
-                                        .foregroundColor(.orange)
-                                    
-                                }
+                            HStack {
+                                Text(review.title)
+                                Spacer()
+                                Text("1年前")
                             }
-                            .padding([.leading,.trailing,.top])
                             
-                            
-                            
-                            Text(review.description)
-                                .font(.body)
-                                .foregroundStyle(.primary)
-                                .padding()
-                            
-                            Spacer()
+                            if(review.evaluation == 0){
+                                Image(systemName: "hand.thumbsup.fill")
+                                    .foregroundColor(.orange)
+                            }else {
+                                Image(systemName: "hand.thumbsdown.fill")
+                                    .foregroundColor(.orange)
+                                
+                            }
                         }
-                        .frame(width: 350, height: 180)
-                        .background(Color.component)
-                        .cornerRadius(10)
+                        .padding([.leading,.trailing,.top])
+                        
+                        
+                        
+                        Text(review.description)
+                            .font(.body)
+                            .foregroundStyle(.primary)
+                            .padding()
+                        
+                        Spacer()
                     }
+                    .frame(width: 350, height: 180)
+                    .background(Color.component)
+                    .cornerRadius(10)
                 }
             }
-        } else {
-            HStack {
-                Image(systemName: "pencil")
-                    .foregroundColor(.accentColor)
-                    .padding(.leading)
-                Text("あなたの口コミを追加")
-                    .foregroundColor(.accentColor)
-                Spacer()
-            }
-            .frame(width: 350, height: 50)
-            .background(Color.component)
-            .cornerRadius(10)
-            .onTapGesture {
-                print("tap")
-            }
-            
         }
     }
 }
 
 #Preview {
-    DetailView(selectedMapInfo: MockData.sample)
+    DetailView(selectedMapInfo: MockData.sampleEnpty)
 }
- 
+
