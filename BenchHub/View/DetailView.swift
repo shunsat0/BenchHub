@@ -36,13 +36,49 @@ struct DetailView: View {
                 
                 Divider()
                 
-                PostReviewView()
+                HStack {
+                    Text("この場所を評価")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                    
+                    Spacer()
+                }
                 
+                VStack {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("居心地")
+                            Text("10件の評価") // \(totalReviewCount)の評価
+                                .foregroundColor(.secondary)
+                                .font(.caption)
+                        }
+                        
+                        Spacer()
+                        
+                        Group {
+                            Button(action: {
+                                
+                            }, label: {
+                                Image(systemName: "hand.thumbsup.circle.fill")
+                            })
+                            
+                            Button(action: {
+                                
+                            }, label: {
+                                Image(systemName: "hand.thumbsdown.circle.fill")
+                            })
+                        }
+                        .foregroundColor(.secondary)
+                        .imageScale(.large)
+                    }
+                    .padding()
+                    .frame(width: 350, height: 50)
+                    .cornerRadius(10)
+                }
+
                 ImagesView()
-                    .frame(minHeight: 200)
                 
                 CommentView(mapInfo: selectedMapInfo)
-                    .frame(minHeight: 300)
             }
         }
         .padding()
