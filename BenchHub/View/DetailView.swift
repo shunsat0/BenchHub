@@ -79,22 +79,11 @@ struct DetailView: View {
 
 struct PostReviewView: View {
     var body: some View {
-        HStack {
-            Text("この場所を評価")
-                .font(.title3)
-                .fontWeight(.bold)
-            
-            Spacer()
-        }
         
         VStack {
             HStack {
                 VStack(alignment: .leading) {
-                    Text("全般")
-                    
-                    Text("10件の評価") // \(totalReviewCount)の評価
-                        .foregroundColor(.secondary)
-                        .font(.caption)
+                    Text("居心地")
                 }
                 
                 Spacer()
@@ -341,3 +330,4 @@ struct CommentView: View {
 #Preview {
     DetailView(selectedMapInfo: MockData.sample)
 }
+ 
