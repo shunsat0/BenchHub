@@ -126,10 +126,12 @@ struct PostReviewView: View {
 
 
 struct ReviewAndDistanceView: View {
+    @State private var isShowingSheet = false
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
         HStack{
             VStack(alignment: .leading) {
-                // ここタップしてもsheet出て評価できる
                 Text("10件の評価") // \(totalReviewCount)の評価
                     .foregroundColor(.secondary)
                     .font(.caption)
@@ -146,17 +148,22 @@ struct ReviewAndDistanceView: View {
                             .fontWeight(.bold)
                             .foregroundColor(.accentColor)
                     })
+                    // 評価ボタンを押した時にはシートが開く
                     .sheet(isPresented: $isShowingSheet){
                         VStack {
                             HStack {
-                                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                                Button(action: {
+                                    isShowingSheet = false
+                                }, label: {
                                     Text("キャンセル")
                                         .foregroundColor(.accentColor)
                                 })
                                 
                                 Spacer()
                                 
-                                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                                Button(action: {
+                                    isShowingSheet = false
+                                }, label: {
                                     Text("完了")
                                         .foregroundColor(.accentColor)
                                 })
@@ -167,7 +174,8 @@ struct ReviewAndDistanceView: View {
                             
                             Spacer()
                         }
-                        .presentationDetents([.height(200)])
+                        .presentationDetents([.height(300)])
+                        .presentationBackground(.regularMaterial)
                     }
                     
                 }
