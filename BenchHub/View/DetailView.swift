@@ -152,47 +152,13 @@ struct ReviewAndDistanceView: View {
                     .font(.caption)
                 
                 HStack {
-                    Button(action: {
-                        isShowingSheet = true
-                    }, label: {
-                        Image(systemName: "hand.thumbsup.fill")
-                            .foregroundColor(.accentColor)
-                        
-                        Text("78%")
-                            .fontDesign(.monospaced)
-                            .fontWeight(.bold)
-                            .foregroundColor(.accentColor)
-                    })
-                    // 評価ボタンを押した時にはシートが開く
-                    .sheet(isPresented: $isShowingSheet){
-                        VStack {
-                            HStack {
-                                Button(action: {
-                                    isShowingSheet = false
-                                }, label: {
-                                    Text("キャンセル")
-                                        .foregroundColor(.accentColor)
-                                })
-                                
-                                Spacer()
-                                
-                                Button(action: {
-                                    isShowingSheet = false
-                                }, label: {
-                                    Text("完了")
-                                        .foregroundColor(.accentColor)
-                                })
-                            }
-                            .padding()
-                            
-                            PostReviewView()
-                            
-                            Spacer()
-                        }
-                        .presentationDetents([.height(300)])
-                        .presentationBackground(Color.background)
-                    }
+                    Image(systemName: "hand.thumbsup.fill")
+                        .foregroundColor(.orange)
                     
+                    Text("78%")
+                        .fontDesign(.monospaced)
+                        .fontWeight(.bold)
+                        .foregroundColor(.orange)
                 }
             }
             
