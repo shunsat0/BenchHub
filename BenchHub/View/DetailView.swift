@@ -12,24 +12,16 @@ struct DetailView: View {
     var selectedMapInfo: MapModel
     
     var body: some View {
-        VStack {
+        VStack() {
             HStack {
                 Text(selectedMapInfo.name)
-                    .font(.largeTitle)
+                    .font(.title)
                     .padding()
                 
                 Spacer()
-                
-                Button(action: {
-                    dismiss()
-                }, label: {
-                    Image(systemName: "xmark.circle")
-                        .foregroundColor(.primary)
-                })
-                .padding()
             }
             
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 Divider()
                 
                 ReviewAndDistanceView()
