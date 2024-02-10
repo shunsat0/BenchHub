@@ -101,36 +101,29 @@ struct PostReviewView: View {
             
             Divider()
                 .padding([.horizontal])
-            
-            HStack {
-                Image(systemName: "camera.fill")
+
+                HStack {
+                    Button("\(Image(systemName: "camera.fill"))あなたの写真を追加"){
+                        print("tap")
+                    }
                     .foregroundColor(.accentColor)
-                    .padding(.leading)
-                Text("あなたの写真を追加")
-                    .foregroundColor(.accentColor)
-                Spacer()
-            }
-            .onTapGesture {
-                print("tap")
-            }
-            .padding()
-            
-            Divider()
-                .padding([.horizontal])
-            
-            HStack {
-                Image(systemName: "camera.fill")
-                    .foregroundColor(.accentColor)
-                    .padding(.leading)
-                Text("あなたの口コミを追加")
-                    .foregroundColor(.accentColor)
-                Spacer()
-            }
-            .cornerRadius(10)
-            .onTapGesture {
-                print("tap")
-            }
-            .padding()
+                    Spacer()
+                }
+                .padding()
+                
+                Divider()
+                    .padding([.horizontal])
+                
+                HStack {
+                    Text("\(Image(systemName: "text.bubble"))あなたの口コミを追加")
+                        .foregroundColor(.accentColor)
+                    Spacer()
+                }
+                .cornerRadius(10)
+                .onTapGesture {
+                    print("tap")
+                }
+                .padding()
         }
         .frame(width: 350)
         .background(Color.component)
