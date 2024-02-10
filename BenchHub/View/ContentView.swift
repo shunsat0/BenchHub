@@ -32,7 +32,7 @@ struct ContentView: View {
                     .sheet(isPresented: $isShowSheet) {
                         DetailView(selectedMapInfo: detailViewModel.selectedFramework!)
                             .presentationDetents([ .medium, .large])
-                            //.presentationBackground(.regularMaterial)
+                            .presentationBackground(.thickMaterial)
                             
                     }
                 }
