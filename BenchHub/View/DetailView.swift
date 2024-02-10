@@ -199,12 +199,16 @@ struct ImagesView: View {
 
 struct CommentView: View {
     var mapInfo: MapModel
-    // さらに表示を追加する
+    private let lineLimit: Int = 3
+    // 各レビューの展開状態を追跡するための辞書
+    @State private var expandedStates: [UUID: Bool] = [:]
+    
+    // 3行以内で収まっている場合は、もっとみるは非表示にしたい　後回しでいいかも
+    
     var body: some View {
-        ScrollView(.horizontal,showsIndicators: false) {
+        ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 16) {
                 ForEach(mapInfo.reviews, id: \.id) { review in
-                    
                     VStack(alignment: .leading) {
                         VStack(alignment: .leading) {
                             HStack {
@@ -213,27 +217,36 @@ struct CommentView: View {
                                 Text("1年前")
                             }
                             
-                            if(review.evaluation == 0){
+                            if review.evaluation == 0 {
                                 Image(systemName: "hand.thumbsup.fill")
                                     .foregroundColor(.orange)
-                            }else {
+                            } else {
                                 Image(systemName: "hand.thumbsdown.fill")
                                     .foregroundColor(.orange)
-                                
                             }
                         }
-                        .padding([.leading,.trailing,.top])
-                        
-                        
+                        .padding([.leading, .trailing, .top])
                         
                         Text(review.description)
                             .font(.body)
+                            .lineLimit(expandedStates[review.id, default: false] ? nil : lineLimit)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .foregroundStyle(.primary)
                             .padding()
                         
+                        Button {
+                            withAnimation {
+                                expandedStates[review.id] = !(expandedStates[review.id] ?? false)
+                            }
+                        } label: {
+                            Text(expandedStates[review.id, default: false] ? "一部を表示" : "もっと見る")
+                        }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding()
+                        
                         Spacer()
                     }
-                    .frame(width: 350, height: 180)
+                    .frame(width: 350, height: expandedStates[review.id, default: false] ? nil : 250)
                     .background(Color.component)
                     .cornerRadius(10)
                 }
@@ -243,6 +256,6 @@ struct CommentView: View {
 }
 
 #Preview {
-    DetailView(selectedMapInfo: MockData.sampleEnpty)
+    DetailView(selectedMapInfo: MockData.sample)
 }
 
