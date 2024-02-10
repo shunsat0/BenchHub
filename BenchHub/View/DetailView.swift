@@ -236,18 +236,38 @@ struct ReviewAndDistanceView: View {
 
 
 struct ImagesView: View {
+    // 仮の変変数
+    @State var isImage: Bool  = true
+    
     var body: some View {
-        ScrollView(.horizontal,showsIndicators: false) {
-            LazyHStack {
-                ForEach(1...3, id: \.self) { _ in
-                    Image("bench")
-                        .resizable()
-                        .scaledToFit()
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .frame(width: 200,height: 280)
+        if(isImage) {
+            ScrollView(.horizontal,showsIndicators: false) {
+                LazyHStack {
+                    ForEach(1...3, id: \.self) { _ in
+                        Image("bench")
+                            .resizable()
+                            .scaledToFit()
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .frame(width: 200,height: 280)
+                    }
                 }
             }
+        } else {
+            HStack {
+                Image(systemName: "camera.fill")
+                    .foregroundColor(.accentColor)
+                    .padding(.leading)
+                Text("あなたの写真を追加")
+                    .foregroundColor(.accentColor)
+                Spacer()
+            }
+            .frame(width: 350, height: 50)
+            .cornerRadius(10)
+            .onTapGesture {
+                print("tap")
+            }
         }
+        
         
     }
 }
