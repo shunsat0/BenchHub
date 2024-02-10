@@ -275,45 +275,65 @@ struct ImagesView: View {
 struct CommentView: View {
     var mapInfo: MapModel
     
+    @State var exsitsComment: Bool = true
+    
     // さらに表示を追加する
     var body: some View {
-        ScrollView(.horizontal,showsIndicators: false) {
-            LazyHStack(spacing: 16) {
-                ForEach(mapInfo.reviews, id: \.id) { review in
-                    
-                    VStack(alignment: .leading) {
+        if(exsitsComment){
+            ScrollView(.horizontal,showsIndicators: false) {
+                LazyHStack(spacing: 16) {
+                    ForEach(mapInfo.reviews, id: \.id) { review in
+                        
                         VStack(alignment: .leading) {
-                            HStack {
-                                Text(review.title)
-                                Spacer()
-                                Text("1年前")
-                            }
-                            
-                            if(review.evaluation == 0){
-                                Image(systemName: "hand.thumbsup.fill")
-                                    .foregroundColor(.orange)
-                            }else {
-                                Image(systemName: "hand.thumbsdown.fill")
-                                    .foregroundColor(.orange)
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Text(review.title)
+                                    Spacer()
+                                    Text("1年前")
+                                }
                                 
+                                if(review.evaluation == 0){
+                                    Image(systemName: "hand.thumbsup.fill")
+                                        .foregroundColor(.orange)
+                                }else {
+                                    Image(systemName: "hand.thumbsdown.fill")
+                                        .foregroundColor(.orange)
+                                    
+                                }
                             }
+                            .padding([.leading,.trailing,.top])
+                            
+                            
+                            
+                            Text(review.description)
+                                .font(.body)
+                                .foregroundStyle(.primary)
+                                .padding()
+                            
+                            Spacer()
                         }
-                        .padding([.leading,.trailing,.top])
+                        .frame(width: 350, height: 180)
                         
-                        
-                        
-                        Text(review.description)
-                            .font(.body)
-                            .foregroundStyle(.primary)
-                            .padding()
-                        
-                        Spacer()
+                        .cornerRadius(10)
                     }
-                    .frame(width: 350, height: 180)
-                    .background(.regularMaterial)
-                    .cornerRadius(10)
                 }
             }
+        } else {
+            HStack {
+                Image(systemName: "camera.fill")
+                    .foregroundColor(.accentColor)
+                    .padding(.leading)
+                Text("あなたの口コミを追加")
+                    .foregroundColor(.accentColor)
+                Spacer()
+            }
+            .frame(width: 350, height: 50)
+           
+            .cornerRadius(10)
+            .onTapGesture {
+                print("tap")
+            }
+            
         }
     }
 }
