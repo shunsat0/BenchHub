@@ -117,10 +117,40 @@ struct PostReviewView: View {
             }
             .padding()
             
+            Divider()
+            
+            HStack {
+                Image(systemName: "camera.fill")
+                    .foregroundColor(.accentColor)
+                    .padding(.leading)
+                Text("あなたの写真を追加")
+                    .foregroundColor(.accentColor)
+                Spacer()
+            }
+            .onTapGesture {
+                print("tap")
+            }
+            .padding()
+            
+            Divider()
+            
+            HStack {
+                Image(systemName: "camera.fill")
+                    .foregroundColor(.accentColor)
+                    .padding(.leading)
+                Text("あなたの口コミを追加")
+                    .foregroundColor(.accentColor)
+                Spacer()
+            }
+            .cornerRadius(10)
+            .onTapGesture {
+                print("tap")
+            }
+            .padding()
         }
-        .frame(width: 350, height: 50)
-        .background(.regularMaterial)
+        .frame(width: 350)
         .cornerRadius(10)
+        .padding()
     }
 }
 
