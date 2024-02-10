@@ -107,14 +107,41 @@ struct ReviewAndDistanceView: View {
                     .font(.caption)
                 
                 HStack {
+                    Button(action: {
+                        isShowingSheet = true
+                    }, label: {
+                        Image(systemName: "hand.thumbsup.fill")
+                            .foregroundColor(.accentColor)
+                        
+                        Text("78%")
+                            .fontDesign(.monospaced)
+                            .fontWeight(.bold)
+                            .foregroundColor(.accentColor)
+                    })
+                    .sheet(isPresented: $isShowingSheet){
+                        VStack {
+                            HStack {
+                                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                                    Text("キャンセル")
+                                        .foregroundColor(.accentColor)
+                                })
+                                
+                                Spacer()
+                                
+                                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                                    Text("完了")
+                                        .foregroundColor(.accentColor)
+                                })
+                            }
+                            .padding()
+                            
+                            PostReviewView()
+                            
+                            Spacer()
+                        }
+                        .presentationDetents([.height(200)])
+                    }
                     
-                    Image(systemName: "hand.thumbsup.fill")
-                        .foregroundColor(.accentColor)
-                    
-                    Text("78%")
-                        .fontDesign(.monospaced)
-                        .fontWeight(.bold)
-                        .foregroundColor(.accentColor)
                 }
             }
             
