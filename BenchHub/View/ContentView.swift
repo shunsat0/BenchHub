@@ -51,7 +51,7 @@ struct ContentView: View {
             }label: {
                 Image(systemName: "location.fill")
                     .resizable()
-                    .frame(width: 35.0,height: 35.0)
+                    .frame(width: 30.0,height: 30.0)
                     .padding(5)
                     .background(Color.component)
                     .cornerRadius(10)
