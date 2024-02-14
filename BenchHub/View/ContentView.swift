@@ -12,12 +12,14 @@ struct ContentView: View {
     @StateObject var viewModel = MapDataViewModel()
     @StateObject var detailViewModel = DetailViewModel()
     
-    @State var position: MapCameraPosition = .automatic
+    @State var position: MapCameraPosition = .userLocation(fallback: .automatic)
+    
     @State var isShowSheet: Bool = false
     
     var body: some View {
         ZStack {
-            Map() {
+            Map(position: $position) {
+                UserAnnotation(anchor: .center)
                 ForEach(viewModel.mapData) { mapInfo in
                     Annotation(mapInfo.name, coordinate: mapInfo.coordinate) {
                         ZStack {
@@ -39,25 +41,20 @@ struct ContentView: View {
                     }
                 }
             }
+            .task {
+                let manager = CLLocationManager()
+                manager.requestWhenInUseAuthorization()
+            }
+            .mapControls {
+                MapUserLocationButton()
+                MapCompass()
+                MapScaleView()
+            }
             .onAppear {
                 Task {
                     await viewModel.fetchData()
                 }
             }
-            
-            Button {
-                // 現在地に戻る
-                
-            }label: {
-                Image(systemName: "location.fill")
-                    .resizable()
-                    .frame(width: 30.0,height: 30.0)
-                    .padding(5)
-                    .background(Color.component)
-                    .cornerRadius(10)
-            }
-            .padding(.leading,300)
-            .padding(.top,700)
         }
     }
 }
