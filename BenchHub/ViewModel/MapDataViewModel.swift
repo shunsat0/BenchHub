@@ -11,7 +11,6 @@ import FirebaseFirestore
 class MapDataViewModel: ObservableObject {
     @Published var mapData = [MapModel]()
 
-    
     func fetchData() async {
         let db = Firestore.firestore()
         
@@ -45,5 +44,9 @@ class MapDataViewModel: ObservableObject {
         } catch {
             print("Error getting documents: \(error)")
         }
+    }
+    
+    func addData() {
+        
     }
 }
