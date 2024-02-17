@@ -15,6 +15,9 @@ struct DetailView: View {
     @StateObject var viewModel = MapDataViewModel()
     @StateObject var post = PostViewModel()
     
+    // DetailViewに追加
+    @State private var evaluation: Int = 0
+    @State private var text: String = ""
     
     var body: some View {
         VStack() {
@@ -56,8 +59,8 @@ struct DetailView: View {
                                 isShowingSheet = false
                                 
                                 Task {
-                                    await PostViewModel().addData(postData: PostModel(id: selectedMapInfo.name, evaluation: 0, description: "test"))
-                                    // evaluationも選択したものがちゃんと保存できていないので、設計し直す
+                                    await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text))
+                                    
                                 }
                             }, label: {
                                 Text("完了")
@@ -66,7 +69,7 @@ struct DetailView: View {
                         }
                         .padding()
                         
-                        PostReviewView()
+                        PostReviewView(evaluation: $evaluation, text: $text)
                         
                         
                         Spacer()
@@ -85,7 +88,8 @@ struct PostReviewView: View {
     @State var isPressedThumbsUp: Bool = false
     @State var isPressedThumbsDown: Bool = false
     @State var isShowingSheet: Bool = false
-    @State var text: String = ""
+    @Binding var evaluation: Int
+    @Binding var text: String
     
     var post = PostViewModel()
     
@@ -105,7 +109,7 @@ struct PostReviewView: View {
                             isPressedThumbsDown = false
                         }
                         
-                        //evaluation = 0 // good
+                        evaluation = 0 // good
                         
                     }, label: {
                         Image(systemName: "hand.thumbsup.circle.fill")
@@ -118,7 +122,7 @@ struct PostReviewView: View {
                             isPressedThumbsUp = false
                         }
                         
-                      // evaluation = 1 // bad
+                        evaluation = 1 // bad
                     }, label: {
                         Image(systemName: "hand.thumbsdown.circle.fill")
                             .foregroundColor(isPressedThumbsDown ? .accentColor : .secondary)
@@ -288,6 +292,6 @@ struct CommentView: View {
     }
 }
 
-#Preview {
-    DetailView(selectedMapInfo: MockData.sample)
-}
+//#Preview {
+//    DetailView(selectedMapInfo: MockData.sample)
+//}
