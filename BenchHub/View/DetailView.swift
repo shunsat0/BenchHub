@@ -5,12 +5,19 @@
 //  Created by Shun Sato on 2024/02/05.
 //
 
+
 import SwiftUI
 
 struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isShowingSheet = false
     var selectedMapInfo: MapModel
+    @StateObject var viewModel = MapDataViewModel()
+    @StateObject var post = PostViewModel()
+    
+    // DetailViewに追加
+    @State private var evaluation: Int = 0
+    @State private var text: String = ""
     
     var body: some View {
         VStack() {
@@ -48,8 +55,13 @@ struct DetailView: View {
                             
                             Spacer()
                             
-                            Button(action: {
+                            Button(action:  {
                                 isShowingSheet = false
+                                
+                                Task {
+                                    await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text))
+                                    
+                                }
                             }, label: {
                                 Text("完了")
                                     .foregroundColor(.accentColor)
@@ -57,11 +69,12 @@ struct DetailView: View {
                         }
                         .padding()
                         
-                        PostReviewView()
+                        PostReviewView(evaluation: $evaluation, text: $text)
+                        
                         
                         Spacer()
                     }
-                    .presentationDetents([.height(300)])
+                    .presentationDetents([.height(500)])
                     .presentationBackground(Color.background)
                 }
                 .padding()
@@ -72,6 +85,14 @@ struct DetailView: View {
 }
 
 struct PostReviewView: View {
+    @State var isPressedThumbsUp: Bool = false
+    @State var isPressedThumbsDown: Bool = false
+    @State var isShowingSheet: Bool = false
+    @Binding var evaluation: Int
+    @Binding var text: String
+    
+    var post = PostViewModel()
+    
     var body: some View {
         
         VStack {
@@ -83,15 +104,28 @@ struct PostReviewView: View {
                 
                 Group {
                     Button(action: {
+                        isPressedThumbsUp.toggle()
+                        if isPressedThumbsUp {
+                            isPressedThumbsDown = false
+                        }
+                        
+                        evaluation = 0 // good
                         
                     }, label: {
                         Image(systemName: "hand.thumbsup.circle.fill")
+                            .foregroundColor(isPressedThumbsUp ? .accentColor : .secondary)
                     })
                     
                     Button(action: {
+                        isPressedThumbsDown.toggle()
+                        if isPressedThumbsDown {
+                            isPressedThumbsUp = false
+                        }
                         
+                        evaluation = 1 // bad
                     }, label: {
                         Image(systemName: "hand.thumbsdown.circle.fill")
+                            .foregroundColor(isPressedThumbsDown ? .accentColor : .secondary)
                     })
                 }
                 .foregroundColor(.secondary)
@@ -101,29 +135,33 @@ struct PostReviewView: View {
             
             Divider()
                 .padding([.horizontal])
-
-                HStack {
-                    Button("\(Image(systemName: "camera.fill"))あなたの写真を追加"){
-                        print("tap")
-                    }
-                    .foregroundColor(.accentColor)
-                    Spacer()
-                }
-                .padding()
-                
-                Divider()
-                    .padding([.horizontal])
-                
-                HStack {
+            
+            HStack {
+                VStack {
                     Text("\(Image(systemName: "text.bubble"))あなたの口コミを追加")
                         .foregroundColor(.accentColor)
-                    Spacer()
+                    
+                    TextField("口コミを入力してください", text: $text, axis: .vertical)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .keyboardType(.twitter)
+                        .font(.body)
                 }
-                .cornerRadius(10)
-                .onTapGesture {
+                Spacer()
+            }
+            .padding()
+            
+            HStack {
+                Button("\(Image(systemName: "camera.fill"))あなたの写真を追加"){
                     print("tap")
                 }
-                .padding()
+                .foregroundColor(.accentColor)
+                Spacer()
+            }
+            .padding()
+            
+            Divider()
+                .padding([.horizontal])
+            
         }
         .frame(width: 350)
         .background(Color.component)
@@ -212,7 +250,6 @@ struct CommentView: View {
                     VStack(alignment: .leading) {
                         VStack(alignment: .leading) {
                             HStack {
-                                Text(review.title)
                                 Spacer()
                                 Text("1年前")
                             }
@@ -255,7 +292,6 @@ struct CommentView: View {
     }
 }
 
-#Preview {
-    DetailView(selectedMapInfo: MockData.sample)
-}
-
+//#Preview {
+//    DetailView(selectedMapInfo: MockData.sample)
+//}

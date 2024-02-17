@@ -9,7 +9,6 @@ import Foundation
 
 struct PostModel {
     let id: String
-    let evaluation: Int
-    let title: String
+    let evaluation: Int 
     let description: String
 }
