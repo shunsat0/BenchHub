@@ -37,15 +37,12 @@ class MapDataViewModel: ObservableObject {
                 let model = MapModel(latitude: latitude, longitude: longitude, name: name, ImageName: imageName, reviews: reviews)
                 DispatchQueue.main.async {
                     self.mapData.append(model)
+                    //print("データ!\(self.mapData)")
                 }
 
             }
         } catch {
             print("Error getting documents: \(error)")
         }
-    }
-    
-    func addData() {
-        
     }
 }
