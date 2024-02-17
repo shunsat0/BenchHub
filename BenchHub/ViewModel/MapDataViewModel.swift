@@ -44,8 +44,4 @@ class MapDataViewModel: ObservableObject {
             print("Error getting documents: \(error)")
         }
     }
-    
-    func addData() {
-        
-    }
 }
