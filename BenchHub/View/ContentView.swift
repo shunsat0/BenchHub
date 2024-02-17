@@ -11,10 +11,11 @@ import MapKit
 struct ContentView: View {
     @StateObject var viewModel = MapDataViewModel()
     @StateObject var detailViewModel = DetailViewModel()
+    @StateObject var postViewModel = PostViewModel()
     
     @State var position: MapCameraPosition = .userLocation(fallback: .automatic)
-    
-    @State var isShowSheet: Bool = false
+    @State var isShowReviewSheet: Bool = false
+    @State var isPost: Bool =  false
     
     var body: some View {
         ZStack {
@@ -30,13 +31,12 @@ struct ContentView: View {
                         }
                         .onTapGesture {
                             detailViewModel.selectedFramework = mapInfo
-                            isShowSheet = true
+                            isShowReviewSheet = true
                         }
-                        .sheet(isPresented: $isShowSheet) {
-                            DetailView(selectedMapInfo: detailViewModel.selectedFramework!)
+                        .sheet(isPresented: $isShowReviewSheet) {
+                            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet)
                                 .presentationDetents([ .medium, .large])
                                 .presentationBackground(Color.background)
-                            
                         }
                     }
                 }
@@ -50,7 +50,12 @@ struct ContentView: View {
                 MapCompass()
                 MapScaleView()
             }
-            .onAppear {
+            .onChange(of: isPost) {
+                Task {
+                    await viewModel.fetchData()
+                }
+            }
+            .onAppear() {
                 Task {
                     await viewModel.fetchData()
                 }
@@ -60,6 +65,6 @@ struct ContentView: View {
 }
 
 
-#Preview {
-    ContentView()
-}
+//#Preview {
+//    ContentView(isShowSheet: false, isPost: false)
+//}

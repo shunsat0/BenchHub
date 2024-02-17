@@ -10,14 +10,16 @@ import SwiftUI
 
 struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var isShowingSheet = false
+    @State var isShowPostSheet:Bool
     var selectedMapInfo: MapModel
     @StateObject var viewModel = MapDataViewModel()
     @StateObject var post = PostViewModel()
     
-    // DetailViewに追加
     @State private var evaluation: Int = 0
     @State private var text: String = ""
+    
+    @Binding var isPostReview: Bool
+    @Binding var isShowReviewSheet: Bool
     
     var body: some View {
         VStack() {
@@ -41,13 +43,12 @@ struct DetailView: View {
                 CommentView(mapInfo: selectedMapInfo)
                 
                 Button("\(Image(systemName: "square.and.pencil")) レビューを書く") {
-                    isShowingSheet = true
+                    isShowPostSheet = true
                 }
-                .sheet(isPresented: $isShowingSheet){
+                .sheet(isPresented: $isShowPostSheet){
                     VStack {
                         HStack {
                             Button(action: {
-                                isShowingSheet = false
                             }, label: {
                                 Text("キャンセル")
                                     .foregroundColor(.accentColor)
@@ -56,12 +57,14 @@ struct DetailView: View {
                             Spacer()
                             
                             Button(action:  {
-                                isShowingSheet = false
+                                isShowReviewSheet = false
+                                isShowPostSheet = false
                                 
                                 Task {
                                     await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text))
-                                    
+                                    isPostReview = true
                                 }
+                                
                             }, label: {
                                 Text("完了")
                                     .foregroundColor(.accentColor)
@@ -87,7 +90,7 @@ struct DetailView: View {
 struct PostReviewView: View {
     @State var isPressedThumbsUp: Bool = false
     @State var isPressedThumbsDown: Bool = false
-    @State var isShowingSheet: Bool = false
+    @State private var isShowSheet: Bool = false
     @Binding var evaluation: Int
     @Binding var text: String
     
@@ -172,7 +175,7 @@ struct PostReviewView: View {
 
 
 struct ReviewAndDistanceView: View {
-    @State private var isShowingSheet = false
+    @State private var isShowSheet = false
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
