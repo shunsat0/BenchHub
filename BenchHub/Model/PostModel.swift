@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct PostModel {
     let id: String
     let evaluation: Int 
-    let description: String
+    let description: String?
+    let imageUrl: String?
 }

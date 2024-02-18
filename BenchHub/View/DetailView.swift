@@ -20,6 +20,9 @@ struct DetailView: View {
     
     @Binding var isPostReview: Bool
     @Binding var isShowReviewSheet: Bool
+    @State var selectedImage:  UIImage?
+    
+    @State var imageUrl:String?
     
     var body: some View {
         VStack() {
@@ -34,7 +37,9 @@ struct DetailView: View {
             ScrollView(showsIndicators: false) {
                 Divider()
                 
-                ReviewAndDistanceView()
+                ReviewAndDistanceView(isShowPostSheet: isShowPostSheet) {
+                    isShowPostSheet = true
+                }
                 
                 Divider()
                 
@@ -49,6 +54,7 @@ struct DetailView: View {
                     VStack {
                         HStack {
                             Button(action: {
+                                isShowPostSheet = false
                             }, label: {
                                 Text("キャンセル")
                                     .foregroundColor(.accentColor)
@@ -61,7 +67,11 @@ struct DetailView: View {
                                 isShowPostSheet = false
                                 
                                 Task {
-                                    await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text))
+                                    imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
+                                    print("URL表示　\(String(describing: imageUrl))")
+                                    
+                                    await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text, imageUrl: imageUrl))
+                                    
                                     isPostReview = true
                                 }
                                 
@@ -72,7 +82,7 @@ struct DetailView: View {
                         }
                         .padding()
                         
-                        PostReviewView(evaluation: $evaluation, text: $text)
+                        PostReviewView(evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo,selectedImage: $selectedImage)
                         
                         
                         Spacer()
@@ -91,10 +101,14 @@ struct PostReviewView: View {
     @State var isPressedThumbsUp: Bool = false
     @State var isPressedThumbsDown: Bool = false
     @State private var isShowSheet: Bool = false
+    @State private var isShowImagePicker: Bool = false
     @Binding var evaluation: Int
     @Binding var text: String
+    var selectedMapInfo: MapModel
     
     var post = PostViewModel()
+    
+    @Binding var selectedImage: UIImage?
     
     var body: some View {
         
@@ -154,13 +168,25 @@ struct PostReviewView: View {
             .padding()
             
             HStack {
-                Button("\(Image(systemName: "camera.fill"))あなたの写真を追加"){
-                    print("tap")
+                VStack {
+                    Button("\(Image(systemName: "camera.fill"))あなたの写真を追加"){
+                        //post.UploadImage(name: selectedMapInfo.name)
+                        isShowImagePicker = true
+                    }
+                    .foregroundColor(.accentColor)
+                    if let image = selectedImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
                 }
-                .foregroundColor(.accentColor)
                 Spacer()
             }
             .padding()
+            .sheet(isPresented: $isShowImagePicker) {
+                ImagePicker(image: $selectedImage)
+            }
             
             Divider()
                 .padding([.horizontal])
@@ -173,10 +199,51 @@ struct PostReviewView: View {
     }
 }
 
+struct ImagePicker: UIViewControllerRepresentable {
+    @Environment(\.presentationMode) var presentationMode
+    @Binding var image: UIImage?
+    
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = context.coordinator
+        return imagePicker
+    }
+    
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
+        // No update needed
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
+    
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let parent: ImagePicker
+        
+        init(parent: ImagePicker) {
+            self.parent = parent
+        }
+        
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let image = info[.originalImage] as? UIImage {
+                parent.image = image
+            }
+            
+            parent.presentationMode.wrappedValue.dismiss()
+        }
+        
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.presentationMode.wrappedValue.dismiss()
+        }
+    }
+}
+
+
 
 struct ReviewAndDistanceView: View {
-    @State private var isShowSheet = false
     @Environment(\.dismiss) private var dismiss
+    @State var isShowPostSheet:Bool
+    var postButtonAction: () -> Void
     
     var body: some View {
         HStack{
@@ -184,16 +251,19 @@ struct ReviewAndDistanceView: View {
                 Text("10件の評価") // \(totalReviewCount)の評価
                     .foregroundColor(.secondary)
                     .font(.caption)
-                
-                HStack {
-                    Image(systemName: "hand.thumbsup.fill")
-                        .foregroundColor(.orange)
-                    
-                    Text("78%")
-                        .fontDesign(.monospaced)
-                        .fontWeight(.bold)
-                        .foregroundColor(.orange)
-                }
+                Button(action: {
+                    postButtonAction()
+                }, label: {
+                    HStack {
+                        Image(systemName: "hand.thumbsup.fill")
+                            .foregroundColor(.accentColor)
+                        
+                        Text("78%")
+                            .fontDesign(.monospaced)
+                            .fontWeight(.bold)
+                            .foregroundColor(.accentColor)
+                    }
+                })
             }
             
             Divider()
@@ -295,6 +365,9 @@ struct CommentView: View {
     }
 }
 
-//#Preview {
-//    DetailView(selectedMapInfo: MockData.sample)
-//}
+#Preview {
+    DetailView(isShowPostSheet: false, selectedMapInfo: sample, isPostReview: .constant(false), isShowReviewSheet: .constant(false))
+}
+
+var sample = MapModel(latitude: 35.561282, longitude: 139.711039, name: "西蒲田公園",ImageName: "bench", reviews: [Review(description: "公園のベンチは非常に快適で、座り心地が良いです。木陰に配置されており、景色を楽しみながらくつろげます。メンテナンスも行き届いており、清潔感があります。公園を訪れる人々にとって、素晴らしい休憩スポットとなっています。", evaluation: 0),Review(description: "公園のベンチは老朽化しており、座面が不安定です。背もたれもないため、長時間座っていると疲れやすく、くつろぐことができません。また、周囲にゴミや汚れが散乱しており、清潔さを欠いています。公園全体のメンテナンスが行き届いていない印象を受けます。", evaluation: 1)] )
+
