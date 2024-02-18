@@ -20,6 +20,7 @@
 		247EB06C2B727C530003CFD3 /* MapDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247EB06B2B727C530003CFD3 /* MapDataViewModel.swift */; };
 		247EB06E2B728F4C0003CFD3 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247EB06D2B728F4C0003CFD3 /* DetailViewModel.swift */; };
 		248993042B810988006649BA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 248993032B810988006649BA /* FirebaseStorage */; };
+		248993062B821BE0006649BA /* MyAppCheckProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248993052B821BE0006649BA /* MyAppCheckProviderFactory.swift */; };
 		24A71B382B3DCDEB0050A556 /* BenchHubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A71B372B3DCDEB0050A556 /* BenchHubApp.swift */; };
 		24A71B3C2B3DCDEC0050A556 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24A71B3B2B3DCDEC0050A556 /* Assets.xcassets */; };
 		24A71B3F2B3DCDEC0050A556 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24A71B3E2B3DCDEC0050A556 /* Preview Assets.xcassets */; };
@@ -55,6 +56,8 @@
 		24057CA02B7274CC00503984 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		247EB06B2B727C530003CFD3 /* MapDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataViewModel.swift; sourceTree = "<group>"; };
 		247EB06D2B728F4C0003CFD3 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
+		248993052B821BE0006649BA /* MyAppCheckProviderFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAppCheckProviderFactory.swift; sourceTree = "<group>"; };
+		248993072B822081006649BA /* BenchHub.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BenchHub.entitlements; sourceTree = "<group>"; };
 		24A71B342B3DCDEB0050A556 /* BenchHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BenchHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24A71B372B3DCDEB0050A556 /* BenchHubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchHubApp.swift; sourceTree = "<group>"; };
 		24A71B3B2B3DCDEC0050A556 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -130,6 +133,13 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		248993082B8220C6006649BA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		24A71B2B2B3DCDEB0050A556 = {
 			isa = PBXGroup;
 			children = (
@@ -137,6 +147,7 @@
 				24A71B472B3DCDEC0050A556 /* BenchHubTests */,
 				24A71B512B3DCDEC0050A556 /* BenchHubUITests */,
 				24A71B352B3DCDEB0050A556 /* Products */,
+				248993082B8220C6006649BA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -153,6 +164,7 @@
 		24A71B362B3DCDEB0050A556 /* BenchHub */ = {
 			isa = PBXGroup;
 			children = (
+				248993072B822081006649BA /* BenchHub.entitlements */,
 				24D759372B73D20100A426DC /* GoogleService-Info.plist */,
 				24A71B372B3DCDEB0050A556 /* BenchHubApp.swift */,
 				247EB0682B727BE80003CFD3 /* Model */,
@@ -160,6 +172,7 @@
 				247EB06A2B727BFF0003CFD3 /* View */,
 				24A71B3B2B3DCDEC0050A556 /* Assets.xcassets */,
 				24A71B3D2B3DCDEC0050A556 /* Preview Content */,
+				248993052B821BE0006649BA /* MyAppCheckProviderFactory.swift */,
 			);
 			path = BenchHub;
 			sourceTree = "<group>";
@@ -336,6 +349,7 @@
 				24CD65C22B77F660006C5001 /* PostModel.swift in Sources */,
 				24057CA12B7274CC00503984 /* TestView.swift in Sources */,
 				247EB06E2B728F4C0003CFD3 /* DetailViewModel.swift in Sources */,
+				248993062B821BE0006649BA /* MyAppCheckProviderFactory.swift in Sources */,
 				24057C8E2B6FE08200503984 /* DetailView.swift in Sources */,
 				247EB06C2B727C530003CFD3 /* MapDataViewModel.swift in Sources */,
 				24CD65FA2B7BB25E006C5001 /* PostViewModel.swift in Sources */,
@@ -501,6 +515,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BenchHub/BenchHub.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BenchHub/Preview Content\"";
@@ -536,6 +551,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BenchHub/BenchHub.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BenchHub/Preview Content\"";
