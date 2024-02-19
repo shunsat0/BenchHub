@@ -44,8 +44,10 @@ struct DetailView: View {
                 Divider()
                 
                 ImagesView(mapInfo: selectedMapInfo)
+                    .padding(.top)
                 
                 CommentView(mapInfo: selectedMapInfo)
+                    .padding(.top)
                 
                 Button("\(Image(systemName: "square.and.pencil")) レビューを書く") {
                     isShowPostSheet = true
