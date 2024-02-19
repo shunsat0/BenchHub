@@ -158,10 +158,13 @@ struct PostReviewView: View {
                     Text("\(Image(systemName: "text.bubble"))あなたの口コミを追加")
                         .foregroundColor(.accentColor)
                     
-                    TextField("口コミを入力してください", text: $text, axis: .vertical)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    TextEditor(text: $text)
+                        .textEditorStyle(PlainTextEditorStyle())
+                        .frame(height: 200)
                         .keyboardType(.twitter)
                         .font(.body)
+                        .background(Color.background)
+                        .cornerRadius(10.0)
                 }
                 Spacer()
             }
@@ -318,9 +321,7 @@ struct CommentView: View {
     private let lineLimit: Int = 3
     // 各レビューの展開状態を追跡するための辞書
     @State private var expandedStates: [UUID: Bool] = [:]
-    
-    // 3行以内で収まっている場合は、もっとみるは非表示にしたい　後回しでいいかも
-    
+
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 16) {
@@ -350,9 +351,7 @@ struct CommentView: View {
                             .padding()
                         
                         Button {
-                            withAnimation {
-                                expandedStates[review.id] = !(expandedStates[review.id] ?? false)
-                            }
+                            expandedStates[review.id] = !(expandedStates[review.id] ?? false)
                         } label: {
                             Text(expandedStates[review.id, default: false] ? "一部を表示" : "もっと見る")
                         }
