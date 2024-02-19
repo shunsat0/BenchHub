@@ -22,19 +22,19 @@ class MapDataViewModel: ObservableObject {
                 let geoPoint = data["geopoint"] as? GeoPoint ?? GeoPoint(latitude: 0, longitude: 0)
                 let latitude = geoPoint.latitude
                 let longitude = geoPoint.longitude
-                let imageName = "bench"
                 
                 var reviews: [Review] = []
                 if let reviewsData = data["reviews"] as? [[String: Any]] {
                     for reviewData in reviewsData {
                         let description = reviewData["description"] as? String ?? ""
-                        let evaluation = reviewData["evaluation"] as? Int ?? 0
-                        reviews.append(Review(description: description, evaluation: evaluation))
+                        let evaluation = reviewData["evaluation"] as? Int ?? 0                        
+                        let ImageUrl = reviewData["image"] as? String ?? ""
+                        reviews.append(Review(description: description, evaluation: evaluation, ImageUrl: ImageUrl))
                     }
                 }
                 
 
-                let model = MapModel(latitude: latitude, longitude: longitude, name: name, ImageName: imageName, reviews: reviews)
+                let model = MapModel(latitude: latitude, longitude: longitude, name: name,reviews: reviews)
                 DispatchQueue.main.async {
                     self.mapData.append(model)
                     //print("データ!\(self.mapData)")
