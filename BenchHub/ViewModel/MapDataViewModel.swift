@@ -28,7 +28,7 @@ class MapDataViewModel: ObservableObject {
                     for reviewData in reviewsData {
                         let description = reviewData["description"] as? String ?? ""
                         let evaluation = reviewData["evaluation"] as? Int ?? 0                        
-                        let ImageUrl = reviewData["image"] as? String ?? ""
+                        let ImageUrl = reviewData["image"] as? String ?? "https://1.bp.blogspot.com/-ezrLFVDoMhg/Xlyf7yQWzaI/AAAAAAABXrA/utIBXYJDiPYJ4hMzRXrZSHrcZ11sW2PiACNcBGAsYHQ/s1600/no_image_yoko.jpg"
                         reviews.append(Review(description: description, evaluation: evaluation, ImageUrl: ImageUrl))
                     }
                 }
@@ -37,7 +37,6 @@ class MapDataViewModel: ObservableObject {
                 let model = MapModel(latitude: latitude, longitude: longitude, name: name,reviews: reviews)
                 DispatchQueue.main.async {
                     self.mapData.append(model)
-                    //print("データ!\(self.mapData)")
                 }
 
             }
