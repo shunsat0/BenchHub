@@ -158,10 +158,13 @@ struct PostReviewView: View {
                     Text("\(Image(systemName: "text.bubble"))あなたの口コミを追加")
                         .foregroundColor(.accentColor)
                     
-                    TextField("口コミを入力してください", text: $text, axis: .vertical)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    TextEditor(text: $text)
+                        .textEditorStyle(PlainTextEditorStyle())
+                        .frame(height: 200)
                         .keyboardType(.twitter)
                         .font(.body)
+                        .background(Color.background)
+                        .cornerRadius(10.0)
                 }
                 Spacer()
             }
