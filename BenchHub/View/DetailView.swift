@@ -15,7 +15,7 @@ struct DetailView: View {
     @StateObject var viewModel = MapDataViewModel()
     @StateObject var post = PostViewModel()
     
-    @State private var evaluation: Int = 0
+    @State private var evaluation: Int = 2
     @State private var text: String = ""
     
     @Binding var isPostReview: Bool
@@ -23,6 +23,9 @@ struct DetailView: View {
     @State var selectedImage:  UIImage?
     
     @State var imageUrl:String?
+    
+    @State var isGoodOrBad: Bool
+    @State var showAlert = false
     
     var body: some View {
         VStack() {
@@ -55,37 +58,47 @@ struct DetailView: View {
                 .sheet(isPresented: $isShowPostSheet){
                     VStack {
                         HStack {
-                            Button(action: {
+                            Button("キャンセル"){
                                 isShowPostSheet = false
-                            }, label: {
-                                Text("キャンセル")
-                                    .foregroundColor(.accentColor)
-                            })
+                            }
                             
                             Spacer()
                             
-                            Button(action:  {
-                                isShowReviewSheet = false
-                                isShowPostSheet = false
-                                
-                                Task {
-                                    imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
-                                    print("URL表示　\(String(describing: imageUrl))")
-                                    
-                                    await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text, imageUrl: imageUrl))
-                                    
-                                    isPostReview = true
+                            Button("完了") {
+                               // 評価 or コメントテキストが空あらアラート表示
+                                if(!isGoodOrBad || text.isEmpty) {
+                                    showAlert = true
+                                    print("評価が空です")
+                                    print(showAlert)
+                                }else {
+                                    Task {
+                                        imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
+                                        print("URL表示　\(String(describing: imageUrl))")
+                                        
+                                        await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text, imageUrl: imageUrl))
+                                        
+                                        isShowReviewSheet = false
+                                        isShowPostSheet = false
+                                    }
+                                    isPostReview.toggle()
                                 }
                                 
-                            }, label: {
-                                Text("完了")
-                                    .foregroundColor(.accentColor)
-                            })
+                            }
+                            .alert(isPresented: $showAlert) {
+                                Alert(
+                                    title: Text("評価とコメントの両方を入力してください！"),
+                                    dismissButton: .default(
+                                        Text("OK"),
+                                        action: {
+                                            showAlert = false
+                                        }
+                                    )
+                                )
+                            }
                         }
                         .padding()
                         
-                        PostReviewView(evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo,selectedImage: $selectedImage)
-                        
+                        PostReviewView(evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo,selectedImage: $selectedImage,isGoodOrBad: $isGoodOrBad)
                         
                         Spacer()
                     }
@@ -107,10 +120,9 @@ struct PostReviewView: View {
     @Binding var evaluation: Int
     @Binding var text: String
     var selectedMapInfo: MapModel
-    
     var post = PostViewModel()
-    
     @Binding var selectedImage: UIImage?
+    @Binding var isGoodOrBad: Bool
     
     var body: some View {
         
@@ -128,6 +140,8 @@ struct PostReviewView: View {
                             isPressedThumbsDown = false
                         }
                         
+                        isGoodOrBad = isPressedThumbsUp // ボタンが押されているかどうかの判別
+                        
                         evaluation = 0 // good
                         
                     }, label: {
@@ -140,6 +154,8 @@ struct PostReviewView: View {
                         if isPressedThumbsDown {
                             isPressedThumbsUp = false
                         }
+                        
+                        isGoodOrBad = isPressedThumbsDown // ボタンが押されているかどうかの判別
                         
                         evaluation = 1 // bad
                     }, label: {
@@ -157,12 +173,9 @@ struct PostReviewView: View {
             
             HStack {
                 VStack {
-                    Text("\(Image(systemName: "text.bubble"))あなたの口コミを追加")
-                        .foregroundColor(.accentColor)
-                    
                     TextEditor(text: $text)
                         .textEditorStyle(PlainTextEditorStyle())
-                        .frame(height: 200)
+                        .frame(height: 80)
                         .keyboardType(.twitter)
                         .font(.body)
                         .background(Color.background)
@@ -175,7 +188,6 @@ struct PostReviewView: View {
             HStack {
                 VStack {
                     Button("\(Image(systemName: "camera.fill"))あなたの写真を追加"){
-                        //post.UploadImage(name: selectedMapInfo.name)
                         isShowImagePicker = true
                     }
                     .foregroundColor(.accentColor)
@@ -300,41 +312,40 @@ struct ImagesView: View {
     
     var body: some View {
         ScrollView(.horizontal,showsIndicators: false) {
-            LazyHStack {
+            LazyHStack(spacing: 16) {
                 ForEach(mapInfo.reviews, id: \.id) { images in
-                    let imageUrl = URL(string: images.ImageUrl)
-                    
-                    AsyncImage(url: imageUrl) { image in
-                        image.resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .cornerRadius(10.0)
-                    } placeholder: {
-                        ProgressView()
+                    if let imageUrl = URL(string: images.ImageUrl) {
+                        // imageUrlがnilでない場合に実行
+                        AsyncImage(url: imageUrl) { image in
+                            image.resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .cornerRadius(10.0)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(width: 250, height: 250)
+                    } else {
+                        EmptyView()
                     }
-                    .frame(width: 250, height: 250)
                 }
             }
         }
     }
 }
 
+
+
 struct CommentView: View {
     var mapInfo: MapModel
-    private let lineLimit: Int = 3
-    // 各レビューの展開状態を追跡するための辞書
-    @State private var expandedStates: [UUID: Bool] = [:]
-
+    private let lineLimit: Int = 4
+    @State private var isExpanded = false
+    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 16) {
                 ForEach(mapInfo.reviews, id: \.id) { review in
                     VStack(alignment: .leading) {
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Spacer()
-                                Text("1年前")
-                            }
-                            
+                        HStack {
                             if review.evaluation == 0 {
                                 Image(systemName: "hand.thumbsup.fill")
                                     .foregroundColor(.orange)
@@ -342,29 +353,30 @@ struct CommentView: View {
                                 Image(systemName: "hand.thumbsdown.fill")
                                     .foregroundColor(.orange)
                             }
+                            Spacer()
+                            Text("1年前")
                         }
                         .padding([.leading, .trailing, .top])
                         
                         Text(review.description)
-                            .font(.body)
-                            .lineLimit(expandedStates[review.id, default: false] ? nil : lineLimit)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .foregroundStyle(.primary)
-                            .padding()
+                            .lineLimit(isExpanded ? nil : lineLimit)
+                            .fixedSize(horizontal: false, vertical: isExpanded)
+                            .frame(maxWidth: 300, alignment: .leading)
                         
                         Button {
-                            expandedStates[review.id] = !(expandedStates[review.id] ?? false)
+                            withAnimation { isExpanded.toggle() }
                         } label: {
-                            Text(expandedStates[review.id, default: false] ? "一部を表示" : "もっと見る")
+                            Text(isExpanded ? "一部を表示" : "もっと見る")
+                                .fontWeight(.regular)
                         }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding()
+                        .frame(minWidth:300, maxWidth: 300, alignment: .bottomTrailing)
                         
                         Spacer()
                     }
-                    .frame(width: 350, height: expandedStates[review.id, default: false] ? nil : 250)
+                    .padding(.horizontal)
                     .background(Color.component)
                     .cornerRadius(10)
+                    .frame(height: isExpanded ? 250 : 150)
                 }
             }
         }
@@ -372,7 +384,7 @@ struct CommentView: View {
 }
 
 #Preview {
-    DetailView(isShowPostSheet: false, selectedMapInfo: sample, isPostReview: .constant(false), isShowReviewSheet: .constant(false))
+    DetailView(isShowPostSheet: false, selectedMapInfo: sample, isPostReview: .constant(false), isShowReviewSheet: .constant(false),isGoodOrBad: false)
 }
 
 var sample = MapModel(latitude: 35.561282, longitude: 139.711039, name: "西蒲田公園",reviews: [Review(description: "公園のベンチは非常に快適で、座り心地が良いです。木陰に配置されており、景色を楽しみながらくつろげます。メンテナンスも行き届いており、清潔感があります。公園を訪れる人々にとって、素晴らしい休憩スポットとなっています。", evaluation: 0, ImageUrl: "https://1.bp.blogspot.com/-ezrLFVDoMhg/Xlyf7yQWzaI/AAAAAAABXrA/utIBXYJDiPYJ4hMzRXrZSHrcZ11sW2PiACNcBGAsYHQ/s1600/no_image_yoko.jpg"),Review(description: "公園のベンチは老朽化しており、座面が不安定です。背もたれもないため、長時間座っていると疲れやすく、くつろぐことができません。また、周囲にゴミや汚れが散乱しており、清潔さを欠いています。公園全体のメンテナンスが行き届いていない印象を受けます。", evaluation: 1, ImageUrl: "https://1.bp.blogspot.com/-ezrLFVDoMhg/Xlyf7yQWzaI/AAAAAAABXrA/utIBXYJDiPYJ4hMzRXrZSHrcZ11sW2PiACNcBGAsYHQ/s1600/no_image_yoko.jpg")] )

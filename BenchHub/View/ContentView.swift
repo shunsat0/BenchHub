@@ -34,7 +34,7 @@ struct ContentView: View {
                             isShowReviewSheet = true
                         }
                         .sheet(isPresented: $isShowReviewSheet) {
-                            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet)
+                            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false)
                                 .presentationDetents([ .medium, .large])
                                 .presentationBackground(Color.background)
                         }
@@ -52,7 +52,7 @@ struct ContentView: View {
             }
             .onChange(of: isPost) {
                 Task {
-                    await viewModel.fetchData()
+                   await viewModel.fetchData()                    
                 }
             }
             .onAppear() {
@@ -65,6 +65,6 @@ struct ContentView: View {
 }
 
 
-//#Preview {
-//    ContentView(isShowSheet: false, isPost: false)
-//}
+#Preview {
+    ContentView(isPost: false)
+}
