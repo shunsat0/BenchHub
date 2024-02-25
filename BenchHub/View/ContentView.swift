@@ -16,6 +16,7 @@ struct ContentView: View {
     @State var position: MapCameraPosition = .userLocation(fallback: .automatic)
     @State var isShowReviewSheet: Bool = false
     @State var isPost: Bool =  false
+    @State var getedData:Bool = false
     
     var body: some View {
         ZStack {
@@ -34,7 +35,7 @@ struct ContentView: View {
                             isShowReviewSheet = true
                         }
                         .sheet(isPresented: $isShowReviewSheet) {
-                            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet)
+                            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData)
                                 .presentationDetents([ .medium, .large])
                                 .presentationBackground(Color.background)
                         }
@@ -50,9 +51,9 @@ struct ContentView: View {
                 MapCompass()
                 MapScaleView()
             }
-            .onChange(of: isPost) {
+            .onChange(of: getedData) {
                 Task {
-                    await viewModel.fetchData()
+                   await viewModel.fetchData()
                 }
             }
             .onAppear() {
@@ -65,6 +66,6 @@ struct ContentView: View {
 }
 
 
-//#Preview {
-//    ContentView(isShowSheet: false, isPost: false)
-//}
+#Preview {
+    ContentView(isPost: false)
+}
