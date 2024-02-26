@@ -358,28 +358,33 @@ struct ImagesListView: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             ScrollView(.vertical, showsIndicators: false) {
-                WaterfallGrid(mapInfo.reviews) {image  in
-                    AsyncImage(url: URL(string: image.ImageUrl)) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .cornerRadius(10.0)
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    
-                    .onTapGesture {
-                        // 画像を拡大する
+                WaterfallGrid(mapInfo.reviews, id: \.self) { image ->  AnyView in
+                    if let url = URL(string: image.ImageUrl) {
+                        return AnyView(
+                            AsyncImage(url: url) { image in
+                                image.resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .cornerRadius(10.0)
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .onTapGesture {
+                            }
+                        )
+                    } else {
+                        return AnyView(EmptyView())
                     }
                 }
-                .gridStyle(columns: 2)
+                .gridStyle(columns: 2, spacing: 8)
             }
             
             Button("\(Image(systemName: "xmark.circle.fill"))") {
                 showImageList = false
             }
+            .foregroundColor(.primary)
             .padding()
         }
+
     }
 }
 
