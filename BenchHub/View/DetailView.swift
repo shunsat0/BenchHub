@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import WaterfallGrid
 
 struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
@@ -316,10 +317,10 @@ struct ReviewAndDistanceView: View {
 struct ImagesView: View {
     var mapInfo: MapModel
     @State var showImageList: Bool = false
-
+    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 16) {
+            LazyHStack(spacing: 5) {
                 ForEach(mapInfo.reviews, id: \.id) { images in
                     if let imageUrl = URL(string: images.ImageUrl) {
                         // imageUrlがnilでない場合に実行
@@ -327,13 +328,14 @@ struct ImagesView: View {
                             image.resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .cornerRadius(10.0)
+                                .frame(width: 250, height: 250)
                         } placeholder: {
                             ProgressView()
+                                .frame(width: 250, height: 250)
                         }
-                        .frame(width: 250, height: 250)
                         .onTapGesture {
                             print("画像タップ")
-                            showImageList = true // ここをtoggleからtrueに変更
+                            showImageList = true
                         }
                     } else {
                         EmptyView()
@@ -341,7 +343,7 @@ struct ImagesView: View {
                 }
             }
         }
-        .sheet(isPresented: $showImageList) {
+        .fullScreenCover(isPresented: $showImageList) {
             ImagesListView(mapInfo: mapInfo, showImageList: $showImageList)
         }
     }
@@ -354,31 +356,33 @@ struct ImagesListView: View {
     @Binding var showImageList: Bool
     
     var body: some View {
-        ScrollView(.horizontal,showsIndicators: false) {
-            LazyVStack(spacing: 16) {
-                ForEach(mapInfo.reviews, id: \.id) { images in
-                    if let imageUrl = URL(string: images.ImageUrl) {
-                        // imageUrlがnilでない場合に実行
-                        AsyncImage(url: imageUrl) { image in
-                            image.resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .cornerRadius(10.0)
-                        } placeholder: {
-                            ProgressView()
-                        }
-                        .frame(width: 250, height: 250)
-                        .onTapGesture {
-                            print("画像タップ")
-                        }
-                    } else {
-                        EmptyView()
+        ZStack(alignment: .topTrailing) {
+            ScrollView(.vertical, showsIndicators: false) {
+                WaterfallGrid(mapInfo.reviews) {image  in
+                    AsyncImage(url: URL(string: image.ImageUrl)) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .cornerRadius(10.0)
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    
+                    .onTapGesture {
+                        // 画像を拡大する
                     }
                 }
+                .gridStyle(columns: 2)
             }
+            
+            Button("\(Image(systemName: "xmark.circle.fill"))") {
+                showImageList = false
+            }
+            .padding()
         }
-        
     }
 }
+
 
 
 struct CommentView: View {
