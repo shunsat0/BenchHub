@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import WaterfallGrid
 
 struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
@@ -130,6 +131,8 @@ struct PostReviewView: View {
     @Binding var selectedImage: UIImage?
     @Binding var isGoodOrBad: Bool
     
+    @FocusState var focus:Bool
+    
     var body: some View {
         
         VStack {
@@ -186,6 +189,7 @@ struct PostReviewView: View {
                         .font(.body)
                         .background(Color.background)
                         .cornerRadius(10.0)
+                        .focused($focus)
                 }
                 Spacer()
             }
@@ -219,6 +223,9 @@ struct PostReviewView: View {
         .background(Color.component)
         .cornerRadius(10)
         .padding()
+        .onTapGesture {
+            focus = false
+        }
     }
 }
 
@@ -315,27 +322,76 @@ struct ReviewAndDistanceView: View {
 
 struct ImagesView: View {
     var mapInfo: MapModel
+    @State var showImageList: Bool = false
     
     var body: some View {
-        ScrollView(.horizontal,showsIndicators: false) {
+        ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 16) {
                 ForEach(mapInfo.reviews, id: \.id) { images in
                     if let imageUrl = URL(string: images.ImageUrl) {
                         // imageUrlがnilでない場合に実行
                         AsyncImage(url: imageUrl) { image in
-                            image.resizable()
-                                .aspectRatio(contentMode: .fit)
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 250, height: 250)
                                 .cornerRadius(10.0)
                         } placeholder: {
                             ProgressView()
+                                .frame(width: 250, height: 250)
                         }
-                        .frame(width: 250, height: 250)
+                        .onTapGesture {
+                            print("画像タップ")
+                            showImageList = true
+                        }
                     } else {
                         EmptyView()
                     }
                 }
             }
         }
+        .fullScreenCover(isPresented: $showImageList) {
+            ImagesListView(mapInfo: mapInfo, showImageList: $showImageList)
+        }
+    }
+}
+
+
+
+struct ImagesListView: View {
+    var mapInfo: MapModel
+    @Binding var showImageList: Bool
+    
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            ScrollView(.vertical, showsIndicators: false) {
+                WaterfallGrid(mapInfo.reviews, id: \.self) { image ->  AnyView in
+                    if let url = URL(string: image.ImageUrl) {
+                        return AnyView(
+                            AsyncImage(url: url) { image in
+                                image.resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .cornerRadius(10.0)
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .onTapGesture {
+                            }
+                        )
+                    } else {
+                        return AnyView(EmptyView())
+                    }
+                }
+                .gridStyle(columns: 2, spacing: 8)
+            }
+            
+            Button("\(Image(systemName: "xmark.circle.fill"))") {
+                showImageList = false
+            }
+            .foregroundColor(.primary)
+            .padding()
+        }
+
     }
 }
 
@@ -389,9 +445,9 @@ struct CommentView: View {
     }
 }
 
-//#Preview {
-//    DetailView(isShowPostSheet: false, selectedMapInfo: sample, isPostReview: .constant(false), isShowReviewSheet: .constant(false),isGoodOrBad: false)
-//}
+#Preview {
+    DetailView(isShowPostSheet: false, selectedMapInfo: sample, isPostReview: .constant(false), isShowReviewSheet: .constant(false),isGoodOrBad: false, getedData: .constant(false))
+}
 
 var sample = MapModel(latitude: 35.561282, longitude: 139.711039, name: "西蒲田公園",reviews: [Review(description: "公園のベンチは非常に快適で、座り心地が良いです。木陰に配置されており、景色を楽しみながらくつろげます。メンテナンスも行き届いており、清潔感があります。公園を訪れる人々にとって、素晴らしい休憩スポットとなっています。", evaluation: 0, ImageUrl: "https://1.bp.blogspot.com/-ezrLFVDoMhg/Xlyf7yQWzaI/AAAAAAABXrA/utIBXYJDiPYJ4hMzRXrZSHrcZ11sW2PiACNcBGAsYHQ/s1600/no_image_yoko.jpg"),Review(description: "公園のベンチは老朽化しており、座面が不安定です。背もたれもないため、長時間座っていると疲れやすく、くつろぐことができません。また、周囲にゴミや汚れが散乱しており、清潔さを欠いています。公園全体のメンテナンスが行き届いていない印象を受けます。", evaluation: 1, ImageUrl: "https://1.bp.blogspot.com/-ezrLFVDoMhg/Xlyf7yQWzaI/AAAAAAABXrA/utIBXYJDiPYJ4hMzRXrZSHrcZ11sW2PiACNcBGAsYHQ/s1600/no_image_yoko.jpg")] )
 

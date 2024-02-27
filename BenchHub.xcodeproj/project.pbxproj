@@ -17,6 +17,7 @@
 		24057C9D2B7264CD00503984 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 24057C9C2B7264CD00503984 /* FirebaseCrashlytics */; };
 		24057C9F2B7264CD00503984 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 24057C9E2B7264CD00503984 /* FirebaseFirestore */; };
 		24057CA12B7274CC00503984 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24057CA02B7274CC00503984 /* TestView.swift */; };
+		243568892B8CE557006231CA /* WaterfallGrid in Frameworks */ = {isa = PBXBuildFile; productRef = 243568882B8CE557006231CA /* WaterfallGrid */; };
 		247EB06C2B727C530003CFD3 /* MapDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247EB06B2B727C530003CFD3 /* MapDataViewModel.swift */; };
 		247EB06E2B728F4C0003CFD3 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247EB06D2B728F4C0003CFD3 /* DetailViewModel.swift */; };
 		248993042B810988006649BA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 248993032B810988006649BA /* FirebaseStorage */; };
@@ -82,6 +83,7 @@
 				24057C9D2B7264CD00503984 /* FirebaseCrashlytics in Frameworks */,
 				24057C932B725E1A00503984 /* FirebaseAnalytics in Frameworks */,
 				248993042B810988006649BA /* FirebaseStorage in Frameworks */,
+				243568892B8CE557006231CA /* WaterfallGrid in Frameworks */,
 				24057C952B725E1A00503984 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				24057C9F2B7264CD00503984 /* FirebaseFirestore in Frameworks */,
 			);
@@ -226,6 +228,7 @@
 				24057C9C2B7264CD00503984 /* FirebaseCrashlytics */,
 				24057C9E2B7264CD00503984 /* FirebaseFirestore */,
 				248993032B810988006649BA /* FirebaseStorage */,
+				243568882B8CE557006231CA /* WaterfallGrid */,
 			);
 			productName = BenchHub;
 			productReference = 24A71B342B3DCDEB0050A556 /* BenchHub.app */;
@@ -301,6 +304,7 @@
 			mainGroup = 24A71B2B2B3DCDEB0050A556;
 			packageReferences = (
 				24057C912B725E1A00503984 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				243568872B8CE557006231CA /* XCRemoteSwiftPackageReference "WaterfallGrid" */,
 			);
 			productRefGroup = 24A71B352B3DCDEB0050A556 /* Products */;
 			projectDirPath = "";
@@ -708,6 +712,14 @@
 				minimumVersion = 10.20.0;
 			};
 		};
+		243568872B8CE557006231CA /* XCRemoteSwiftPackageReference "WaterfallGrid" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/paololeonardi/WaterfallGrid";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -740,6 +752,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 24057C912B725E1A00503984 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		243568882B8CE557006231CA /* WaterfallGrid */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 243568872B8CE557006231CA /* XCRemoteSwiftPackageReference "WaterfallGrid" */;
+			productName = WaterfallGrid;
 		};
 		248993032B810988006649BA /* FirebaseStorage */ = {
 			isa = XCSwiftPackageProductDependency;
