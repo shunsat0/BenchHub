@@ -326,15 +326,16 @@ struct ImagesView: View {
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 5) {
+            LazyHStack(spacing: 16) {
                 ForEach(mapInfo.reviews, id: \.id) { images in
                     if let imageUrl = URL(string: images.ImageUrl) {
                         // imageUrlがnilでない場合に実行
                         AsyncImage(url: imageUrl) { image in
-                            image.resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .cornerRadius(10.0)
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width: 250, height: 250)
+                                .cornerRadius(10.0)
                         } placeholder: {
                             ProgressView()
                                 .frame(width: 250, height: 250)
