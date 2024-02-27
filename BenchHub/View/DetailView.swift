@@ -30,6 +30,8 @@ struct DetailView: View {
     
     @Binding var getedData: Bool
     
+    @State var isPodtConpleted = false
+    
     var body: some View {
         VStack() {
             HStack {
@@ -85,9 +87,16 @@ struct DetailView: View {
                                         isShowReviewSheet = false
                                         isShowPostSheet = false
                                         getedData = false
+                                        isPodtConpleted.toggle()
+                                        sleep(1)            
                                     }
+                                    isPodtConpleted.toggle()
                                 }
-                                
+                            }
+                            .fullScreenCover(isPresented: $isPodtConpleted) {
+                                Text("投稿完了しました👏")
+                                    .font(.largeTitle)
+                                    .fontWeight(.bold)
                             }
                             .alert(isPresented: $showAlert) {
                                 Alert(
