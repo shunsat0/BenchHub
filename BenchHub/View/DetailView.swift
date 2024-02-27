@@ -131,6 +131,8 @@ struct PostReviewView: View {
     @Binding var selectedImage: UIImage?
     @Binding var isGoodOrBad: Bool
     
+    @FocusState var focus:Bool
+    
     var body: some View {
         
         VStack {
@@ -187,6 +189,7 @@ struct PostReviewView: View {
                         .font(.body)
                         .background(Color.background)
                         .cornerRadius(10.0)
+                        .focused($focus)
                 }
                 Spacer()
             }
@@ -220,6 +223,9 @@ struct PostReviewView: View {
         .background(Color.component)
         .cornerRadius(10)
         .padding()
+        .onTapGesture {
+            focus = false
+        }
     }
 }
 
