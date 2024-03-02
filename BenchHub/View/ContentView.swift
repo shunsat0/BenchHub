@@ -17,6 +17,8 @@ struct ContentView: View {
     @State var isShowReviewSheet: Bool = false
     @State var isPost: Bool =  false
     @State var getedData:Bool = false
+    @State var searchSheet: Bool = true
+    @State var txt = ""
     
     var body: some View {
         ZStack {
@@ -53,13 +55,30 @@ struct ContentView: View {
             }
             .onChange(of: getedData) {
                 Task {
-                   await viewModel.fetchData()
+                    await viewModel.fetchData()
                 }
             }
             .onAppear() {
                 Task {
                     await viewModel.fetchData()
                 }
+            }
+            .sheet(isPresented: $searchSheet) {
+                ScrollView(.vertical) {
+                    HStack(spacing: 15){
+                        
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 22))
+                            .foregroundColor(.gray)
+                        
+                        TextField("Search Place", text: $txt) { (status) in
+                            
+                        }
+                        
+                    }
+                }
+                .presentationDetents([ .medium, .large])
+                .presentationBackground(.thinMaterial)
             }
         }
     }
