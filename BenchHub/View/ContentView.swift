@@ -21,7 +21,7 @@ struct ContentView: View {
     @State var txt = ""
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             Map(position: $position) {
                 UserAnnotation(anchor: .center)
                 ForEach(viewModel.mapData) { mapInfo in
@@ -62,24 +62,28 @@ struct ContentView: View {
                 Task {
                     await viewModel.fetchData()
                 }
-            }
-            .sheet(isPresented: $searchSheet) {
-                ScrollView(.vertical) {
-                    HStack(spacing: 15){
-                        
-                        Image(systemName: "magnifyingglass")
-                            .font(.system(size: 22))
-                            .foregroundColor(.gray)
-                        
-                        TextField("Search Place", text: $txt) { (status) in
-                            
-                        }
+            } // Map
+        } // ZStack
+        .sheet(isPresented: $searchSheet) {
+            ScrollView(.vertical) {
+                HStack(spacing: 15){
+                    
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 22))
+                        .foregroundColor(.gray)
+                    
+                    TextField("場所を入力して移動", text: $txt) { (status) in
                         
                     }
+                    
                 }
-                .presentationDetents([ .medium, .large])
-                .presentationBackground(.thinMaterial)
             }
+            .presentationDetents([.height(60), .medium, .large])
+            .presentationCornerRadius(20)
+            .presentationBackground(.regularMaterial)
+            .presentationBackgroundInteraction(.enabled(upThrough: .large))
+            .interactiveDismissDisabled()
+            .padding()
         }
     }
 }
