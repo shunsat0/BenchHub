@@ -100,16 +100,17 @@ struct ContentView: View {
                         .font(.system(size: 22))
                         .foregroundColor(.gray)
                     
-                    TextField("場所を入力して移動", text: $txt) { (status) in
-                        
+                    TextField("場所を入力して移動", text: $inputText)
+                    .onSubmit {
+                        searchText = inputText
                     }
-                    
+                    .submitLabel(.search)
                 }
             }
-            .presentationDetents([.height(60), .medium, .large])
+            .presentationDetents([.height(60)])
             .presentationCornerRadius(20)
-            .presentationBackground(.regularMaterial)
-            .presentationBackgroundInteraction(.enabled(upThrough: .large))
+            .presentationBackground(.thinMaterial)
+            .presentationBackgroundInteraction(.enabled(upThrough: .height(60)))
             .interactiveDismissDisabled()
             .padding()
         }
