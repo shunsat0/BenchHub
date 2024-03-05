@@ -22,6 +22,7 @@
 		247EB06E2B728F4C0003CFD3 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247EB06D2B728F4C0003CFD3 /* DetailViewModel.swift */; };
 		248993042B810988006649BA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 248993032B810988006649BA /* FirebaseStorage */; };
 		248993062B821BE0006649BA /* MyAppCheckProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248993052B821BE0006649BA /* MyAppCheckProviderFactory.swift */; };
+		24910DB82B975BCA001311EF /* AnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24910DB72B975BCA001311EF /* AnimationView.swift */; };
 		24A71B382B3DCDEB0050A556 /* BenchHubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A71B372B3DCDEB0050A556 /* BenchHubApp.swift */; };
 		24A71B3C2B3DCDEC0050A556 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24A71B3B2B3DCDEC0050A556 /* Assets.xcassets */; };
 		24A71B3F2B3DCDEC0050A556 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24A71B3E2B3DCDEC0050A556 /* Preview Assets.xcassets */; };
@@ -59,6 +60,7 @@
 		247EB06D2B728F4C0003CFD3 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		248993052B821BE0006649BA /* MyAppCheckProviderFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAppCheckProviderFactory.swift; sourceTree = "<group>"; };
 		248993072B822081006649BA /* BenchHub.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BenchHub.entitlements; sourceTree = "<group>"; };
+		24910DB72B975BCA001311EF /* AnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationView.swift; sourceTree = "<group>"; };
 		24A71B342B3DCDEB0050A556 /* BenchHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BenchHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24A71B372B3DCDEB0050A556 /* BenchHubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchHubApp.swift; sourceTree = "<group>"; };
 		24A71B3B2B3DCDEC0050A556 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				24057C892B6F6FA000503984 /* ContentView.swift */,
 				24057C8D2B6FE08200503984 /* DetailView.swift */,
 				24057CA02B7274CC00503984 /* TestView.swift */,
+				24910DB72B975BCA001311EF /* AnimationView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -357,6 +360,7 @@
 				24057C8E2B6FE08200503984 /* DetailView.swift in Sources */,
 				247EB06C2B727C530003CFD3 /* MapDataViewModel.swift in Sources */,
 				24CD65FA2B7BB25E006C5001 /* PostViewModel.swift in Sources */,
+				24910DB82B975BCA001311EF /* AnimationView.swift in Sources */,
 				24057C8C2B6F6FE400503984 /* MapModel.swift in Sources */,
 				24A71B382B3DCDEB0050A556 /* BenchHubApp.swift in Sources */,
 			);

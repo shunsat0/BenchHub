@@ -92,6 +92,7 @@ struct ContentView: View {
                 }
             } // Map
         } // ZStack
+        // ベンチ情報を閉じたら再びtrueにする　$isShowReviewSheetの値利用できそうかね
         .sheet(isPresented: $showSearchSheet) {
             ScrollView(.vertical) {
                 HStack(spacing: 15){

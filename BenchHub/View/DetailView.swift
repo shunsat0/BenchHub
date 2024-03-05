@@ -30,7 +30,7 @@ struct DetailView: View {
     
     @Binding var getedData: Bool
     
-    @State var isPodtConpleted = false
+    @State var isPostConpleted = false
     
     var body: some View {
         VStack() {
@@ -84,19 +84,45 @@ struct DetailView: View {
                                         
                                         await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text, imageUrl: imageUrl))
                                         
-                                        isShowReviewSheet = false
-                                        isShowPostSheet = false
-                                        getedData = false
-                                        isPodtConpleted.toggle()
-                                        sleep(1)            
+                                        isPostConpleted.toggle()
                                     }
-                                    isPodtConpleted.toggle()
                                 }
                             }
-                            .fullScreenCover(isPresented: $isPodtConpleted) {
-                                Text("投稿完了しました👏")
-                                    .font(.largeTitle)
-                                    .fontWeight(.bold)
+                            .fullScreenCover(isPresented: $isPostConpleted) {
+                                ZStack {
+                                    VStack {
+                                        Text("投稿完了しました👏")
+                                            .font(.largeTitle)
+                                            .fontWeight(.bold)
+                                        
+                                        Button(action: {
+                                            isShowReviewSheet = false
+                                            isShowPostSheet = false
+                                            getedData = false
+                                            isPostConpleted.toggle()
+                                        }) {
+                                            Text("閉じる")
+                                                .frame(width: 200, height: 50)
+                                        }
+                                        .accentColor(Color.white)
+                                        .background(Color.blue)
+                                        .cornerRadius(10.0)
+                                        
+                                    }
+                                    
+                                    
+                                    Circle()
+                                        .fill(Color.blue)
+                                        .frame(width: 12, height: 12)
+                                        .modifier(ParticlesModifier())
+                                        .offset(x: -100, y : -50)
+                                    
+                                    Circle()
+                                        .fill(Color.red)
+                                        .frame(width: 12, height: 12)
+                                        .modifier(ParticlesModifier())
+                                        .offset(x: 60, y : 70)
+                                }
                             }
                             .alert(isPresented: $showAlert) {
                                 Alert(
@@ -384,8 +410,8 @@ struct ImagesListView: View {
                             } placeholder: {
                                 ProgressView()
                             }
-                            .onTapGesture {
-                            }
+                                .onTapGesture {
+                                }
                         )
                     } else {
                         return AnyView(EmptyView())
@@ -400,7 +426,7 @@ struct ImagesListView: View {
             .foregroundColor(.primary)
             .padding()
         }
-
+        
     }
 }
 
