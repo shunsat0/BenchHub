@@ -39,9 +39,11 @@ struct ContentView: View {
                         .onTapGesture {
                             detailViewModel.selectedFramework = mapInfo
                             isShowReviewSheet = true
-                            showSearchSheet = false                            
+                            showSearchSheet = false
                         }
-                        .sheet(isPresented: $isShowReviewSheet) {
+                        .sheet(isPresented: $isShowReviewSheet,onDismiss: {
+                            showSearchSheet = true
+                        }) {
                             DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData)
                                 .presentationDetents([ .medium, .large])
                                 .presentationBackground(Color.background)
