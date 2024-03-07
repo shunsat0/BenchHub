@@ -104,10 +104,11 @@ struct ContentView: View {
                         .foregroundColor(.gray)
                     
                     TextField("場所を入力して移動", text: $inputText)
-                    .onSubmit {
-                        searchText = inputText
-                    }
-                    .submitLabel(.search)
+                        .onSubmit {
+                            searchText = inputText
+                            inputText = ""
+                        }
+                        .submitLabel(.search)
                 }
             }
             .presentationDetents([.height(60)])
