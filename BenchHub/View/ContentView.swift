@@ -25,7 +25,7 @@ struct ContentView: View {
     @State var cameraPosition: MapCameraPosition = .automatic
     
     var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack(alignment: .bottomTrailing) {
             Map(position: $cameraPosition) {
                 UserAnnotation(anchor: .center)
                 ForEach(viewModel.mapData) { mapInfo in
@@ -60,6 +60,7 @@ struct ContentView: View {
                 MapCompass()
                 MapScaleView()
             }
+            .controlSize(.small)
             .onChange(of: getedData) {
                 Task {
                     await viewModel.fetchData()
@@ -69,7 +70,7 @@ struct ContentView: View {
                 print("検索ワード: \(newValue)")
                 let request  = MKLocalSearch.Request()
                 request.naturalLanguageQuery = newValue
-
+                
                 let search = MKLocalSearch(request: request)
                 search.start { response, error in
                     if let mapItems = response?.mapItems,
@@ -84,7 +85,6 @@ struct ContentView: View {
                             
                         ))
                     }
-                    
                 }
             }
             .onAppear() {
@@ -93,8 +93,18 @@ struct ContentView: View {
                     await viewModel.fetchData()
                 }
             } // Map
+            
+            Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
+                Image(systemName: "gear")
+                    .padding()
+                    .background(Color.background)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .font(.subheadline)
+            }
+            .padding(.bottom,100)
+            .padding(.trailing,5)
+            .controlSize(.small)
         } // ZStack
-        // ベンチ情報を閉じたら再びtrueにする　$isShowReviewSheetの値利用できそうかね
         .sheet(isPresented: $showSearchSheet) {
             ScrollView(.vertical) {
                 HStack(spacing: 15){
