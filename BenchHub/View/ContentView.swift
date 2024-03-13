@@ -24,77 +24,94 @@ struct ContentView: View {
     @State var targetCoordinate = CLLocationCoordinate2D()
     @State var cameraPosition: MapCameraPosition = .automatic
     
+    @State var showSttings = false
+    
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Map(position: $cameraPosition) {
-                UserAnnotation(anchor: .center)
-                ForEach(viewModel.mapData) { mapInfo in
-                    Annotation(mapInfo.name, coordinate: mapInfo.coordinate) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill(.orange)
-                            Text("🪑")
-                                .padding(5)
-                        }
-                        .onTapGesture {
-                            detailViewModel.selectedFramework = mapInfo
-                            isShowReviewSheet = true
-                            showSearchSheet = false
-                        }
-                        .sheet(isPresented: $isShowReviewSheet,onDismiss: {
-                            showSearchSheet = true
-                        }) {
-                            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData)
-                                .presentationDetents([ .medium, .large])
-                                .presentationBackground(Color.background)
+        ZStack(alignment: .bottomTrailing) {
+            NavigationView {
+                
+                Map(position: $cameraPosition) {
+                    UserAnnotation(anchor: .center)
+                    ForEach(viewModel.mapData) { mapInfo in
+                        Annotation(mapInfo.name, coordinate: mapInfo.coordinate) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 5)
+                                    .fill(.orange)
+                                Text("🪑")
+                                    .padding(5)
+                            }
+                            .onTapGesture {
+                                detailViewModel.selectedFramework = mapInfo
+                                isShowReviewSheet = true
+                                showSearchSheet = false
+                            }
+                            .sheet(isPresented: $isShowReviewSheet,onDismiss: {
+                                showSearchSheet = true
+                            }) {
+                                DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData)
+                                    .presentationDetents([ .medium, .large])
+                                    .presentationBackground(Color.background)
+                            }
                         }
                     }
                 }
-            }
-            .task {
-                let manager = CLLocationManager()
-                manager.requestWhenInUseAuthorization()
-            }
-            .mapControls {
-                MapUserLocationButton()
-                MapCompass()
-                MapScaleView()
-            }
-            .onChange(of: getedData) {
-                Task {
-                    await viewModel.fetchData()
+                .task {
+                    let manager = CLLocationManager()
+                    manager.requestWhenInUseAuthorization()
                 }
-            }
-            .onChange(of: searchText, initial: true) { oldValue, newValue in
-                print("検索ワード: \(newValue)")
-                let request  = MKLocalSearch.Request()
-                request.naturalLanguageQuery = newValue
-
-                let search = MKLocalSearch(request: request)
-                search.start { response, error in
-                    if let mapItems = response?.mapItems,
-                       let mapItem = mapItems.first {
-                        targetCoordinate = mapItem.placemark.coordinate
-                        print("緯度経度: \(targetCoordinate)")
-                        print(mapItems)
-                        cameraPosition = .region(MKCoordinateRegion(
-                            center: targetCoordinate,
-                            latitudinalMeters: 500.0,
-                            longitudinalMeters: 500.0
-                            
-                        ))
+                .mapControls {
+                    MapUserLocationButton()
+                    MapCompass()
+                    MapScaleView()
+                }
+                .onChange(of: getedData) {
+                    Task {
+                        await viewModel.fetchData()
                     }
+                }
+                .onChange(of: searchText, initial: true) { oldValue, newValue in
+                    print("検索ワード: \(newValue)")
+                    let request  = MKLocalSearch.Request()
+                    request.naturalLanguageQuery = newValue
                     
+                    let search = MKLocalSearch(request: request)
+                    search.start { response, error in
+                        if let mapItems = response?.mapItems,
+                           let mapItem = mapItems.first {
+                            targetCoordinate = mapItem.placemark.coordinate
+                            print("緯度経度: \(targetCoordinate)")
+                            print(mapItems)
+                            cameraPosition = .region(MKCoordinateRegion(
+                                center: targetCoordinate,
+                                latitudinalMeters: 500.0,
+                                longitudinalMeters: 500.0
+                                
+                            ))
+                        }
+                    }
                 }
+                .onAppear() {
+                    showSearchSheet = true
+                    cameraPosition = position
+                    Task {
+                        await viewModel.fetchData()
+                    }
+                } // Map
             }
-            .onAppear() {
-                cameraPosition = position
-                Task {
-                    await viewModel.fetchData()
-                }
-            } // Map
+            
+            // 設定ボタン
+            NavigationLink(destination: SettingView(showSearchSheet: $showSearchSheet)) {
+                Image(systemName: "gear")
+                    .font(.subheadline)
+            }
+            .simultaneousGesture(TapGesture().onEnded {
+                print("TAPPED")
+                showSearchSheet = false
+            })
+            .buttonStyle(.borderedProminent)
+            .padding(.bottom,100)
+            .padding(.trailing,5)
         } // ZStack
-        // ベンチ情報を閉じたら再びtrueにする　$isShowReviewSheetの値利用できそうかね
         .sheet(isPresented: $showSearchSheet) {
             ScrollView(.vertical) {
                 HStack(spacing: 15){
