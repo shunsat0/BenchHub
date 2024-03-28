@@ -27,9 +27,8 @@ struct ContentView: View {
     @State var showSttings = false
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
+        ZStack(alignment: .bottomLeading) {
             NavigationView {
-                
                 Map(position: $cameraPosition) {
                     UserAnnotation(anchor: .center)
                     ForEach(viewModel.mapData) { mapInfo in
@@ -55,88 +54,106 @@ struct ContentView: View {
                         }
                     }
                 }
-                .task {
-                    let manager = CLLocationManager()
-                    manager.requestWhenInUseAuthorization()
-                }
-                .mapControls {
-                    MapUserLocationButton()
-                    MapCompass()
-                    MapScaleView()
-                }
-                .onChange(of: getedData) {
-                    Task {
-                        await viewModel.fetchData()
+                .safeAreaInset(edge: .bottom) {
+                    // 設定ボタン
+                    NavigationLink(destination: SettingView(showSearchSheet: $showSearchSheet)) {
+                        Image(systemName: "gear")
+                            .font(.subheadline)
                     }
-                }
-                .onChange(of: searchText, initial: true) { oldValue, newValue in
-                    print("検索ワード: \(newValue)")
-                    let request  = MKLocalSearch.Request()
-                    request.naturalLanguageQuery = newValue
+                    .simultaneousGesture(TapGesture().onEnded {
+                        print("TAPPED")
+                        showSearchSheet = false
+                    })
+                    .buttonStyle(.borderedProminent)
+                    .padding(.bottom,100)
+                    .padding(.trailing,300)
                     
-                    let search = MKLocalSearch(request: request)
-                    search.start { response, error in
-                        if let mapItems = response?.mapItems,
-                           let mapItem = mapItems.first {
-                            targetCoordinate = mapItem.placemark.coordinate
-                            print("緯度経度: \(targetCoordinate)")
-                            print(mapItems)
-                            cameraPosition = .region(MKCoordinateRegion(
-                                center: targetCoordinate,
-                                latitudinalMeters: 500.0,
-                                longitudinalMeters: 500.0
+                    VStack {
+                        ZStack {
+                            // 背景
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(.ultraThickMaterial)
+                                .shadow(radius: 10)
+                                .frame(height: 50)
+                            
+                            HStack(spacing: 6) {
+                                Spacer()
+                                    .frame(width: 0)
                                 
-                            ))
+                                // 虫眼鏡
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(.gray)
+                                
+                                // テキストフィールド
+                                TextField("場所を入力して移動", text: $inputText)
+                                    .onSubmit {
+                                        searchText = inputText
+                                        inputText = ""
+                                    }
+                                    .submitLabel(.search)
+                                
+                                // 検索文字が空ではない場合は、クリアボタンを表示
+                                if !inputText.isEmpty {
+                                    Button {
+                                        inputText = ""
+                                    } label: {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundColor(.gray)
+                                    }
+                                    .padding(.trailing, 10)
+                                }
+                            }
                         }
+                        .padding(.horizontal)
                     }
                 }
-                .onAppear() {
-                    showSearchSheet = true
-                    cameraPosition = position
-                    Task {
-                        await viewModel.fetchData()
-                    }
-                } // Map
             }
-            
-            // 設定ボタン
-            NavigationLink(destination: SettingView(showSearchSheet: $showSearchSheet)) {
-                Image(systemName: "gear")
-                    .font(.subheadline)
+            .task {
+                let manager = CLLocationManager()
+                manager.requestWhenInUseAuthorization()
             }
-            .simultaneousGesture(TapGesture().onEnded {
-                print("TAPPED")
-                showSearchSheet = false
-            })
-            .buttonStyle(.borderedProminent)
-            .padding(.bottom,100)
-            .padding(.trailing,5)
-        } // ZStack
-        .sheet(isPresented: $showSearchSheet) {
-            ScrollView(.vertical) {
-                HStack(spacing: 15){
-                    
-                    Image(systemName: "magnifyingglass")
-                        .font(.system(size: 22))
-                        .foregroundColor(.gray)
-                    
-                    TextField("場所を入力して移動", text: $inputText)
-                        .onSubmit {
-                            searchText = inputText
-                            inputText = ""
-                        }
-                        .submitLabel(.search)
+            .mapControls {
+                MapUserLocationButton()
+                MapCompass()
+                MapScaleView()
+            }
+            .onChange(of: getedData) {
+                Task {
+                    await viewModel.fetchData()
                 }
             }
-            .presentationDetents([.height(60)])
-            .presentationCornerRadius(20)
-            .presentationBackground(.thinMaterial)
-            .presentationBackgroundInteraction(.enabled(upThrough: .height(60)))
-            .interactiveDismissDisabled()
-            .padding()
+            .onChange(of: searchText, initial: true) { oldValue, newValue in
+                print("検索ワード: \(newValue)")
+                let request  = MKLocalSearch.Request()
+                request.naturalLanguageQuery = newValue
+                
+                let search = MKLocalSearch(request: request)
+                search.start { response, error in
+                    if let mapItems = response?.mapItems,
+                       let mapItem = mapItems.first {
+                        targetCoordinate = mapItem.placemark.coordinate
+                        print("緯度経度: \(targetCoordinate)")
+                        print(mapItems)
+                        cameraPosition = .region(MKCoordinateRegion(
+                            center: targetCoordinate,
+                            latitudinalMeters: 500.0,
+                            longitudinalMeters: 500.0
+                            
+                        ))
+                    }
+                }
+            }
+            .onAppear() {
+                showSearchSheet = true
+                cameraPosition = position
+                Task {
+                    await viewModel.fetchData()
+                }
+            } // Map
         }
-    }
+    } // ZStack
 }
+
 
 
 #Preview {
