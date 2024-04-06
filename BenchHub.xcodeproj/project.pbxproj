@@ -32,7 +32,6 @@
 		24CD65C22B77F660006C5001 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CD65C12B77F660006C5001 /* PostModel.swift */; };
 		24CD65FA2B7BB25E006C5001 /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CD65F92B7BB25E006C5001 /* PostViewModel.swift */; };
 		24D759382B73D20100A426DC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 24D759372B73D20100A426DC /* GoogleService-Info.plist */; };
-		24E16E2D2BBDB14B00A2249C /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E16E2C2BBDB14B00A2249C /* MapView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,7 +74,6 @@
 		24CD65C12B77F660006C5001 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
 		24CD65F92B7BB25E006C5001 /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
 		24D759372B73D20100A426DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "View/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		24E16E2C2BBDB14B00A2249C /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,7 +135,6 @@
 				24057C892B6F6FA000503984 /* ContentView.swift */,
 				24057C8D2B6FE08200503984 /* DetailView.swift */,
 				24910DB72B975BCA001311EF /* AnimationView.swift */,
-				24E16E2C2BBDB14B00A2249C /* MapView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -360,7 +357,6 @@
 				24057C8A2B6F6FA000503984 /* ContentView.swift in Sources */,
 				24CD65C22B77F660006C5001 /* PostModel.swift in Sources */,
 				247EB06E2B728F4C0003CFD3 /* DetailViewModel.swift in Sources */,
-				24E16E2D2BBDB14B00A2249C /* MapView.swift in Sources */,
 				248993062B821BE0006649BA /* MyAppCheckProviderFactory.swift in Sources */,
 				24057C8E2B6FE08200503984 /* DetailView.swift in Sources */,
 				247EB06C2B727C530003CFD3 /* MapDataViewModel.swift in Sources */,
