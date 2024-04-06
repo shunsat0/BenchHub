@@ -76,7 +76,7 @@ struct ContentView: View {
                             .shadow(radius: 10)
                     }
                     .simultaneousGesture(TapGesture().onEnded {
-                        print("TAPPED")
+                        // 検索バーを閉じる
                         showSearchSheet = false
                     })
                     .padding(.bottom,120)
@@ -167,8 +167,6 @@ struct ContentView: View {
         }
     } // ZStack
 }
-
-
 
 #Preview {
     ContentView(isPost: false)
