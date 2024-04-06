@@ -56,7 +56,7 @@ struct SettingView: View {
             }
             Section(header: Text("口コミ")){
                 NavigationLink(
-                    destination: PostBenchInfoView(),
+                    destination: PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false),
                     label: {
                         HStack {
                             Image(systemName: "chair")
@@ -72,39 +72,144 @@ struct SettingView: View {
 
 struct PostBenchInfoView: View {
     @State var position: MapCameraPosition = .userLocation(fallback: .automatic)
-    @State var placeName:String = ""
-    @State private var coordinate: CLLocationCoordinate2D = .init(latitude: 0.00,
-                                                                  longitude: 0.00)
+    @State var placeName: String = ""
+    @State private var coordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
+    
     let locationManager = CLLocationManager()
     
+    
+    @State var isPressedThumbsUp: Bool = false
+    @State var isPressedThumbsDown: Bool = false
+    @State var isShowSheet: Bool = false
+    @State var isShowImagePicker: Bool = false
+    @State var evaluation: Int
+    @State var text: String
+    @State var selectedImage: UIImage?
+    @State var isGoodOrBad: Bool
+    
+    @FocusState var focus:Bool
+    
+    
+    init(evaluation: Int, text: String, isGoodOrBad: Bool) {
+        self.evaluation = evaluation
+        self.text = text
+        self.isGoodOrBad = isGoodOrBad
+    }
+    
     var body: some View {
+        let place = [PostCoordinateModel(lat: coordinate.latitude, long: coordinate.longitude)]
+        
         ZStack {
             VStack {
                 List{
-                    Section(header: Text("口コミ")){
-                        MapReader{proxy in
-                            Map(position: $position)
-                                .frame(width: 300,height: 200)
-                                .cornerRadius(10.0)
-                                .task {
-                                    let manager = CLLocationManager()
-                                    manager.requestWhenInUseAuthorization()
+                    Section(header: Text("座標(ベンチの場所をタップしてください)")){
+                        MapReader{ proxy in
+                            Map(position: $position) {
+                                Annotation("", coordinate: place[0].location) {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .fill(.orange)
+                                        Text("🪑")
+                                            .padding(5)
+                                    }
                                 }
-//                                .onTapGesture { position in
-//                                    Marker(coordinate: coordinate, label: Text("test"))
-//                                    if let selectedCoordinate = proxy.convert(position, from: .local) {
-//                                        coordinate = selectedCoordinate
-//                                    }
-//                                }
+                            }
+                            .frame(width: 300,height: 200)
+                            .cornerRadius(10.0)
+                            .mapControls {
+                                MapUserLocationButton()
+                                    .mapControlVisibility(.hidden)
+                            }
+                            .task {
+                                let manager = CLLocationManager()
+                                manager.requestWhenInUseAuthorization()
+                            }
+                            .onTapGesture { position in
+                                if let selectedCoordinate = proxy.convert(position, from: .local) {
+                                    coordinate = selectedCoordinate
+                                }
+                            }
                         }
                     }
-                    TextField(text: $placeName, prompt: Text("場所名")) {
-                        Text("placeName")
+                    
+                    Section(header: Text("場所名")) {
+                        TextField(text: $placeName, prompt: Text("場所名")) {
+                            Text("placeName")
+                        }
                     }
                     
-                    Text("latitude: \(coordinate.latitude)")
-                    Text("longitude: \(coordinate.longitude)")
-                }
+                    Section(header: Text("レビュー")) {
+                        HStack {
+                            Text("居心地")
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                isPressedThumbsUp.toggle()
+                                if isPressedThumbsUp {
+                                    isPressedThumbsDown = false
+                                }
+                                
+                                isGoodOrBad = isPressedThumbsUp // ボタンが押されているかどうかの判別
+                                
+                                evaluation = 0 // good
+                                
+                            }, label: {
+                                Image(systemName: "hand.thumbsup.circle.fill")
+                                    .foregroundColor(isPressedThumbsUp ? .accentColor : .secondary)
+                            })
+                            .buttonStyle(PlainButtonStyle())
+                            
+                            Button(action: {
+                                isPressedThumbsDown.toggle()
+                                if isPressedThumbsDown {
+                                    isPressedThumbsUp = false
+                                }
+                                
+                                isGoodOrBad = isPressedThumbsDown // ボタンが押されているかどうかの判別
+                                
+                                evaluation = 1 // bad
+                            }, label: {
+                                Image(systemName: "hand.thumbsdown.circle.fill")
+                                    .foregroundColor(isPressedThumbsDown ? .accentColor : .secondary)
+                            })
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                        
+                        TextEditor(text: $text)
+                            .textEditorStyle(PlainTextEditorStyle())
+                            .frame(height: 80)
+                            .keyboardType(.twitter)
+                            .font(.body)
+                            .background(Color.background)
+                            .cornerRadius(10.0)
+                            .focused($focus)
+                        
+                        HStack {
+                            VStack {
+                                Button("\(Image(systemName: "camera.fill"))あなたの写真を追加"){
+                                    isShowImagePicker = true
+                                }
+                                .foregroundColor(.accentColor)
+                                if let image = selectedImage {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                }
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .sheet(isPresented: $isShowImagePicker) {
+                            ImagePicker(image: $selectedImage)
+                        }
+                    }
+                    
+                    .foregroundColor(.secondary)
+                    .imageScale(.large)
+                    }
+
             }
         }
     }
@@ -112,5 +217,5 @@ struct PostBenchInfoView: View {
 
 #Preview {
     //SettingView()
-    PostBenchInfoView()
+    PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false)
 }
