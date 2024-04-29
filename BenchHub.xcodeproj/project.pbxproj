@@ -29,6 +29,8 @@
 		24A71B492B3DCDEC0050A556 /* BenchHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A71B482B3DCDEC0050A556 /* BenchHubTests.swift */; };
 		24A71B532B3DCDEC0050A556 /* BenchHubUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A71B522B3DCDEC0050A556 /* BenchHubUITests.swift */; };
 		24A71B552B3DCDEC0050A556 /* BenchHubUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A71B542B3DCDEC0050A556 /* BenchHubUITestsLaunchTests.swift */; };
+		24C441032BDF8B23009FDE55 /* NewReviewPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C441022BDF8B23009FDE55 /* NewReviewPostViewModel.swift */; };
+		24C441052BDF8B83009FDE55 /* NewPostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C441042BDF8B83009FDE55 /* NewPostModel.swift */; };
 		24CD65C22B77F660006C5001 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CD65C12B77F660006C5001 /* PostModel.swift */; };
 		24CD65FA2B7BB25E006C5001 /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CD65F92B7BB25E006C5001 /* PostViewModel.swift */; };
 		24D759382B73D20100A426DC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 24D759372B73D20100A426DC /* GoogleService-Info.plist */; };
@@ -71,6 +73,8 @@
 		24A71B4E2B3DCDEC0050A556 /* BenchHubUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BenchHubUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		24A71B522B3DCDEC0050A556 /* BenchHubUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchHubUITests.swift; sourceTree = "<group>"; };
 		24A71B542B3DCDEC0050A556 /* BenchHubUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchHubUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		24C441022BDF8B23009FDE55 /* NewReviewPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReviewPostViewModel.swift; sourceTree = "<group>"; };
+		24C441042BDF8B83009FDE55 /* NewPostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostModel.swift; sourceTree = "<group>"; };
 		24CD65C12B77F660006C5001 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
 		24CD65F92B7BB25E006C5001 /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
 		24D759372B73D20100A426DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "View/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -114,6 +118,7 @@
 				24057C8B2B6F6FE400503984 /* MapModel.swift */,
 				24CD65C12B77F660006C5001 /* PostModel.swift */,
 				241F6D452BC1553100BF3FF3 /* PostCoordinateModel.swift */,
+				24C441042BDF8B83009FDE55 /* NewPostModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -124,6 +129,7 @@
 				247EB06B2B727C530003CFD3 /* MapDataViewModel.swift */,
 				247EB06D2B728F4C0003CFD3 /* DetailViewModel.swift */,
 				24CD65F92B7BB25E006C5001 /* PostViewModel.swift */,
+				24C441022BDF8B23009FDE55 /* NewReviewPostViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -353,11 +359,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24C441052BDF8B83009FDE55 /* NewPostModel.swift in Sources */,
 				241F6D462BC1553100BF3FF3 /* PostCoordinateModel.swift in Sources */,
 				24057C8A2B6F6FA000503984 /* ContentView.swift in Sources */,
 				24CD65C22B77F660006C5001 /* PostModel.swift in Sources */,
 				247EB06E2B728F4C0003CFD3 /* DetailViewModel.swift in Sources */,
 				248993062B821BE0006649BA /* MyAppCheckProviderFactory.swift in Sources */,
+				24C441032BDF8B23009FDE55 /* NewReviewPostViewModel.swift in Sources */,
 				24057C8E2B6FE08200503984 /* DetailView.swift in Sources */,
 				247EB06C2B727C530003CFD3 /* MapDataViewModel.swift in Sources */,
 				24CD65FA2B7BB25E006C5001 /* PostViewModel.swift in Sources */,

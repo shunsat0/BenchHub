@@ -79,7 +79,6 @@ struct PostBenchInfoView: View {
     
     let locationManager = CLLocationManager()
     
-    
     @State var isPressedThumbsUp: Bool = false
     @State var isPressedThumbsDown: Bool = false
     @State var isShowSheet: Bool = false
@@ -90,6 +89,8 @@ struct PostBenchInfoView: View {
     @State var isGoodOrBad: Bool
     
     @FocusState var focus:Bool
+    
+    @StateObject var post = NewReviewPostViewModel()
     
     
     init(evaluation: Int, text: String, isGoodOrBad: Bool) {
@@ -127,7 +128,7 @@ struct PostBenchInfoView: View {
                         .onTapGesture { position in
                             if let selectedCoordinate = proxy.convert(position, from: .local) {
                                 coordinate = selectedCoordinate
-                            }
+                            }                            
                         }
                     }
                 }
@@ -208,6 +209,10 @@ struct PostBenchInfoView: View {
             }
             
             Button(action: {
+                // ベンチ情報を投稿する
+                Task {
+                    await post.postNewData(newPostData: NewPostModel(id: placeName, evaluation: evaluation, description: text, imageUrl: "", latitude: coordinate.latitude, longitude: coordinate.longitude))
+                }
             }) {
                 Text("投稿")
                     .frame(width: 100, height: 25)
