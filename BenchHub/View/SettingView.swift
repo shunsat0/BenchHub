@@ -87,6 +87,7 @@ struct PostBenchInfoView: View {
     @State var text: String
     @State var selectedImage: UIImage?
     @State var isGoodOrBad: Bool
+    @State var imageUrl:String?
     
     @FocusState var focus:Bool
     
@@ -211,7 +212,10 @@ struct PostBenchInfoView: View {
             Button(action: {
                 // ベンチ情報を投稿する
                 Task {
-                    await post.postNewData(newPostData: NewPostModel(id: placeName, evaluation: evaluation, description: text, imageUrl: "", latitude: coordinate.latitude, longitude: coordinate.longitude))
+                    // 先に画像をアップロード
+                    imageUrl = await post.uploadImage(name: placeName, image: selectedImage)
+                    
+                    await post.postNewData(newPostData: NewPostModel(id: placeName, evaluation: evaluation, description: text, imageUrl: imageUrl, latitude: coordinate.latitude, longitude: coordinate.longitude))
                 }
             }) {
                 Text("投稿")
