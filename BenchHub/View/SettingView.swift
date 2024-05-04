@@ -66,7 +66,7 @@ struct SettingView: View {
                 )
             }
         }
-        .navigationTitle("設定")
+        //.navigationTitle("設定")
     }
 }
 
