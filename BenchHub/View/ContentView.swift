@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct ContentView: View {
-    @StateObject var viewModel = MapDataViewModel()
+    @StateObject var mapDataViewModel = MapDataViewModel()
     @StateObject var detailViewModel = DetailViewModel()
     @StateObject var postViewModel = PostViewModel()
     
@@ -28,14 +28,14 @@ struct ContentView: View {
     
     @State private var coordinate: CLLocationCoordinate2D = .init(latitude: 0.00,
                                                                   longitude: 0.00)
-    
     var body: some View {
+        
         ZStack(alignment: .bottomLeading) {
             NavigationView {
                 MapReader {  proxy in
                     Map(position: $cameraPosition) {
                         UserAnnotation(anchor: .center)
-                        ForEach(viewModel.mapData) { mapInfo in
+                        ForEach(mapDataViewModel.mapData) { mapInfo in
                             Annotation(mapInfo.name, coordinate: mapInfo.coordinate) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 5)
@@ -135,7 +135,7 @@ struct ContentView: View {
             }
             .onChange(of: getedData) {
                 Task {
-                    await viewModel.fetchData()
+                    await mapDataViewModel.fetchData()
                 }
             }
             .onChange(of: searchText, initial: true) { oldValue, newValue in
@@ -163,7 +163,7 @@ struct ContentView: View {
                 showSearchSheet = true
                 cameraPosition = position
                 Task {
-                    await viewModel.fetchData()
+                    await mapDataViewModel.fetchData()
                 }
             } // Map
         }
