@@ -58,13 +58,6 @@ struct ContentView: View {
                             }
                         }
                     }
-                    .onTapGesture { position in
-                        print("tap")
-                        if let selectedCoordinate = proxy.convert(position, from: .local) {
-                            coordinate = selectedCoordinate
-                            print(coordinate)
-                        }
-                    }
                 }
                 .safeAreaInset(edge: .bottom) {
                     // 設定ボタン
