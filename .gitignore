@@ -1,2 +1,4 @@
+UserInterfaceState.xcuserstate
 BenchHub.xcodeproj/project.xcworkspace/xcuserdata/shun.xcuserdatad/UserInterfaceState.xcuserstate
-.DS_Store
+*.resolved
+BenchHub.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved

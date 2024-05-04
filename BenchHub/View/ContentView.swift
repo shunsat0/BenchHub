@@ -70,7 +70,6 @@ struct ContentView: View {
                     // 設定ボタン
                     NavigationLink(destination: SettingView()) {
                         Image(systemName: "gear")
-                            .font(.subheadline)
                             .padding()
                             .background(.ultraThickMaterial, in: RoundedRectangle(cornerRadius: 8))
                             .shadow(radius: 10)
