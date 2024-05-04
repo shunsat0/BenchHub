@@ -67,6 +67,16 @@ struct ContentView: View {
                             .background(.ultraThickMaterial, in: RoundedRectangle(cornerRadius: 8))
                             .shadow(radius: 10)
                     }
+                    .onDisappear {
+                        print("設定画面")
+                    }
+                    .onAppear {
+                        print("ホーム画面")
+                        print("更新")
+                        Task {
+                            await mapDataViewModel.fetchData()
+                        }
+                    }
                     .simultaneousGesture(TapGesture().onEnded {
                         // 検索バーを閉じる
                         showSearchSheet = false
