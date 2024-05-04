@@ -10,8 +10,7 @@ import FirebaseFirestore
 import FirebaseStorage
 import SwiftUI
 
-final class PostViewModel: ObservableObject {
-    
+final class PostViewModel: ObservableObject {    
     func addData(postData: PostModel) async {
         let db = Firestore.firestore()
         let reviewRef = db.collection("benchData").document("\(postData.id)")
