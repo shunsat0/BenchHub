@@ -22,53 +22,51 @@ private var settings = [
 
 
 struct SettingView: View {
-    @Environment(\.dismiss) var dismiss
-    
+    @Environment(\.dismiss) var dismiss    
     var body: some View {
-            List {
-                Section(header: Text("通知")){
-                    NavigationLink(
-                        destination: EmptyView(),
-                        label: {
-                            HStack {
-                                Image(systemName: "bell")
-                                    .foregroundColor(.accentColor)
-                                Text("通知設定")
-                            }
+        List {
+            Section(header: Text("通知")){
+                NavigationLink(
+                    destination: EmptyView(),
+                    label: {
+                        HStack {
+                            Image(systemName: "bell")
+                                .foregroundColor(.accentColor)
+                            Text("通知設定")
                         }
-                        
-                    )
-                }
-                Section(header: Text("その他")){
-                    ForEach(settings) { setting in
-                        NavigationLink(
-                            destination:  EmptyView(),
-                            label: {
-                                HStack {
-                                    Image(systemName: setting.icon)
-                                        .foregroundColor(.accentColor)
-                                    Text(setting.name)
-                                }
-                            }
-                        )
-                        
                     }
-                }
-                Section(header: Text("口コミ")){
+                    
+                )
+            }
+            Section(header: Text("その他")){
+                ForEach(settings) { setting in
                     NavigationLink(
-                        destination: PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false),
+                        destination:  EmptyView(),
                         label: {
                             HStack {
-                                Image(systemName: "chair")
+                                Image(systemName: setting.icon)
                                     .foregroundColor(.accentColor)
-                                Text("ベンチ情報を追加")
+                                Text(setting.name)
                             }
                         }
                     )
-                    .navigationTitle("設定")
+                    
                 }
             }
-            .navigationTitle("設定")
+            Section(header: Text("口コミ")){
+                NavigationLink(
+                    destination: PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false),
+                    label: {
+                        HStack {
+                            Image(systemName: "chair")
+                                .foregroundColor(.accentColor)
+                            Text("ベンチ情報を追加")
+                        }
+                    }
+                )
+            }
+        }
+        //.navigationTitle("設定")
     }
 }
 
@@ -79,7 +77,6 @@ struct PostBenchInfoView: View {
     
     let locationManager = CLLocationManager()
     
-    
     @State var isPressedThumbsUp: Bool = false
     @State var isPressedThumbsDown: Bool = false
     @State var isShowSheet: Bool = false
@@ -88,8 +85,14 @@ struct PostBenchInfoView: View {
     @State var text: String
     @State var selectedImage: UIImage?
     @State var isGoodOrBad: Bool
-    
+    @State var imageUrl: String?
+    @State var isPosting: Bool = false
     @FocusState var focus:Bool
+    
+    @StateObject var post = NewReviewPostViewModel()
+    @Environment(\.dismiss) var dismiss
+    
+    @State var isInputAll: Bool = false
     
     
     init(evaluation: Int, text: String, isGoodOrBad: Bool) {
@@ -98,10 +101,40 @@ struct PostBenchInfoView: View {
         self.isGoodOrBad = isGoodOrBad
     }
     
+    func newPost() {
+        isPosting = true
+        Task {
+            // 先に画像をアップロード
+            imageUrl = await post.uploadImage(name: placeName, image: selectedImage)
+            
+            // データ全体をアップロード
+            await post.postNewData(newPostData: NewPostModel(id: placeName, evaluation: evaluation, description: text, imageUrl: imageUrl, latitude: coordinate.latitude, longitude: coordinate.longitude))
+            
+            // 1秒間の遅延を挿入
+            try await Task.sleep(nanoseconds: 5_000_000_000)
+            
+            isPosting = false
+            
+            dismiss()
+        }
+    }
+    
     var body: some View {
         let place = [PostCoordinateModel(lat: coordinate.latitude, long: coordinate.longitude)]
-        VStack {
-            List{
+        
+        var isInputAll: Bool {
+            return !placeName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+                   !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+//                   selectedImage != nil &&
+//                   imageUrl != &&
+                   coordinate.latitude != 0.0 &&
+                   coordinate.longitude != 0.0
+        }
+
+        
+        ZStack(alignment: .topLeading) {
+
+            Form {
                 Section(header: Text("座標(ベンチの場所をタップしてください)")){
                     MapReader{ proxy in
                         Map(position: $position) {
@@ -205,22 +238,33 @@ struct PostBenchInfoView: View {
                         ImagePicker(image: $selectedImage)
                     }
                 }
+                
+                HStack {
+                    Spacer()
+                    
+                    Button("送信") {
+                        newPost()
+                    }
+                    .disabled(!isInputAll)
+                    
+                    Spacer()
+                }
             }
             
-            Button(action: {
-            }) {
-                Text("投稿")
-                    .frame(width: 100, height: 25)
+            
+            if(isPosting) {
+                ProgressView()
+                    .scaleEffect(1.5)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.black.opacity(0.5))
+                    .edgesIgnoringSafeArea(.all)
             }
-            .accentColor(Color.white)
-            .background(Color.blue)
-            .cornerRadius(10.0)
-            .padding()
         }
     }
 }
 
+
 #Preview {
-    SettingView()
-    //PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false)
+    //SettingView()
+    PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false)
 }
