@@ -26,44 +26,56 @@ struct ContentView: View {
     
     @State var showSttings = false
     
+    @State private var coordinate: CLLocationCoordinate2D = .init(latitude: 0.00,
+                                                                  longitude: 0.00)
+    
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             NavigationView {
-                Map(position: $cameraPosition) {
-                    UserAnnotation(anchor: .center)
-                    ForEach(viewModel.mapData) { mapInfo in
-                        Annotation(mapInfo.name, coordinate: mapInfo.coordinate) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .fill(.orange)
-                                Text("🪑")
-                                    .padding(5)
+                MapReader {  proxy in
+                    Map(position: $cameraPosition) {
+                        UserAnnotation(anchor: .center)
+                        ForEach(viewModel.mapData) { mapInfo in
+                            Annotation(mapInfo.name, coordinate: mapInfo.coordinate) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .fill(.orange)
+                                    Text("🪑")
+                                        .padding(5)
+                                }
+                                .onTapGesture {
+                                    detailViewModel.selectedFramework = mapInfo
+                                    isShowReviewSheet = true
+                                    showSearchSheet = false
+                                }
+                                .sheet(isPresented: $isShowReviewSheet,onDismiss: {
+                                    showSearchSheet = true
+                                }) {
+                                    DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData)
+                                        .presentationDetents([ .medium, .large])
+                                        .presentationBackground(Color.background)
+                                }
                             }
-                            .onTapGesture {
-                                detailViewModel.selectedFramework = mapInfo
-                                isShowReviewSheet = true
-                                showSearchSheet = false
-                            }
-                            .sheet(isPresented: $isShowReviewSheet,onDismiss: {
-                                showSearchSheet = true
-                            }) {
-                                DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData)
-                                    .presentationDetents([ .medium, .large])
-                                    .presentationBackground(Color.background)
-                            }
+                        }
+                    }
+                    .onTapGesture { position in
+                        print("tap")
+                        if let selectedCoordinate = proxy.convert(position, from: .local) {
+                            coordinate = selectedCoordinate
+                            print(coordinate)
                         }
                     }
                 }
                 .safeAreaInset(edge: .bottom) {
                     // 設定ボタン
-                    NavigationLink(destination: SettingView(showSearchSheet: $showSearchSheet)) {
+                    NavigationLink(destination: SettingView()) {
                         Image(systemName: "gear")
                             .padding()
                             .background(.ultraThickMaterial, in: RoundedRectangle(cornerRadius: 8))
                             .shadow(radius: 10)
                     }
                     .simultaneousGesture(TapGesture().onEnded {
-                        print("TAPPED")
+                        // 検索バーを閉じる
                         showSearchSheet = false
                     })
                     .padding(.bottom,120)
@@ -154,8 +166,6 @@ struct ContentView: View {
         }
     } // ZStack
 }
-
-
 
 #Preview {
     ContentView(isPost: false)
