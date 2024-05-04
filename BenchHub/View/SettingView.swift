@@ -122,6 +122,16 @@ struct PostBenchInfoView: View {
     var body: some View {
         let place = [PostCoordinateModel(lat: coordinate.latitude, long: coordinate.longitude)]
         
+        var isInputAll: Bool {
+            return !placeName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+                   !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+//                   selectedImage != nil &&
+//                   imageUrl != &&
+                   coordinate.latitude != 0.0 &&
+                   coordinate.longitude != 0.0
+        }
+
+        
         ZStack(alignment: .topLeading) {
 
             Form {
@@ -235,7 +245,7 @@ struct PostBenchInfoView: View {
                     Button("送信") {
                         newPost()
                     }
-                    .disabled(true)
+                    .disabled(!isInputAll)
                     
                     Spacer()
                 }
