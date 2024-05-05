@@ -48,13 +48,6 @@ struct ContentView: View {
                                     isShowReviewSheet = true
                                     showSearchSheet = false
                                 }
-                                .sheet(isPresented: $isShowReviewSheet,onDismiss: {
-                                    showSearchSheet = true
-                                }) {
-                                    DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData)
-                                        .presentationDetents([ .medium, .large])
-                                        .presentationBackground(Color.background)
-                                }
                             }
                         }
                     }
@@ -84,45 +77,52 @@ struct ContentView: View {
                     .padding(.bottom,120)
                     .padding(.trailing,300)
                     
-                    VStack {
-                        ZStack {
-                            // 背景
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(.ultraThickMaterial)
-                                .shadow(radius: 10)
-                                .frame(height: 50)
-                            
-                            HStack(spacing: 6) {
-                                Spacer()
-                                    .frame(width: 0)
-                                
-                                // 虫眼鏡
-                                Image(systemName: "magnifyingglass")
-                                    .foregroundColor(.gray)
-                                
-                                // テキストフィールド
-                                TextField("場所を入力して移動", text: $inputText)
-                                    .onSubmit {
-                                        searchText = inputText
-                                        inputText = ""
-                                    }
-                                    .submitLabel(.search)
-                                
-                                // 検索文字が空ではない場合は、クリアボタンを表示
-                                if !inputText.isEmpty {
-                                    Button {
-                                        inputText = ""
-                                    } label: {
-                                        Image(systemName: "xmark.circle.fill")
-                                            .foregroundColor(.gray)
-                                    }
-                                    .padding(.trailing, 10)
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
+//                    VStack {
+//                        ZStack {
+//                            // 背景
+//                            RoundedRectangle(cornerRadius: 16)
+//                                .fill(.ultraThickMaterial)
+//                                .shadow(radius: 10)
+//                                .frame(height: 50)
+//                            
+//                            HStack(spacing: 6) {
+//                                Spacer()
+//                                    .frame(width: 0)
+//                                
+//                                // 虫眼鏡
+//                                Image(systemName: "magnifyingglass")
+//                                    .foregroundColor(.gray)
+//                                
+//                                // テキストフィールド
+//                                TextField("場所を入力して移動", text: $inputText)
+//                                    .onSubmit {
+//                                        searchText = inputText
+//                                        inputText = ""
+//                                    }
+//                                    .submitLabel(.search)
+//                                
+//                                // 検索文字が空ではない場合は、クリアボタンを表示
+//                                if !inputText.isEmpty {
+//                                    Button {
+//                                        inputText = ""
+//                                    } label: {
+//                                        Image(systemName: "xmark.circle.fill")
+//                                            .foregroundColor(.gray)
+//                                    }
+//                                    .padding(.trailing, 10)
+//                                }
+//                            }
+//                        }
+//                        .padding(.horizontal)
+//                    }
                 }
+            }
+            .sheet(isPresented: $isShowReviewSheet,onDismiss: {
+                showSearchSheet = true
+            }) {
+                DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData)
+                    .presentationDetents([ .medium, .large])
+                    .presentationBackground(Color.background)
             }
             .task {
                 let manager = CLLocationManager()
