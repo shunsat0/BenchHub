@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 
 struct ContentView: View {
+    @Environment(\.dismiss) private var dismiss
     @StateObject var mapDataViewModel = MapDataViewModel()
     @StateObject var detailViewModel = DetailViewModel()
     @StateObject var postViewModel = PostViewModel()
@@ -28,9 +29,12 @@ struct ContentView: View {
     
     @State private var coordinate: CLLocationCoordinate2D = .init(latitude: 0.00,
                                                                   longitude: 0.00)
+    
+    @State var isPostConpleted:Bool = false
+    
     var body: some View {
         
-        ZStack(alignment: .bottomLeading) {
+        ZStack() {
             NavigationView {
                 MapReader {  proxy in
                     Map(position: $cameraPosition) {
@@ -112,8 +116,25 @@ struct ContentView: View {
                                     .padding(.trailing, 10)
                                 }
                             }
-                        }
-                        .padding(.horizontal)
+                        }}
+                    
+                    .padding(.horizontal)
+                }
+            }
+        }
+        .fullScreenCover(isPresented: $isPostConpleted) {
+            ZStack {
+                VStack {
+                    Text("投稿完了しました👏")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                    
+                    Button(action: {
+                        dismiss()
+                        isPostConpleted = false
+                    }) {
+                        Text("閉じる")
+                            .frame(width: 200, height: 50)
                     }
                     .accentColor(Color.white)
                     .background(Color.blue)
@@ -138,7 +159,7 @@ struct ContentView: View {
         .sheet(isPresented: $isShowReviewSheet,onDismiss: {
             showSearchSheet = true
         }) {
-            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData)
+            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData, isPostConpleted: $isPostConpleted)
                 .presentationDetents([ .medium, .large])
                 .presentationBackground(Color.background)
         }
@@ -176,58 +197,16 @@ struct ContentView: View {
                     ))
                 }
             }
-            .sheet(isPresented: $isShowReviewSheet,onDismiss: {
-                showSearchSheet = true
-            }) {
-                DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData)
-                    .presentationDetents([ .medium, .large])
-                    .presentationBackground(Color.background)
-            }
-            .task {
-                let manager = CLLocationManager()
-                manager.requestWhenInUseAuthorization()
-            }
-            .mapControls {
-                MapUserLocationButton()
-                MapCompass()
-                MapScaleView()
-            }
-            .onChange(of: getedData) {
-                Task {
-                    await mapDataViewModel.fetchData()
-                }
-            }
-            .onChange(of: searchText, initial: true) { oldValue, newValue in
-                print("検索ワード: \(newValue)")
-                let request  = MKLocalSearch.Request()
-                request.naturalLanguageQuery = newValue
-                
-                let search = MKLocalSearch(request: request)
-                search.start { response, error in
-                    if let mapItems = response?.mapItems,
-                       let mapItem = mapItems.first {
-                        targetCoordinate = mapItem.placemark.coordinate
-                        print("緯度経度: \(targetCoordinate)")
-                        print(mapItems)
-                        cameraPosition = .region(MKCoordinateRegion(
-                            center: targetCoordinate,
-                            latitudinalMeters: 500.0,
-                            longitudinalMeters: 500.0
-                            
-                        ))
-                    }
-                }
-            }
-            .onAppear() {
-                showSearchSheet = true
-                cameraPosition = position
-                Task {
-                    await mapDataViewModel.fetchData()
-                }
-            } // Map
         }
-    } // ZStack
-}
+        .onAppear() {
+            showSearchSheet = true
+            cameraPosition = position
+            Task {
+                await mapDataViewModel.fetchData()
+            }
+        } // Map
+    }
+} // ZStack
 
 #Preview {
     ContentView(isPost: false)

@@ -9,6 +9,7 @@
 import SwiftUI
 import WaterfallGrid
 
+
 struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State var isShowPostSheet:Bool
@@ -30,7 +31,8 @@ struct DetailView: View {
     
     @Binding var getedData: Bool
     
-    @State var isPostConpleted = false
+    @Binding var isPostConpleted:Bool
+    @State var isProgress:Bool = false
     
     var body: some View {
         VStack() {
@@ -43,11 +45,11 @@ struct DetailView: View {
             }
             
             ScrollView(showsIndicators: false) {
-                Divider()
+                //Divider()
                 
-                ReviewAndDistanceView(isShowPostSheet: isShowPostSheet) {
-                    isShowPostSheet = true
-                }
+//                ReviewAndDistanceView(isShowPostSheet: isShowPostSheet) {
+//                    isShowPostSheet = true
+//                }
                 
                 Divider()
                 
@@ -61,98 +63,84 @@ struct DetailView: View {
                     isShowPostSheet = true
                 }
                 .sheet(isPresented: $isShowPostSheet){
-                    VStack {
-                        HStack {
-                            Button("キャンセル"){
-                                isShowPostSheet = false
-                            }
-                            
-                            Spacer()
-                            
-                            Button("完了") {
-                                getedData = true
-                                print("ブール\(getedData)")
-                                // 評価 or コメントテキストが空あらアラート表示
-                                if(!isGoodOrBad || text.isEmpty) {
-                                    showAlert = true
-                                    print("評価が空です")
-                                    print(showAlert)
-                                }else {
-                                    Task {
-                                        imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
-                                        print("URL表示　\(String(describing: imageUrl))")
+                    ZStack {
+                        VStack {
+                            HStack {
+                                Button("キャンセル"){
+                                    isShowPostSheet = false
+                                }
+                                
+                                Spacer()
+                                
+                                Button("完了") {
+                                    getedData = true
+                                    print("ブール\(getedData)")
+                                    // 評価 or コメントテキストが空あらアラート表示
+                                    if(!isGoodOrBad || text.isEmpty) {
+                                        showAlert = true
+                                        print("評価が空です")
+                                        print(showAlert)
+                                    }else {
+                                        isProgress.toggle()
+                                        Task {
+                                            imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
+                                            print("URL表示　\(String(describing: imageUrl))")
+                                            
+                                            await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text, imageUrl: imageUrl))
+                                            
+                                            try await Task.sleep(nanoseconds: 5_000_000_000)
+                                            
+                                        }
+                                        isProgress.toggle()
                                         
-                                        await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text, imageUrl: imageUrl))
-                                        
+                                        isShowReviewSheet = false
+                                        isShowPostSheet = false
+                                        getedData = false
                                         isPostConpleted.toggle()
                                     }
                                 }
-                            }
-                            .fullScreenCover(isPresented: $isPostConpleted) {
-                                ZStack {
-                                    VStack {
-                                        Text("投稿完了しました👏")
-                                            .font(.largeTitle)
-                                            .fontWeight(.bold)
-                                        
-                                        Button(action: {
-                                            isShowReviewSheet = false
-                                            isShowPostSheet = false
-                                            getedData = false
-                                            isPostConpleted.toggle()
-                                        }) {
-                                            Text("閉じる")
-                                                .frame(width: 200, height: 50)
-                                        }
-                                        .accentColor(Color.white)
-                                        .background(Color.blue)
-                                        .cornerRadius(10.0)
-                                        
-                                    }
-                                    
-                                    
-                                    Circle()
-                                        .fill(Color.blue)
-                                        .frame(width: 12, height: 12)
-                                        .modifier(ParticlesModifier())
-                                        .offset(x: -100, y : -50)
-                                    
-                                    Circle()
-                                        .fill(Color.red)
-                                        .frame(width: 12, height: 12)
-                                        .modifier(ParticlesModifier())
-                                        .offset(x: 60, y : 70)
+                                .alert(isPresented: $showAlert) {
+                                    Alert(
+                                        title: Text("評価とコメントの両方を入力してください！"),
+                                        dismissButton: .default(
+                                            Text("OK"),
+                                            action: {
+                                                showAlert = false
+                                                getedData = false
+                                                print("ブール\(getedData)")
+                                            }
+                                        )
+                                    )
                                 }
                             }
-                            .alert(isPresented: $showAlert) {
-                                Alert(
-                                    title: Text("評価とコメントの両方を入力してください！"),
-                                    dismissButton: .default(
-                                        Text("OK"),
-                                        action: {
-                                            showAlert = false
-                                            getedData = false
-                                            print("ブール\(getedData)")
-                                        }
-                                    )
-                                )
-                            }
+                            .padding()
+                            
+                            
+                            PostReviewView(evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo,selectedImage: $selectedImage,isGoodOrBad: $isGoodOrBad)
+                            
+                            Spacer()
                         }
-                        .padding()
+                        .presentationDetents([.height(500)])
+                        .presentationBackground(Color.background)
                         
-                        PostReviewView(evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo,selectedImage: $selectedImage,isGoodOrBad: $isGoodOrBad)
-                        
-                        Spacer()
+                        if(isProgress) {
+                            ProgressView()
+                                .scaleEffect(1.5)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .background(Color.black.opacity(0.5))
+                                .edgesIgnoringSafeArea(.all)
+                        }
                     }
-                    .presentationDetents([.height(500)])
-                    .presentationBackground(Color.background)
                 }
-                .padding()
+                .padding(16)
             }
+            .padding(.bottom,-50)
         }
         .padding()
     }
 }
+
+
 struct PostReviewView: View {
     @State var isPressedThumbsUp: Bool = false
     @State var isPressedThumbsDown: Bool = false
@@ -168,7 +156,6 @@ struct PostReviewView: View {
     @FocusState var focus:Bool
     
     var body: some View {
-        
         VStack {
             HStack {
                 Text("居心地")
@@ -233,6 +220,7 @@ struct PostReviewView: View {
                 VStack {
                     Button("\(Image(systemName: "camera.fill"))あなたの写真を追加"){
                         isShowImagePicker = true
+                        print(isShowImagePicker)
                     }
                     .foregroundColor(.accentColor)
                     if let image = selectedImage {
@@ -245,7 +233,7 @@ struct PostReviewView: View {
                 Spacer()
             }
             .padding()
-            .sheet(isPresented: $isShowImagePicker) {
+            .popover(isPresented: $isShowImagePicker) {
                 ImagePicker(image: $selectedImage)
             }
             
@@ -304,53 +292,53 @@ struct ImagePicker: UIViewControllerRepresentable {
 
 
 
-struct ReviewAndDistanceView: View {
-    @Environment(\.dismiss) private var dismiss
-    @State var isShowPostSheet:Bool
-    var postButtonAction: () -> Void
-    
-    var body: some View {
-        HStack{
-            VStack(alignment: .leading) {
-                Text("10件の評価") // \(totalReviewCount)の評価
-                    .foregroundColor(.secondary)
-                    .font(.caption)
-                Button(action: {
-                    postButtonAction()
-                }, label: {
-                    HStack {
-                        Image(systemName: "hand.thumbsup.fill")
-                            .foregroundColor(.accentColor)
-                        
-                        Text("78%")
-                            .fontDesign(.monospaced)
-                            .fontWeight(.bold)
-                            .foregroundColor(.accentColor)
-                    }
-                })
-            }
-            
-            Divider()
-            
-            VStack(alignment: .leading) {
-                Text("距離")
-                    .foregroundColor(.secondary)
-                    .font(.caption)
-                
-                HStack {
-                    Image(systemName: "arrow.triangle.turn.up.right.diamond")
-                        .foregroundColor(.secondary)
-                    Text("300m") // \(distance)m
-                        .fontDesign(.monospaced)
-                        .fontWeight(.bold)
-                        .foregroundColor(.primary)
-                }
-            }
-            
-            Spacer()
-        }
-    }
-}
+//struct ReviewAndDistanceView: View {
+//    @Environment(\.dismiss) private var dismiss
+//    @State var isShowPostSheet:Bool
+//    var postButtonAction: () -> Void
+//    
+//    var body: some View {
+//        HStack{
+//            VStack(alignment: .leading) {
+//                Text("10件の評価") // \(totalReviewCount)の評価
+//                    .foregroundColor(.secondary)
+//                    .font(.caption)
+//                Button(action: {
+//                    postButtonAction()
+//                }, label: {
+//                    HStack {
+//                        Image(systemName: "hand.thumbsup.fill")
+//                            .foregroundColor(.accentColor)
+//                        
+//                        Text("78%")
+//                            .fontDesign(.monospaced)
+//                            .fontWeight(.bold)
+//                            .foregroundColor(.accentColor)
+//                    }
+//                })
+//            }
+//            
+//            Divider()
+//            
+//            VStack(alignment: .leading) {
+//                Text("距離")
+//                    .foregroundColor(.secondary)
+//                    .font(.caption)
+//                
+//                HStack {
+//                    Image(systemName: "arrow.triangle.turn.up.right.diamond")
+//                        .foregroundColor(.secondary)
+//                    Text("300m") // \(distance)m
+//                        .fontDesign(.monospaced)
+//                        .fontWeight(.bold)
+//                        .foregroundColor(.primary)
+//                }
+//            }
+//            
+//            Spacer()
+//        }
+//    }
+//}
 
 
 
@@ -480,7 +468,7 @@ struct CommentView: View {
 }
 
 #Preview {
-    DetailView(isShowPostSheet: false, selectedMapInfo: sample, isPostReview: .constant(false), isShowReviewSheet: .constant(false),isGoodOrBad: false, getedData: .constant(false))
+    DetailView(isShowPostSheet: false, selectedMapInfo: sample, isPostReview: .constant(false), isShowReviewSheet: .constant(false),isGoodOrBad: false, getedData: .constant(false), isPostConpleted: .constant(false))
 }
 
 var sample = MapModel(latitude: 35.561282, longitude: 139.711039, name: "西蒲田公園",reviews: [Review(description: "公園のベンチは非常に快適で、座り心地が良いです。木陰に配置されており、景色を楽しみながらくつろげます。メンテナンスも行き届いており、清潔感があります。公園を訪れる人々にとって、素晴らしい休憩スポットとなっています。", evaluation: 0, ImageUrl: "https://1.bp.blogspot.com/-ezrLFVDoMhg/Xlyf7yQWzaI/AAAAAAABXrA/utIBXYJDiPYJ4hMzRXrZSHrcZ11sW2PiACNcBGAsYHQ/s1600/no_image_yoko.jpg"),Review(description: "公園のベンチは老朽化しており、座面が不安定です。背もたれもないため、長時間座っていると疲れやすく、くつろぐことができません。また、周囲にゴミや汚れが散乱しており、清潔さを欠いています。公園全体のメンテナンスが行き届いていない印象を受けます。", evaluation: 1, ImageUrl: "https://1.bp.blogspot.com/-ezrLFVDoMhg/Xlyf7yQWzaI/AAAAAAABXrA/utIBXYJDiPYJ4hMzRXrZSHrcZ11sW2PiACNcBGAsYHQ/s1600/no_image_yoko.jpg")] )
