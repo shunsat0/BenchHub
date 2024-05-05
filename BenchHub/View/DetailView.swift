@@ -81,7 +81,7 @@ struct DetailView: View {
                                         print("評価が空です")
                                         print(showAlert)
                                     }else {
-                                        isProgress.toggle()
+                                        isProgress = true
                                         Task {
                                             imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
                                             print("URL表示　\(String(describing: imageUrl))")
@@ -90,13 +90,14 @@ struct DetailView: View {
                                             
                                             try await Task.sleep(nanoseconds: 5_000_000_000)
                                             
+                                            isProgress = false
+                                            
+                                            isShowReviewSheet = false
+                                            isShowPostSheet = false
+                                            getedData = false
+                                            isPostConpleted.toggle()
+                                            
                                         }
-                                        isProgress.toggle()
-                                        
-                                        isShowReviewSheet = false
-                                        isShowPostSheet = false
-                                        getedData = false
-                                        isPostConpleted.toggle()
                                     }
                                 }
                                 .alert(isPresented: $showAlert) {
