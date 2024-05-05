@@ -115,6 +115,65 @@ struct ContentView: View {
                         }
                         .padding(.horizontal)
                     }
+                    .accentColor(Color.white)
+                    .background(Color.blue)
+                    .cornerRadius(10.0)
+                    
+                }
+                
+                
+                Circle()
+                    .fill(Color.blue)
+                    .frame(width: 12, height: 12)
+                    .modifier(ParticlesModifier())
+                    .offset(x: -100, y : -50)
+                
+                Circle()
+                    .fill(Color.red)
+                    .frame(width: 12, height: 12)
+                    .modifier(ParticlesModifier())
+                    .offset(x: 60, y : 70)
+            }
+        }
+        .sheet(isPresented: $isShowReviewSheet,onDismiss: {
+            showSearchSheet = true
+        }) {
+            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData)
+                .presentationDetents([ .medium, .large])
+                .presentationBackground(Color.background)
+        }
+        .task {
+            let manager = CLLocationManager()
+            manager.requestWhenInUseAuthorization()
+        }
+        .mapControls {
+            MapUserLocationButton()
+            MapCompass()
+            MapScaleView()
+        }
+        .onChange(of: getedData) {
+            Task {
+                await mapDataViewModel.fetchData()
+            }
+        }
+        .onChange(of: searchText, initial: true) { oldValue, newValue in
+            print("検索ワード: \(newValue)")
+            let request  = MKLocalSearch.Request()
+            request.naturalLanguageQuery = newValue
+            
+            let search = MKLocalSearch(request: request)
+            search.start { response, error in
+                if let mapItems = response?.mapItems,
+                   let mapItem = mapItems.first {
+                    targetCoordinate = mapItem.placemark.coordinate
+                    print("緯度経度: \(targetCoordinate)")
+                    print(mapItems)
+                    cameraPosition = .region(MKCoordinateRegion(
+                        center: targetCoordinate,
+                        latitudinalMeters: 500.0,
+                        longitudinalMeters: 500.0
+                        
+                    ))
                 }
             }
             .sheet(isPresented: $isShowReviewSheet,onDismiss: {

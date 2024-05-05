@@ -153,7 +153,6 @@ struct DetailView: View {
         .padding()
     }
 }
-
 struct PostReviewView: View {
     @State var isPressedThumbsUp: Bool = false
     @State var isPressedThumbsDown: Bool = false
