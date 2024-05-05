@@ -9,6 +9,7 @@
 import SwiftUI
 import WaterfallGrid
 
+
 struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State var isShowPostSheet:Bool
@@ -155,7 +156,6 @@ struct PostReviewView: View {
     @FocusState var focus:Bool
     
     var body: some View {
-        
         VStack {
             HStack {
                 Text("居心地")
@@ -247,7 +247,6 @@ struct PostReviewView: View {
         .onTapGesture {
             focus = false
         }
-        
     }
 }
 
@@ -292,53 +291,53 @@ struct ImagePicker: UIViewControllerRepresentable {
 
 
 
-struct ReviewAndDistanceView: View {
-    @Environment(\.dismiss) private var dismiss
-    @State var isShowPostSheet:Bool
-    var postButtonAction: () -> Void
-    
-    var body: some View {
-        HStack{
-            VStack(alignment: .leading) {
-                Text("10件の評価") // \(totalReviewCount)の評価
-                    .foregroundColor(.secondary)
-                    .font(.caption)
-                Button(action: {
-                    postButtonAction()
-                }, label: {
-                    HStack {
-                        Image(systemName: "hand.thumbsup.fill")
-                            .foregroundColor(.accentColor)
-                        
-                        Text("78%")
-                            .fontDesign(.monospaced)
-                            .fontWeight(.bold)
-                            .foregroundColor(.accentColor)
-                    }
-                })
-            }
-            
-            Divider()
-            
-            VStack(alignment: .leading) {
-                Text("距離")
-                    .foregroundColor(.secondary)
-                    .font(.caption)
-                
-                HStack {
-                    Image(systemName: "arrow.triangle.turn.up.right.diamond")
-                        .foregroundColor(.secondary)
-                    Text("300m") // \(distance)m
-                        .fontDesign(.monospaced)
-                        .fontWeight(.bold)
-                        .foregroundColor(.primary)
-                }
-            }
-            
-            Spacer()
-        }
-    }
-}
+//struct ReviewAndDistanceView: View {
+//    @Environment(\.dismiss) private var dismiss
+//    @State var isShowPostSheet:Bool
+//    var postButtonAction: () -> Void
+//    
+//    var body: some View {
+//        HStack{
+//            VStack(alignment: .leading) {
+//                Text("10件の評価") // \(totalReviewCount)の評価
+//                    .foregroundColor(.secondary)
+//                    .font(.caption)
+//                Button(action: {
+//                    postButtonAction()
+//                }, label: {
+//                    HStack {
+//                        Image(systemName: "hand.thumbsup.fill")
+//                            .foregroundColor(.accentColor)
+//                        
+//                        Text("78%")
+//                            .fontDesign(.monospaced)
+//                            .fontWeight(.bold)
+//                            .foregroundColor(.accentColor)
+//                    }
+//                })
+//            }
+//            
+//            Divider()
+//            
+//            VStack(alignment: .leading) {
+//                Text("距離")
+//                    .foregroundColor(.secondary)
+//                    .font(.caption)
+//                
+//                HStack {
+//                    Image(systemName: "arrow.triangle.turn.up.right.diamond")
+//                        .foregroundColor(.secondary)
+//                    Text("300m") // \(distance)m
+//                        .fontDesign(.monospaced)
+//                        .fontWeight(.bold)
+//                        .foregroundColor(.primary)
+//                }
+//            }
+//            
+//            Spacer()
+//        }
+//    }
+//}
 
 
 

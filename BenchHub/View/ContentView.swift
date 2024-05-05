@@ -131,7 +131,7 @@ struct ContentView: View {
                     
                     Button(action: {
                         dismiss()
-                        isPostConpleted.toggle()
+                        isPostConpleted = false
                     }) {
                         Text("閉じる")
                             .frame(width: 200, height: 50)
