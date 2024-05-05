@@ -30,129 +30,115 @@ struct DetailView: View {
     
     @Binding var getedData: Bool
     
-    @State var isPostConpleted = false
+    @Binding var isPostConpleted:Bool
+    @State var isProgress:Bool = false
     
     var body: some View {
-        VStack() {
-            HStack {
-                Text(selectedMapInfo.name)
-                    .font(.title)
-                    .padding()
-                
-                Spacer()
-            }
-            
-            ScrollView(showsIndicators: false) {
-                Divider()
-                
-                ReviewAndDistanceView(isShowPostSheet: isShowPostSheet) {
-                    isShowPostSheet = true
+            VStack() {
+                HStack {
+                    Text(selectedMapInfo.name)
+                        .font(.title)
+                        .padding()
+                    
+                    Spacer()
                 }
                 
-                Divider()
-                
-                ImagesView(mapInfo: selectedMapInfo)
-                    .padding(.top)
-                
-                CommentView(mapInfo: selectedMapInfo)
-                    .padding(.top)
-                
-                Button("\(Image(systemName: "square.and.pencil")) レビューを書く") {
-                    isShowPostSheet = true
-                }
-                .sheet(isPresented: $isShowPostSheet){
-                    VStack {
-                        HStack {
-                            Button("キャンセル"){
-                                isShowPostSheet = false
-                            }
-                            
-                            Spacer()
-                            
-                            Button("完了") {
-                                getedData = true
-                                print("ブール\(getedData)")
-                                // 評価 or コメントテキストが空あらアラート表示
-                                if(!isGoodOrBad || text.isEmpty) {
-                                    showAlert = true
-                                    print("評価が空です")
-                                    print(showAlert)
-                                }else {
-                                    Task {
-                                        imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
-                                        print("URL表示　\(String(describing: imageUrl))")
-                                        
-                                        await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text, imageUrl: imageUrl))
-                                        
-                                        isPostConpleted.toggle()
+                ScrollView(showsIndicators: false) {
+                    Divider()
+                    
+                    ReviewAndDistanceView(isShowPostSheet: isShowPostSheet) {
+                        isShowPostSheet = true
+                    }
+                    
+                    Divider()
+                    
+                    ImagesView(mapInfo: selectedMapInfo)
+                        .padding(.top)
+                    
+                    CommentView(mapInfo: selectedMapInfo)
+                        .padding(.top)
+                    
+                    Button("\(Image(systemName: "square.and.pencil")) レビューを書く") {
+                        isShowPostSheet = true
+                    }
+                    .sheet(isPresented: $isShowPostSheet){
+                        ZStack {
+                            VStack {
+                                HStack {
+                                    Button("キャンセル"){
+                                        isShowPostSheet = false
                                     }
-                                }
-                            }
-                            .fullScreenCover(isPresented: $isPostConpleted) {
-                                ZStack {
-                                    VStack {
-                                        Text("投稿完了しました👏")
-                                            .font(.largeTitle)
-                                            .fontWeight(.bold)
-                                        
-                                        Button(action: {
+                                    
+                                    Spacer()
+                                    
+                                    Button("完了") {
+                                        getedData = true
+                                        print("ブール\(getedData)")
+                                        // 評価 or コメントテキストが空あらアラート表示
+                                        if(!isGoodOrBad || text.isEmpty) {
+                                            showAlert = true
+                                            print("評価が空です")
+                                            print(showAlert)
+                                        }else {
+                                            isProgress.toggle()
+                                            Task {
+                                                imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
+                                                print("URL表示　\(String(describing: imageUrl))")
+                                                
+                                                await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text, imageUrl: imageUrl))
+                                                
+                                                try await Task.sleep(nanoseconds: 5_000_000_000)
+                                                
+                                            }
+                                            isProgress.toggle()
+                                            
                                             isShowReviewSheet = false
                                             isShowPostSheet = false
                                             getedData = false
                                             isPostConpleted.toggle()
-                                        }) {
-                                            Text("閉じる")
-                                                .frame(width: 200, height: 50)
                                         }
-                                        .accentColor(Color.white)
-                                        .background(Color.blue)
-                                        .cornerRadius(10.0)
-                                        
                                     }
-                                    
-                                    
-                                    Circle()
-                                        .fill(Color.blue)
-                                        .frame(width: 12, height: 12)
-                                        .modifier(ParticlesModifier())
-                                        .offset(x: -100, y : -50)
-                                    
-                                    Circle()
-                                        .fill(Color.red)
-                                        .frame(width: 12, height: 12)
-                                        .modifier(ParticlesModifier())
-                                        .offset(x: 60, y : 70)
+                                    .alert(isPresented: $showAlert) {
+                                        Alert(
+                                            title: Text("評価とコメントの両方を入力してください！"),
+                                            dismissButton: .default(
+                                                Text("OK"),
+                                                action: {
+                                                    showAlert = false
+                                                    getedData = false
+                                                    print("ブール\(getedData)")
+                                                }
+                                            )
+                                        )
+                                    }
                                 }
+                                .padding()
+                            
+                                
+                                PostReviewView(evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo,selectedImage: $selectedImage,isGoodOrBad: $isGoodOrBad)
+                                
+                                Spacer()
                             }
-                            .alert(isPresented: $showAlert) {
-                                Alert(
-                                    title: Text("評価とコメントの両方を入力してください！"),
-                                    dismissButton: .default(
-                                        Text("OK"),
-                                        action: {
-                                            showAlert = false
-                                            getedData = false
-                                            print("ブール\(getedData)")
-                                        }
-                                    )
-                                )
+                            .presentationDetents([.height(500)])
+                            .presentationBackground(Color.background)
+                            
+                            if(isProgress) {
+                                ProgressView()
+                                    .scaleEffect(1.5)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .background(Color.black.opacity(0.5))
+                                    .edgesIgnoringSafeArea(.all)
                             }
                         }
-                        .padding()
-                        
-                        PostReviewView(evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo,selectedImage: $selectedImage,isGoodOrBad: $isGoodOrBad)
-                        
-                        Spacer()
                     }
-                    .presentationDetents([.height(500)])
-                    .presentationBackground(Color.background)
+                    .padding(16)
                 }
-                .padding()
+                .padding(.bottom,-50)
             }
+            .padding()
         }
-        .padding()
     }
-}
+
 
 struct PostReviewView: View {
     @State var isPressedThumbsUp: Bool = false
@@ -261,6 +247,7 @@ struct PostReviewView: View {
         .onTapGesture {
             focus = false
         }
+        
     }
 }
 
@@ -481,7 +468,7 @@ struct CommentView: View {
 }
 
 #Preview {
-    DetailView(isShowPostSheet: false, selectedMapInfo: sample, isPostReview: .constant(false), isShowReviewSheet: .constant(false),isGoodOrBad: false, getedData: .constant(false))
+    DetailView(isShowPostSheet: false, selectedMapInfo: sample, isPostReview: .constant(false), isShowReviewSheet: .constant(false),isGoodOrBad: false, getedData: .constant(false), isPostConpleted: .constant(false))
 }
 
 var sample = MapModel(latitude: 35.561282, longitude: 139.711039, name: "西蒲田公園",reviews: [Review(description: "公園のベンチは非常に快適で、座り心地が良いです。木陰に配置されており、景色を楽しみながらくつろげます。メンテナンスも行き届いており、清潔感があります。公園を訪れる人々にとって、素晴らしい休憩スポットとなっています。", evaluation: 0, ImageUrl: "https://1.bp.blogspot.com/-ezrLFVDoMhg/Xlyf7yQWzaI/AAAAAAABXrA/utIBXYJDiPYJ4hMzRXrZSHrcZ11sW2PiACNcBGAsYHQ/s1600/no_image_yoko.jpg"),Review(description: "公園のベンチは老朽化しており、座面が不安定です。背もたれもないため、長時間座っていると疲れやすく、くつろぐことができません。また、周囲にゴミや汚れが散乱しており、清潔さを欠いています。公園全体のメンテナンスが行き届いていない印象を受けます。", evaluation: 1, ImageUrl: "https://1.bp.blogspot.com/-ezrLFVDoMhg/Xlyf7yQWzaI/AAAAAAABXrA/utIBXYJDiPYJ4hMzRXrZSHrcZ11sW2PiACNcBGAsYHQ/s1600/no_image_yoko.jpg")] )
