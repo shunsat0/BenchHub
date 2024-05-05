@@ -22,7 +22,7 @@ private var settings = [
 
 
 struct SettingView: View {
-    @Environment(\.dismiss) var dismiss    
+    @Environment(\.dismiss) var dismiss
     var body: some View {
         List {
             Section(header: Text("通知")){
@@ -86,7 +86,6 @@ struct PostBenchInfoView: View {
     @State var selectedImage: UIImage?
     @State var isGoodOrBad: Bool
     @State var imageUrl: String?
-    @State var isPosting: Bool = false
     @FocusState var focus:Bool
     
     @StateObject var post = NewReviewPostViewModel()
@@ -94,12 +93,14 @@ struct PostBenchInfoView: View {
     
     @State var isInputAll: Bool = false
     
+    @State var isPosting: Bool = false
+    @State var isPosted: Bool = false
     
-    init(evaluation: Int, text: String, isGoodOrBad: Bool) {
-        self.evaluation = evaluation
-        self.text = text
-        self.isGoodOrBad = isGoodOrBad
-    }
+//    init(evaluation: Int, text: String, isGoodOrBad: Bool) {
+//        self.evaluation = evaluation
+//        self.text = text
+//        self.isGoodOrBad = isGoodOrBad
+//    }
     
     func newPost() {
         isPosting = true
@@ -110,12 +111,11 @@ struct PostBenchInfoView: View {
             // データ全体をアップロード
             await post.postNewData(newPostData: NewPostModel(id: placeName, evaluation: evaluation, description: text, imageUrl: imageUrl, latitude: coordinate.latitude, longitude: coordinate.longitude))
             
-            // 1秒間の遅延を挿入
+            // 5秒間の遅延を挿入
             try await Task.sleep(nanoseconds: 5_000_000_000)
             
-            isPosting = false
-            
-            dismiss()
+            isPosting = false         
+            isPosted.toggle()
         }
     }
     
@@ -258,6 +258,39 @@ struct PostBenchInfoView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color.black.opacity(0.5))
                     .edgesIgnoringSafeArea(.all)
+            }
+        }
+        .fullScreenCover(isPresented: $isPosted) {
+            ZStack {
+                VStack {
+                    Text("投稿完了しました👏")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                    
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Text("閉じる")
+                            .frame(width: 200, height: 50)
+                    }
+                    .accentColor(Color.white)
+                    .background(Color.blue)
+                    .cornerRadius(10.0)
+                    
+                }
+                
+                
+                Circle()
+                    .fill(Color.blue)
+                    .frame(width: 12, height: 12)
+                    .modifier(ParticlesModifier())
+                    .offset(x: -100, y : -50)
+                
+                Circle()
+                    .fill(Color.red)
+                    .frame(width: 12, height: 12)
+                    .modifier(ParticlesModifier())
+                    .offset(x: 60, y : 70)
             }
         }
     }
