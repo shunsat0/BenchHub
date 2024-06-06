@@ -408,13 +408,18 @@ struct ImagesListView: View {
                     }
                 }
             }
-            .padding()
+            .padding(.top,50)
+            .padding(.horizontal,10)
             
             
-            Button("\(Image(systemName: "xmark.circle.fill"))") {
-                showImageList = false
+            HStack() {
+                Button("\(Image(systemName: "xmark.circle.fill"))") {
+                    showImageList = false
+                }
+                .foregroundColor(.gray)
+                
+                Spacer()
             }
-            .foregroundColor(.primary)
             .padding()
         }
         
