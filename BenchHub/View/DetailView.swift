@@ -388,25 +388,28 @@ struct ImagesListView: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             ScrollView(.vertical, showsIndicators: false) {
-                WaterfallGrid(mapInfo.reviews, id: \.self) { image ->  AnyView in
-                    if let url = URL(string: image.ImageUrl) {
-                        return AnyView(
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                    ForEach(mapInfo.reviews, id: \.self) { image in
+                        if let url = URL(string: image.ImageUrl) {
                             AsyncImage(url: url) { image in
                                 image.resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .cornerRadius(10.0)
-                            } placeholder: {
+                            }
+                            placeholder: {
                                 ProgressView()
                             }
-                                .onTapGesture {
-                                }
-                        )
-                    } else {
-                        return AnyView(EmptyView())
+                            .onTapGesture {
+                                // Tap action here
+                            }
+                        } else {
+                            EmptyView()
+                        }
                     }
                 }
-                .gridStyle(columns: 2, spacing: 8)
             }
+            .padding()
+            
             
             Button("\(Image(systemName: "xmark.circle.fill"))") {
                 showImageList = false
