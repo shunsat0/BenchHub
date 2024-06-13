@@ -57,30 +57,6 @@ struct ContentView: View {
                     }
                 }
                 .safeAreaInset(edge: .bottom) {
-                    // 設定ボタン
-                    NavigationLink(destination: SettingView()) {
-                        Image(systemName: "gear")
-                            .padding()
-                            .background(.ultraThickMaterial, in: RoundedRectangle(cornerRadius: 8))
-                            .shadow(radius: 10)
-                    }
-                    .onDisappear {
-                        print("設定画面")
-                    }
-                    .onAppear {
-                        print("ホーム画面")
-                        print("更新")
-                        Task {
-                            await mapDataViewModel.fetchData()
-                        }
-                    }
-                    .simultaneousGesture(TapGesture().onEnded {
-                        // 検索バーを閉じる
-                        showSearchSheet = false
-                    })
-                    .padding(.bottom,120)
-                    .padding(.trailing,300)
-                    
                     VStack {
                         ZStack {
                             // 背景
@@ -120,6 +96,36 @@ struct ContentView: View {
                     
                     .padding(.horizontal)
                 }
+            }
+            
+            VStack {
+                HStack {
+                    NavigationLink(destination: SettingView()) {
+                        Image(systemName: "gear")
+                            .padding(12)
+                            .background(.white, in: RoundedRectangle(cornerRadius: 8))
+                    }
+                    .onDisappear {
+                        print("設定画面")
+                    }
+                    .onAppear {
+                        print("ホーム画面")
+                        print("更新")
+                        Task {
+                            await mapDataViewModel.fetchData()
+                        }
+                    }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        // 検索バーを閉じる
+                        showSearchSheet = false
+                    })
+                    
+                    Spacer()
+                }
+                .padding()
+                .offset(y: -12)
+                
+                Spacer()
             }
         }
         .fullScreenCover(isPresented: $isPostConpleted) {
