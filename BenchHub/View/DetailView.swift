@@ -7,8 +7,6 @@
 
 
 import SwiftUI
-import WaterfallGrid
-
 
 struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
