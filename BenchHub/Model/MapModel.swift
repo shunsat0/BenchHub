@@ -24,4 +24,5 @@ struct Review: Identifiable,Hashable {
     let description: String
     let evaluation: Int
     let ImageUrl: String
+    let date: Date
 }
