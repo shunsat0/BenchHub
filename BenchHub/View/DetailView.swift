@@ -431,6 +431,13 @@ struct CommentView: View {
     private let lineLimit: Int = 4
     @State private var isExpanded = false
     
+    func dateToString(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        return dateFormatter.string(from: date)
+    }
+    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 16) {
@@ -445,7 +452,7 @@ struct CommentView: View {
                                     .foregroundColor(.orange)
                             }
                             Spacer()
-                            Text("1年前")
+                            Text(dateToString(review.date))
                         }
                         .padding([.leading, .trailing, .top])
                         
