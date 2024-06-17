@@ -29,8 +29,12 @@ class MapDataViewModel: ObservableObject {
                         let description = reviewData["description"] as? String ?? ""
                         let evaluation = reviewData["evaluation"] as? Int ?? 0                        
                         let ImageUrl = reviewData["image"] as? String ?? ""
-                        reviews.append(Review(description: description, evaluation: evaluation, ImageUrl: ImageUrl))
+                        let timestamp = reviewData["date"] as? Timestamp
+                        let date = timestamp?.dateValue() ?? Date()
+                        reviews.append(Review(description: description, evaluation: evaluation, ImageUrl: ImageUrl,date: date))
                     }
+                    
+                    reviews.sort { $0.date > $1.date }
                 }
                 
 

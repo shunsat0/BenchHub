@@ -431,6 +431,13 @@ struct CommentView: View {
     private let lineLimit: Int = 4
     @State private var isExpanded = false
     
+    func dateToString(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        return dateFormatter.string(from: date)
+    }
+    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 16) {
@@ -445,7 +452,7 @@ struct CommentView: View {
                                     .foregroundColor(.orange)
                             }
                             Spacer()
-                            Text("1年前")
+                            Text(dateToString(review.date))
                         }
                         .padding([.leading, .trailing, .top])
                         
@@ -473,10 +480,3 @@ struct CommentView: View {
         }
     }
 }
-
-#Preview {
-    DetailView(isShowPostSheet: false, selectedMapInfo: sample, isPostReview: .constant(false), isShowReviewSheet: .constant(false),isGoodOrBad: false, getedData: .constant(false), isPostConpleted: .constant(false))
-}
-
-var sample = MapModel(latitude: 35.561282, longitude: 139.711039, name: "西蒲田公園",reviews: [Review(description: "公園のベンチは非常に快適で、座り心地が良いです。木陰に配置されており、景色を楽しみながらくつろげます。メンテナンスも行き届いており、清潔感があります。公園を訪れる人々にとって、素晴らしい休憩スポットとなっています。", evaluation: 0, ImageUrl: "https://1.bp.blogspot.com/-ezrLFVDoMhg/Xlyf7yQWzaI/AAAAAAABXrA/utIBXYJDiPYJ4hMzRXrZSHrcZ11sW2PiACNcBGAsYHQ/s1600/no_image_yoko.jpg"),Review(description: "公園のベンチは老朽化しており、座面が不安定です。背もたれもないため、長時間座っていると疲れやすく、くつろぐことができません。また、周囲にゴミや汚れが散乱しており、清潔さを欠いています。公園全体のメンテナンスが行き届いていない印象を受けます。", evaluation: 1, ImageUrl: "https://1.bp.blogspot.com/-ezrLFVDoMhg/Xlyf7yQWzaI/AAAAAAABXrA/utIBXYJDiPYJ4hMzRXrZSHrcZ11sW2PiACNcBGAsYHQ/s1600/no_image_yoko.jpg")] )
-
