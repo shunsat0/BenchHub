@@ -165,7 +165,7 @@ struct ContentView: View {
         .sheet(isPresented: $isShowReviewSheet,onDismiss: {
             showSearchSheet = true
         }) {
-            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData, isPostConpleted: $isPostConpleted)
+            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData, isPostCompleted: $isPostConpleted)
                 .presentationDetents([ .medium, .large])
                 .presentationBackground(Color.background)
         }
