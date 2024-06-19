@@ -252,6 +252,7 @@ struct PostReviewView: View {
             
             HStack {
                 VStack {
+                    
                     ZStack(alignment: .topTrailing) {
                         if let image = selectedImage {
                             Image(uiImage: image)
@@ -270,6 +271,7 @@ struct PostReviewView: View {
                             .padding(.top,60)
                             .padding(.trailing,10)
                         }
+                    }
                     
                     if (isShowImagePicker) {
                         PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
