@@ -7,10 +7,11 @@
 
 
 import SwiftUI
+import PhotosUI
 
 struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
-    @State var isShowPostSheet:Bool
+    @State var isShowPostSheet: Bool
     var selectedMapInfo: MapModel
     @StateObject var viewModel = MapDataViewModel()
     @StateObject var post = PostViewModel()
@@ -20,20 +21,22 @@ struct DetailView: View {
     
     @Binding var isPostReview: Bool
     @Binding var isShowReviewSheet: Bool
-    @State var selectedImage:  UIImage?
+    @State var selectedImage: UIImage?
     
-    @State var imageUrl:String?
+    @State var imageUrl: String?
     
     @State var isGoodOrBad: Bool
     @State var showAlert = false
     
     @Binding var getedData: Bool
     
-    @Binding var isPostConpleted:Bool
-    @State var isProgress:Bool = false
+    @Binding var isPostCompleted: Bool
+    @State var isProgress: Bool = false
+    
+    @State var isShowImagePicker: Bool = false  // 追加
     
     var body: some View {
-        VStack() {
+        VStack {
             HStack {
                 Text(selectedMapInfo.name)
                     .font(.title)
@@ -43,7 +46,6 @@ struct DetailView: View {
             }
             
             ScrollView(showsIndicators: false) {
-                
                 Divider()
                 
                 ImagesView(mapInfo: selectedMapInfo)
@@ -59,7 +61,7 @@ struct DetailView: View {
                     ZStack {
                         VStack {
                             HStack {
-                                Button("キャンセル"){
+                                Button("キャンセル") {
                                     isShowPostSheet = false
                                 }
                                 
@@ -69,11 +71,11 @@ struct DetailView: View {
                                     getedData = true
                                     print("ブール\(getedData)")
                                     // 評価 or コメントテキストが空あらアラート表示
-                                    if(!isGoodOrBad || text.isEmpty) {
+                                    if (!isGoodOrBad || text.isEmpty) {
                                         showAlert = true
                                         print("評価が空です")
                                         print(showAlert)
-                                    }else {
+                                    } else {
                                         isProgress = true
                                         Task {
                                             imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
@@ -88,8 +90,7 @@ struct DetailView: View {
                                             isShowReviewSheet = false
                                             isShowPostSheet = false
                                             getedData = false
-                                            isPostConpleted.toggle()
-                                            
+                                            isPostCompleted.toggle()
                                         }
                                     }
                                 }
@@ -109,15 +110,14 @@ struct DetailView: View {
                             }
                             .padding()
                             
-                            
-                            PostReviewView(evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo,selectedImage: $selectedImage,isGoodOrBad: $isGoodOrBad)
+                            PostReviewView(isShowImagePicker: $isShowImagePicker, evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo, selectedImage: $selectedImage, isGoodOrBad: $isGoodOrBad)
                             
                             Spacer()
                         }
                         .presentationDetents([.height(500)])
                         .presentationBackground(Color.background)
                         
-                        if(isProgress) {
+                        if (isProgress) {
                             ProgressView()
                                 .scaleEffect(1.5)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -128,18 +128,16 @@ struct DetailView: View {
                 }
                 .padding(16)
             }
-            .padding(.bottom,-50)
+            .padding(.bottom, -50)
         }
         .padding()
     }
 }
 
-
 struct PostReviewView: View {
     @State var isPressedThumbsUp: Bool = false
     @State var isPressedThumbsDown: Bool = false
-    @State private var isShowSheet: Bool = false
-    @State private var isShowImagePicker: Bool = false
+    @Binding var isShowImagePicker: Bool  // 追加
     @Binding var evaluation: Int
     @Binding var text: String
     var selectedMapInfo: MapModel
@@ -147,7 +145,10 @@ struct PostReviewView: View {
     @Binding var selectedImage: UIImage?
     @Binding var isGoodOrBad: Bool
     
-    @FocusState var focus:Bool
+    @FocusState var focus: Bool
+    
+    @State private var selectedPhotoItem: PhotosPickerItem? = nil
+    @State private var image: UIImage? = nil
     
     var body: some View {
         VStack {
@@ -208,32 +209,39 @@ struct PostReviewView: View {
                 }
                 Spacer()
             }
-            .padding()
+            .padding([.horizontal])
             
             HStack {
                 VStack {
-                    Button("\(Image(systemName: "camera.fill"))あなたの写真を追加"){
-                        isShowImagePicker = true
-                        print(isShowImagePicker)
-                    }
-                    .foregroundColor(.accentColor)
                     if let image = selectedImage {
                         Image(uiImage: image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            //.frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                    
+                    if (isShowImagePicker) {
+                        PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+                            Label(
+                                title: { Text("写真を追加する") },
+                                icon: { Image(systemName: "photo") }
+                            )
+                        }
+                        .onChange(of: selectedPhotoItem) {
+                            Task {
+                                guard let imageData = try await selectedPhotoItem?.loadTransferable(type: Data.self) else { return }
+                                guard let uiImage = UIImage(data: imageData) else { return }
+                                selectedImage = uiImage
+                            }
+                        }
                     }
                 }
                 Spacer()
             }
             .padding()
-            .popover(isPresented: $isShowImagePicker) {
-                ImagePicker(image: $selectedImage)
-            }
             
             Divider()
                 .padding([.horizontal])
-            
         }
         .frame(width: 350)
         .background(Color.component)
@@ -242,6 +250,11 @@ struct PostReviewView: View {
         .onTapGesture {
             focus = false
         }
+        .onAppear {
+            print("レビューシートが表示された")
+            isShowImagePicker = true
+        }
+        
     }
 }
 
@@ -298,12 +311,12 @@ struct ImagesListView: View {
                                     .aspectRatio(contentMode: .fit)
                                     .cornerRadius(10.0)
                             }
-                            placeholder: {
-                                ProgressView()
-                            }
-                            .onTapGesture {
-                                // Tap action here
-                            }
+                        placeholder: {
+                            ProgressView()
+                        }
+                        .onTapGesture {
+                            // Tap action here
+                        }
                         } else {
                             EmptyView()
                         }
