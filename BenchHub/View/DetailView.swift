@@ -252,31 +252,16 @@ struct PostReviewView: View {
             
             HStack {
                 VStack {
-                    
-                    ZStack(alignment: .topTrailing) {
-                        if let image = selectedImage {
-                            Image(uiImage: image)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 300, height: 300)
-                        }
-                        
-                        if(selectedImage != nil) {
-                            Button(action: {
-                                selectedImage = nil
-                            }, label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.gray)
-                            })
-                            .padding(.top,60)
-                            .padding(.trailing,10)
-                        }
+                    if let image = selectedImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
                     }
                     
                     if (isShowImagePicker) {
                         PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
                             Label(
-                                title: { Text("写真を選ぶ") },
+                                title: { Text("写真を追加する") },
                                 icon: { Image(systemName: "photo") }
                             )
                         }
