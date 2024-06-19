@@ -33,7 +33,7 @@ struct DetailView: View {
     @Binding var isPostCompleted: Bool
     @State var isProgress: Bool = false
     
-    @State var isShowImagePicker: Bool = false  // 追加
+    @State var isShowImagePicker: Bool = false
     
     var body: some View {
         VStack {
@@ -58,79 +58,118 @@ struct DetailView: View {
                     isShowPostSheet = true
                 }
                 .fullScreenCover(isPresented: $isShowPostSheet) {
-                    ZStack {
-                        VStack {
-                            HStack {
-                                Button("キャンセル") {
-                                    isShowPostSheet = false
-                                }
-                                
-                                Spacer()
-                                
-                                Button("完了") {
-                                    getedData = true
-                                    print("ブール\(getedData)")
-                                    // 評価 or コメントテキストが空あらアラート表示
-                                    if (!isGoodOrBad || text.isEmpty) {
-                                        showAlert = true
-                                        print("評価が空です")
-                                        print(showAlert)
-                                    } else {
-                                        isProgress = true
-                                        Task {
-                                            imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
-                                            print("URL表示　\(String(describing: imageUrl))")
-                                            
-                                            await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text, imageUrl: imageUrl))
-                                            
-                                            try await Task.sleep(nanoseconds: 5_000_000_000)
-                                            
-                                            isProgress = false
-                                            
-                                            isShowReviewSheet = false
-                                            isShowPostSheet = false
-                                            getedData = false
-                                            isPostCompleted.toggle()
+                    
+                        ZStack {
+                            VStack {
+                                HStack {
+                                    Button("キャンセル") {
+                                        isShowPostSheet = false
+                                        isShowImagePicker = false
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    Button("完了") {
+                                        getedData = true
+                                        print("ブール\(getedData)")
+                                        // 評価 or コメントテキストが空あらアラート表示
+                                        if (!isGoodOrBad || text.isEmpty) {
+                                            showAlert = true
+                                            print("評価が空です")
+                                            print(showAlert)
+                                        } else {
+                                            isProgress = true
+                                            Task {
+                                                imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
+                                                print("URL表示　\(String(describing: imageUrl))")
+                                                
+                                                await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text, imageUrl: imageUrl))
+                                                
+                                                try await Task.sleep(nanoseconds: 5_000_000_000)
+                                                
+                                                isProgress = false
+                                                
+//                                                isShowReviewSheet = false
+                                                //isShowPostSheet = false
+                                                getedData = false
+                                                isPostCompleted.toggle()
+                                            }
                                         }
                                     }
-                                }
-                                .alert(isPresented: $showAlert) {
-                                    Alert(
-                                        title: Text("評価とコメントの両方を入力してください！"),
-                                        dismissButton: .default(
-                                            Text("OK"),
-                                            action: {
-                                                showAlert = false
-                                                getedData = false
-                                                print("ブール\(getedData)")
-                                            }
+                                    .alert(isPresented: $showAlert) {
+                                        Alert(
+                                            title: Text("評価とコメントの両方を入力してください！"),
+                                            dismissButton: .default(
+                                                Text("OK"),
+                                                action: {
+                                                    showAlert = false
+                                                    getedData = false
+                                                    print("ブール\(getedData)")
+                                                }
+                                            )
                                         )
-                                    )
+                                    }
                                 }
+                                .padding()
+                                
+                                PostReviewView(isShowImagePicker: $isShowImagePicker, evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo, selectedImage: $selectedImage, isGoodOrBad: $isGoodOrBad)
+                                
+                                Spacer()
                             }
-                            .padding()
+                            .presentationDetents([.height(500)])
+                            .presentationBackground(Color.background)
                             
-                            PostReviewView(isShowImagePicker: $isShowImagePicker, evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo, selectedImage: $selectedImage, isGoodOrBad: $isGoodOrBad)
+                            if (isProgress) {
+                                ProgressView()
+                                    .scaleEffect(1.5)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .background(Color.black.opacity(0.5))
+                                    .edgesIgnoringSafeArea(.all)
+                            }
                             
-                            Spacer()
-                        }
-                        .presentationDetents([.height(500)])
-                        .presentationBackground(Color.background)
-                        
-                        if (isProgress) {
-                            ProgressView()
-                                .scaleEffect(1.5)
+                            if(isPostCompleted) {
+                                ZStack {
+                                    VStack {
+                                        Text("投稿完了しました👏")
+                                            .font(.largeTitle)
+                                            .fontWeight(.bold)
+                                        
+                                        Button(action: {
+                                            dismiss()
+                                            isPostCompleted = false
+                                        }) {
+                                            Text("閉じる")
+                                                .frame(width: 200, height: 50)
+                                        }
+                                        .accentColor(Color.white)
+                                        .background(Color.blue)
+                                        .cornerRadius(10.0)
+                                        
+                                    }
+                                    
+                                    
+                                    Circle()
+                                        .fill(Color.blue)
+                                        .frame(width: 12, height: 12)
+                                        .modifier(ParticlesModifier())
+                                        .offset(x: -100, y : -50)
+                                    
+                                    Circle()
+                                        .fill(Color.red)
+                                        .frame(width: 12, height: 12)
+                                        .modifier(ParticlesModifier())
+                                        .offset(x: 60, y : 70)
+                                }
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(Color.black.opacity(0.5))
+                                .background(.black)
                                 .edgesIgnoringSafeArea(.all)
+                            }
                         }
-                    }
                 }
-                .padding(16)
             }
-            .padding(.bottom, -50)
+            .padding(16)
         }
-        .padding()
+        .padding(.bottom, -50)
     }
 }
 
@@ -217,7 +256,6 @@ struct PostReviewView: View {
                         Image(uiImage: image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            //.frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                     
                     if (isShowImagePicker) {
@@ -253,6 +291,9 @@ struct PostReviewView: View {
         .onAppear {
             print("レビューシートが表示された")
             isShowImagePicker = true
+            //            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            //                isShowImagePicker = true
+            //            }
         }
         
     }
