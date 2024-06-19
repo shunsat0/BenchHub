@@ -274,7 +274,7 @@ struct PostReviewView: View {
                     if (isShowImagePicker) {
                         PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
                             Label(
-                                title: { Text("写真を追加する") },
+                                title: { Text("写真を選ぶ") },
                                 icon: { Image(systemName: "photo") }
                             )
                         }
