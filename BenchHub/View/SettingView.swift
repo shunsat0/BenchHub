@@ -234,9 +234,6 @@ struct PostBenchInfoView: View {
                         Spacer()
                     }
                     .padding()
-                    .sheet(isPresented: $isShowImagePicker) {
-                        ImagePicker(image: $selectedImage)
-                    }
                 }
                 
                 HStack {

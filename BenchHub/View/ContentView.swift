@@ -30,7 +30,7 @@ struct ContentView: View {
     @State private var coordinate: CLLocationCoordinate2D = .init(latitude: 0.00,
                                                                   longitude: 0.00)
     
-    @State var isPostConpleted:Bool = false
+    @State var isPostCompleted:Bool = false
     
     var body: some View {
         
@@ -128,44 +128,44 @@ struct ContentView: View {
                 Spacer()
             }
         }
-        .fullScreenCover(isPresented: $isPostConpleted) {
-            ZStack {
-                VStack {
-                    Text("投稿完了しました👏")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                    
-                    Button(action: {
-                        dismiss()
-                        isPostConpleted = false
-                    }) {
-                        Text("閉じる")
-                            .frame(width: 200, height: 50)
-                    }
-                    .accentColor(Color.white)
-                    .background(Color.blue)
-                    .cornerRadius(10.0)
-                    
-                }
-                
-                
-                Circle()
-                    .fill(Color.blue)
-                    .frame(width: 12, height: 12)
-                    .modifier(ParticlesModifier())
-                    .offset(x: -100, y : -50)
-                
-                Circle()
-                    .fill(Color.red)
-                    .frame(width: 12, height: 12)
-                    .modifier(ParticlesModifier())
-                    .offset(x: 60, y : 70)
-            }
-        }
+//        .fullScreenCover(isPresented: $isPostCompleted) {
+//            ZStack {
+//                VStack {
+//                    Text("投稿完了しました👏")
+//                        .font(.largeTitle)
+//                        .fontWeight(.bold)
+//                    
+//                    Button(action: {
+//                        dismiss()
+//                        isPostCompleted = false
+//                    }) {
+//                        Text("閉じる")
+//                            .frame(width: 200, height: 50)
+//                    }
+//                    .accentColor(Color.white)
+//                    .background(Color.blue)
+//                    .cornerRadius(10.0)
+//                    
+//                }
+//                
+//                
+//                Circle()
+//                    .fill(Color.blue)
+//                    .frame(width: 12, height: 12)
+//                    .modifier(ParticlesModifier())
+//                    .offset(x: -100, y : -50)
+//                
+//                Circle()
+//                    .fill(Color.red)
+//                    .frame(width: 12, height: 12)
+//                    .modifier(ParticlesModifier())
+//                    .offset(x: 60, y : 70)
+//            }
+//        }
         .sheet(isPresented: $isShowReviewSheet,onDismiss: {
             showSearchSheet = true
         }) {
-            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData, isPostConpleted: $isPostConpleted)
+            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData, isPostCompleted: $isPostCompleted)
                 .presentationDetents([ .medium, .large])
                 .presentationBackground(Color.background)
         }
