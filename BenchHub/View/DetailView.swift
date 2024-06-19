@@ -57,7 +57,7 @@ struct DetailView: View {
                 Button("\(Image(systemName: "square.and.pencil")) レビューを書く") {
                     isShowPostSheet = true
                 }
-                .sheet(isPresented: $isShowPostSheet){
+                .fullScreenCover(isPresented: $isShowPostSheet) {
                     ZStack {
                         VStack {
                             HStack {
