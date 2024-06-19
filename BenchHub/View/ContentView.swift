@@ -30,7 +30,7 @@ struct ContentView: View {
     @State private var coordinate: CLLocationCoordinate2D = .init(latitude: 0.00,
                                                                   longitude: 0.00)
     
-    @State var isPostConpleted:Bool = false
+    @State var isPostCompleted:Bool = false
     
     var body: some View {
         
@@ -165,7 +165,7 @@ struct ContentView: View {
         .sheet(isPresented: $isShowReviewSheet,onDismiss: {
             showSearchSheet = true
         }) {
-            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData, isPostCompleted: $isPostConpleted)
+            DetailView(isShowPostSheet: false, selectedMapInfo: detailViewModel.selectedFramework!, isPostReview: $isPost,isShowReviewSheet: $isShowReviewSheet, isGoodOrBad: false, getedData: $getedData, isPostCompleted: $isPostCompleted)
                 .presentationDetents([ .medium, .large])
                 .presentationBackground(Color.background)
         }
