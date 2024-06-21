@@ -103,7 +103,7 @@ struct ContentView: View {
                     NavigationLink(destination: SettingView()) {
                         Image(systemName: "gear")
                             .padding(12)
-                            .background(.white, in: RoundedRectangle(cornerRadius: 8))
+                            .background(Color.background, in: RoundedRectangle(cornerRadius: 8))
                     }
                     .onDisappear {
                         print("設定画面")
