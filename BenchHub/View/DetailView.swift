@@ -59,112 +59,109 @@ struct DetailView: View {
                 }
                 .fullScreenCover(isPresented: $isShowPostSheet) {
                     
-                        ZStack {
-                            VStack {
-                                HStack {
-                                    Button("キャンセル") {
-                                        isShowPostSheet = false
-                                        isShowImagePicker = false
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    Button("完了") {
-                                        getedData = true
-                                        print("ブール\(getedData)")
-                                        // 評価 or コメントテキストが空あらアラート表示
-                                        if (!isGoodOrBad || text.isEmpty) {
-                                            showAlert = true
-                                            print("評価が空です")
-                                            print(showAlert)
-                                        } else {
-                                            isProgress = true
-                                            Task {
-                                                imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
-                                                print("URL表示　\(String(describing: imageUrl))")
-                                                
-                                                await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text, imageUrl: imageUrl))
-                                                
-                                                try await Task.sleep(nanoseconds: 5_000_000_000)
-                                                
-                                                isProgress = false
-                                                
-//                                                isShowReviewSheet = false
-                                                //isShowPostSheet = false
-                                                getedData = false
-                                                isPostCompleted.toggle()
-                                            }
-                                        }
-                                    }
-                                    .alert(isPresented: $showAlert) {
-                                        Alert(
-                                            title: Text("評価とコメントの両方を入力してください！"),
-                                            dismissButton: .default(
-                                                Text("OK"),
-                                                action: {
-                                                    showAlert = false
-                                                    getedData = false
-                                                    print("ブール\(getedData)")
-                                                }
-                                            )
-                                        )
-                                    }
+                    ZStack {
+                        VStack {
+                            HStack {
+                                Button("キャンセル") {
+                                    isShowPostSheet = false
+                                    isShowImagePicker = false
                                 }
-                                .padding()
-                                
-                                PostReviewView(isShowImagePicker: $isShowImagePicker, evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo, selectedImage: $selectedImage, isGoodOrBad: $isGoodOrBad)
                                 
                                 Spacer()
-                            }
-                            .presentationDetents([.height(500)])
-                            .presentationBackground(Color.background)
-                            
-                            if (isProgress) {
-                                ProgressView()
-                                    .scaleEffect(1.5)
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .background(Color.black.opacity(0.5))
-                                    .edgesIgnoringSafeArea(.all)
-                            }
-                            
-                            if(isPostCompleted) {
-                                ZStack {
-                                    VStack {
-                                        Text("投稿完了しました👏")
-                                            .font(.largeTitle)
-                                            .fontWeight(.bold)
-                                        
-                                        Button(action: {
-                                            dismiss()
-                                            isPostCompleted = false
-                                        }) {
-                                            Text("閉じる")
-                                                .frame(width: 200, height: 50)
+                                
+                                Button("完了") {
+                                    getedData = true
+                                    print("ブール\(getedData)")
+                                    // 評価 or コメントテキストが空あらアラート表示
+                                    if (!isGoodOrBad || text.isEmpty) {
+                                        showAlert = true
+                                        print("評価が空です")
+                                        print(showAlert)
+                                    } else {
+                                        isProgress = true
+                                        Task {
+                                            imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
+                                            print("URL表示　\(String(describing: imageUrl))")
+                                            
+                                            await post.addData(postData: PostModel(id: selectedMapInfo.name, evaluation: evaluation, description: text, imageUrl: imageUrl))
+                                            
+                                            try await Task.sleep(nanoseconds: 5_000_000_000)
+                                            
+                                            isProgress = false
+                                            getedData = false
+                                            isPostCompleted.toggle()
                                         }
-                                        .accentColor(Color.white)
-                                        .background(Color.blue)
-                                        .cornerRadius(10.0)
-                                        
                                     }
-                                    
-                                    
-                                    Circle()
-                                        .fill(Color.blue)
-                                        .frame(width: 12, height: 12)
-                                        .modifier(ParticlesModifier())
-                                        .offset(x: -100, y : -50)
-                                    
-                                    Circle()
-                                        .fill(Color.red)
-                                        .frame(width: 12, height: 12)
-                                        .modifier(ParticlesModifier())
-                                        .offset(x: 60, y : 70)
                                 }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(.black)
-                                .edgesIgnoringSafeArea(.all)
+                                .alert(isPresented: $showAlert) {
+                                    Alert(
+                                        title: Text("評価とコメントの両方を入力してください！"),
+                                        dismissButton: .default(
+                                            Text("OK"),
+                                            action: {
+                                                showAlert = false
+                                                getedData = false
+                                                print("ブール\(getedData)")
+                                            }
+                                        )
+                                    )
+                                }
                             }
+                            .padding()
+                            
+                            PostReviewView(isShowImagePicker: $isShowImagePicker, evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo, selectedImage: $selectedImage, isGoodOrBad: $isGoodOrBad)
+                            
+                            Spacer()
                         }
+                        .presentationDetents([.height(500)])
+                        .presentationBackground(Color.background)
+                        
+                        if (isProgress) {
+                            ProgressView()
+                                .scaleEffect(1.5)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .background(Color.black.opacity(0.5))
+                                .edgesIgnoringSafeArea(.all)
+                        }
+                        
+                        if(isPostCompleted) {
+                            ZStack {
+                                VStack {
+                                    Text("投稿完了しました👏")
+                                        .font(.largeTitle)
+                                        .fontWeight(.bold)
+                                    
+                                    Button(action: {
+                                        dismiss()
+                                        isPostCompleted = false
+                                    }) {
+                                        Text("閉じる")
+                                            .frame(width: 200, height: 50)
+                                    }
+                                    .accentColor(Color.white)
+                                    .background(Color.blue)
+                                    .cornerRadius(10.0)
+                                    
+                                }
+                                
+                                
+                                Circle()
+                                    .fill(Color.blue)
+                                    .frame(width: 12, height: 12)
+                                    .modifier(ParticlesModifier())
+                                    .offset(x: -100, y : -50)
+                                
+                                Circle()
+                                    .fill(Color.red)
+                                    .frame(width: 12, height: 12)
+                                    .modifier(ParticlesModifier())
+                                    .offset(x: 60, y : 70)
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .background(.black)
+                            .edgesIgnoringSafeArea(.all)
+                        }
+                    }
                 }
             }
             .padding(16)
@@ -176,7 +173,7 @@ struct DetailView: View {
 struct PostReviewView: View {
     @State var isPressedThumbsUp: Bool = false
     @State var isPressedThumbsDown: Bool = false
-    @Binding var isShowImagePicker: Bool  // 追加
+    @Binding var isShowImagePicker: Bool
     @Binding var evaluation: Int
     @Binding var text: String
     var selectedMapInfo: MapModel
@@ -258,7 +255,7 @@ struct PostReviewView: View {
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 300, height: 300)
+                            
                         }
                         
                         if(selectedImage != nil) {
@@ -268,25 +265,28 @@ struct PostReviewView: View {
                                 Image(systemName: "xmark.circle.fill")
                                     .foregroundColor(.gray)
                             })
-                            .padding(.top,60)
+                            .padding(.top,20)
                             .padding(.trailing,10)
                         }
                     }
-                    
-                    if (isShowImagePicker) {
-                        PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
-                            Label(
-                                title: { Text("写真を選ぶ") },
-                                icon: { Image(systemName: "photo") }
-                            )
-                        }
-                        .onChange(of: selectedPhotoItem) {
-                            Task {
-                                guard let imageData = try await selectedPhotoItem?.loadTransferable(type: Data.self) else { return }
-                                guard let uiImage = UIImage(data: imageData) else { return }
-                                selectedImage = uiImage
+                    HStack {
+                        if (isShowImagePicker) {
+                            PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+                                Label(
+                                    title: { Text("写真を選ぶ") },
+                                    icon: { Image(systemName: "photo") }
+                                )
+                            }
+                            .onChange(of: selectedPhotoItem) {
+                                Task {
+                                    guard let imageData = try await selectedPhotoItem?.loadTransferable(type: Data.self) else { return }
+                                    guard let uiImage = UIImage(data: imageData) else { return }
+                                    selectedImage = uiImage
+                                }
                             }
                         }
+                        
+                        Spacer()
                     }
                 }
                 Spacer()
@@ -306,9 +306,6 @@ struct PostReviewView: View {
         .onAppear {
             print("レビューシートが表示された")
             isShowImagePicker = true
-            //            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            //                isShowImagePicker = true
-            //            }
         }
         
     }
