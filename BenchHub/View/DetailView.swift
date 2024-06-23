@@ -236,7 +236,7 @@ struct PostReviewView: View {
                 VStack {
                     TextEditor(text: $text)
                         .textEditorStyle(PlainTextEditorStyle())
-                        .frame(height: 80)
+                        .frame(height: 120)
                         .keyboardType(.twitter)
                         .font(.body)
                         .background(Color.background)
