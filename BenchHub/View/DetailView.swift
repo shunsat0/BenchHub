@@ -93,18 +93,13 @@ struct DetailView: View {
                                         }
                                     }
                                 }
-                                .alert(isPresented: $showAlert) {
-                                    Alert(
-                                        title: Text("評価とコメントの両方を入力してください！"),
-                                        dismissButton: .default(
-                                            Text("OK"),
-                                            action: {
-                                                showAlert = false
-                                                getedData = false
-                                                print("ブール\(getedData)")
-                                            }
-                                        )
-                                    )
+                                .alert("🙇",isPresented:$showAlert) {
+                                    Button("OK") {
+                                        showAlert = false
+                                        getedData = false
+                                    }
+                                } message:{
+                                    Text("評価とコメントの両方を入力してください！")
                                 }
                             }
                             .padding()
