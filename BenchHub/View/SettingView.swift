@@ -23,20 +23,18 @@ private var settings = [
 
 struct SettingView: View {
     @Environment(\.dismiss) var dismiss
+    @State var toggleStatus: Bool = false
+    
     var body: some View {
         List {
             Section(header: Text("通知")){
-                NavigationLink(
-                    destination: EmptyView(),
-                    label: {
-                        HStack {
-                            Image(systemName: "bell")
-                                .foregroundColor(.accentColor)
-                            Text("通知設定")
-                        }
-                    }
-                    
-                )
+                HStack {
+                    Image(systemName: "bell")
+                        .foregroundColor(.accentColor)
+                    Toggle("通知", isOn: $toggleStatus)
+                        .padding()
+                }
+                
             }
             Section(header: Text("その他")){
                 ForEach(settings) { setting in
@@ -66,8 +64,11 @@ struct SettingView: View {
                 )
             }
         }
-        //.navigationTitle("設定")
     }
+}
+
+#Preview {
+    SettingView()
 }
 
 struct PostBenchInfoView: View {
@@ -96,12 +97,6 @@ struct PostBenchInfoView: View {
     @State var isPosting: Bool = false
     @State var isPosted: Bool = false
     
-//    init(evaluation: Int, text: String, isGoodOrBad: Bool) {
-//        self.evaluation = evaluation
-//        self.text = text
-//        self.isGoodOrBad = isGoodOrBad
-//    }
-    
     func newPost() {
         isPosting = true
         Task {
@@ -114,7 +109,7 @@ struct PostBenchInfoView: View {
             // 5秒間の遅延を挿入
             try await Task.sleep(nanoseconds: 5_000_000_000)
             
-            isPosting = false         
+            isPosting = false
             isPosted.toggle()
         }
     }
@@ -124,16 +119,14 @@ struct PostBenchInfoView: View {
         
         var isInputAll: Bool {
             return !placeName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-                   !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-//                   selectedImage != nil &&
-//                   imageUrl != &&
-                   coordinate.latitude != 0.0 &&
-                   coordinate.longitude != 0.0
+            !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+            coordinate.latitude != 0.0 &&
+            coordinate.longitude != 0.0
         }
-
+        
         
         ZStack(alignment: .topLeading) {
-
+            
             Form {
                 Section(header: Text("座標(ベンチの場所をタップしてください)")){
                     MapReader{ proxy in
@@ -294,7 +287,7 @@ struct PostBenchInfoView: View {
 }
 
 
-#Preview {
-    //SettingView()
-    PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false)
-}
+//#Preview {
+//    //SettingView()
+//    PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false)
+//}
