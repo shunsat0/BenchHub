@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24032CAD2C2FFB3A0086E89A /* SystemNotification in Frameworks */ = {isa = PBXBuildFile; productRef = 24032CAC2C2FFB3A0086E89A /* SystemNotification */; };
 		2404D98B2BA0B21E00A74221 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404D98A2BA0B21E00A74221 /* SettingView.swift */; };
 		24057C8A2B6F6FA000503984 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24057C892B6F6FA000503984 /* ContentView.swift */; };
 		24057C8C2B6F6FE400503984 /* MapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24057C8B2B6F6FE400503984 /* MapModel.swift */; };
@@ -83,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24032CAD2C2FFB3A0086E89A /* SystemNotification in Frameworks */,
 				243CD1F92C1B3FE7008DD245 /* FirebaseDatabase in Frameworks */,
 				243CD1FB2C1B3FE7008DD245 /* FirebaseFirestore in Frameworks */,
 				243CD1F52C1B3FE7008DD245 /* FirebaseAppCheck in Frameworks */,
@@ -232,6 +234,7 @@
 				243CD1F82C1B3FE7008DD245 /* FirebaseDatabase */,
 				243CD1FA2C1B3FE7008DD245 /* FirebaseFirestore */,
 				243CD1FC2C1B4034008DD245 /* FirebaseStorage */,
+				24032CAC2C2FFB3A0086E89A /* SystemNotification */,
 			);
 			productName = BenchHub;
 			productReference = 24A71B342B3DCDEB0050A556 /* BenchHub.app */;
@@ -308,6 +311,7 @@
 			mainGroup = 24A71B2B2B3DCDEB0050A556;
 			packageReferences = (
 				243CD1F32C1B3FE7008DD245 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				24032CAB2C2FFB3A0086E89A /* XCRemoteSwiftPackageReference "SystemNotification" */,
 			);
 			productRefGroup = 24A71B352B3DCDEB0050A556 /* Products */;
 			projectDirPath = "";
@@ -711,6 +715,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		24032CAB2C2FFB3A0086E89A /* XCRemoteSwiftPackageReference "SystemNotification" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielsaidi/SystemNotification.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.1;
+			};
+		};
 		243CD1F32C1B3FE7008DD245 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -722,6 +734,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		24032CAC2C2FFB3A0086E89A /* SystemNotification */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 24032CAB2C2FFB3A0086E89A /* XCRemoteSwiftPackageReference "SystemNotification" */;
+			productName = SystemNotification;
+		};
 		243CD1F42C1B3FE7008DD245 /* FirebaseAppCheck */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 243CD1F32C1B3FE7008DD245 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

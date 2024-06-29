@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import SystemNotification
 
 struct SettingMenue: Identifiable, Hashable {
     let name: String
@@ -23,46 +24,62 @@ private var settings = [
 
 struct SettingView: View {
     @Environment(\.dismiss) var dismiss
-    @State var toggleStatus: Bool = false
+    @State var isToggleOn = false
+    @State var isNotificationOn = false
     
     var body: some View {
-        List {
-            Section(header: Text("通知")){
-                HStack {
-                    Image(systemName: "bell")
-                        .foregroundColor(.accentColor)
-                    Toggle("通知", isOn: $toggleStatus)
-                        .padding()
+        VStack {
+            List {
+                Section(header: Text("通知")){
+                    HStack {
+                        Image(systemName: "bell")
+                            .foregroundColor(.accentColor)
+                        Toggle("通知", isOn: $isToggleOn)
+                    }
+                    
                 }
-                
-            }
-            Section(header: Text("その他")){
-                ForEach(settings) { setting in
+                Section(header: Text("その他")){
+                    ForEach(settings) { setting in
+                        NavigationLink(
+                            destination:  EmptyView(),
+                            label: {
+                                HStack {
+                                    Image(systemName: setting.icon)
+                                        .foregroundColor(.accentColor)
+                                    Text(setting.name)
+                                }
+                            }
+                        )
+                        
+                    }
+                }
+                Section(header: Text("口コミ")){
                     NavigationLink(
-                        destination:  EmptyView(),
+                        destination: PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false),
                         label: {
                             HStack {
-                                Image(systemName: setting.icon)
+                                Image(systemName: "chair")
                                     .foregroundColor(.accentColor)
-                                Text(setting.name)
+                                Text("ベンチ情報を追加")
                             }
                         }
                     )
-                    
                 }
             }
-            Section(header: Text("口コミ")){
-                NavigationLink(
-                    destination: PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false),
-                    label: {
-                        HStack {
-                            Image(systemName: "chair")
-                                .foregroundColor(.accentColor)
-                            Text("ベンチ情報を追加")
-                        }
-                    }
-                )
+        }
+        .onChange(of: isToggleOn) {
+            if(isToggleOn == true) {
+                isNotificationOn = true
+            } else {
+                isNotificationOn = false
             }
+        }
+        .systemNotification(isActive: $isNotificationOn) {
+            Text("ベンチが近くにある時、プッシュ通知でお知らせします🔔")
+                .padding()
+                .onDisappear {
+                    print("消えます")
+                }
         }
     }
 }
