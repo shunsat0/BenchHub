@@ -32,6 +32,8 @@
 		24CD65C22B77F660006C5001 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CD65C12B77F660006C5001 /* PostModel.swift */; };
 		24CD65FA2B7BB25E006C5001 /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CD65F92B7BB25E006C5001 /* PostViewModel.swift */; };
 		24D759382B73D20100A426DC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 24D759372B73D20100A426DC /* GoogleService-Info.plist */; };
+		24FA9CAD2C3AF9950037224F /* SystemNotification in Frameworks */ = {isa = PBXBuildFile; productRef = 24FA9CAC2C3AF9950037224F /* SystemNotification */; };
+		24FA9CAF2C3AFAFE0037224F /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 24FA9CAE2C3AFAFE0037224F /* FirebaseMessaging */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,7 +85,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24FA9CAD2C3AF9950037224F /* SystemNotification in Frameworks */,
 				243CD1F92C1B3FE7008DD245 /* FirebaseDatabase in Frameworks */,
+				24FA9CAF2C3AFAFE0037224F /* FirebaseMessaging in Frameworks */,
 				243CD1FB2C1B3FE7008DD245 /* FirebaseFirestore in Frameworks */,
 				243CD1F52C1B3FE7008DD245 /* FirebaseAppCheck in Frameworks */,
 				243CD1FD2C1B4034008DD245 /* FirebaseStorage in Frameworks */,
@@ -232,6 +236,8 @@
 				243CD1F82C1B3FE7008DD245 /* FirebaseDatabase */,
 				243CD1FA2C1B3FE7008DD245 /* FirebaseFirestore */,
 				243CD1FC2C1B4034008DD245 /* FirebaseStorage */,
+				24FA9CAC2C3AF9950037224F /* SystemNotification */,
+				24FA9CAE2C3AFAFE0037224F /* FirebaseMessaging */,
 			);
 			productName = BenchHub;
 			productReference = 24A71B342B3DCDEB0050A556 /* BenchHub.app */;
@@ -308,6 +314,7 @@
 			mainGroup = 24A71B2B2B3DCDEB0050A556;
 			packageReferences = (
 				243CD1F32C1B3FE7008DD245 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				24FA9CAB2C3AF9950037224F /* XCRemoteSwiftPackageReference "SystemNotification" */,
 			);
 			productRefGroup = 24A71B352B3DCDEB0050A556 /* Products */;
 			projectDirPath = "";
@@ -719,6 +726,14 @@
 				minimumVersion = 10.27.0;
 			};
 		};
+		24FA9CAB2C3AF9950037224F /* XCRemoteSwiftPackageReference "SystemNotification" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielsaidi/SystemNotification.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -746,6 +761,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 243CD1F32C1B3FE7008DD245 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		24FA9CAC2C3AF9950037224F /* SystemNotification */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 24FA9CAB2C3AF9950037224F /* XCRemoteSwiftPackageReference "SystemNotification" */;
+			productName = SystemNotification;
+		};
+		24FA9CAE2C3AFAFE0037224F /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 243CD1F32C1B3FE7008DD245 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
