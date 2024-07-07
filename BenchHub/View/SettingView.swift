@@ -7,7 +7,6 @@
 
 import SwiftUI
 import MapKit
-import SystemNotification
 
 struct SettingMenue: Identifiable, Hashable {
     let name: String
@@ -24,68 +23,51 @@ private var settings = [
 
 struct SettingView: View {
     @Environment(\.dismiss) var dismiss
-    @State var isToggleOn = false
-    @State var isNotificationOn = false
-    
     var body: some View {
-        VStack {
-            List {
-                Section(header: Text("通知")){
-                    HStack {
-                        Image(systemName: "bell")
-                            .foregroundColor(.accentColor)
-                        Toggle("通知", isOn: $isToggleOn)
+        List {
+            Section(header: Text("通知")){
+                NavigationLink(
+                    destination: EmptyView(),
+                    label: {
+                        HStack {
+                            Image(systemName: "bell")
+                                .foregroundColor(.accentColor)
+                            Text("通知設定")
+                        }
                     }
                     
-                }
-                Section(header: Text("その他")){
-                    ForEach(settings) { setting in
-                        NavigationLink(
-                            destination:  EmptyView(),
-                            label: {
-                                HStack {
-                                    Image(systemName: setting.icon)
-                                        .foregroundColor(.accentColor)
-                                    Text(setting.name)
-                                }
-                            }
-                        )
-                        
-                    }
-                }
-                Section(header: Text("口コミ")){
+                )
+            }
+            Section(header: Text("その他")){
+                ForEach(settings) { setting in
                     NavigationLink(
-                        destination: PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false),
+                        destination:  EmptyView(),
                         label: {
                             HStack {
-                                Image(systemName: "chair")
+                                Image(systemName: setting.icon)
                                     .foregroundColor(.accentColor)
-                                Text("ベンチ情報を追加")
+                                Text(setting.name)
                             }
                         }
                     )
+                    
                 }
             }
-        }
-        .onChange(of: isToggleOn) {
-            if(isToggleOn == true) {
-                isNotificationOn = true
-            } else {
-                isNotificationOn = false
+            Section(header: Text("口コミ")){
+                NavigationLink(
+                    destination: PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false),
+                    label: {
+                        HStack {
+                            Image(systemName: "chair")
+                                .foregroundColor(.accentColor)
+                            Text("ベンチ情報を追加")
+                        }
+                    }
+                )
             }
         }
-        .systemNotification(isActive: $isNotificationOn) {
-            Text("ベンチが近くにある時、プッシュ通知でお知らせします🔔")
-                .padding()
-                .onDisappear {
-                    print("消えます")
-                }
-        }
+        //.navigationTitle("設定")
     }
-}
-
-#Preview {
-    SettingView()
 }
 
 struct PostBenchInfoView: View {
@@ -114,6 +96,12 @@ struct PostBenchInfoView: View {
     @State var isPosting: Bool = false
     @State var isPosted: Bool = false
     
+//    init(evaluation: Int, text: String, isGoodOrBad: Bool) {
+//        self.evaluation = evaluation
+//        self.text = text
+//        self.isGoodOrBad = isGoodOrBad
+//    }
+    
     func newPost() {
         isPosting = true
         Task {
@@ -126,7 +114,7 @@ struct PostBenchInfoView: View {
             // 5秒間の遅延を挿入
             try await Task.sleep(nanoseconds: 5_000_000_000)
             
-            isPosting = false
+            isPosting = false         
             isPosted.toggle()
         }
     }
@@ -136,14 +124,16 @@ struct PostBenchInfoView: View {
         
         var isInputAll: Bool {
             return !placeName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-            !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-            coordinate.latitude != 0.0 &&
-            coordinate.longitude != 0.0
+                   !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+//                   selectedImage != nil &&
+//                   imageUrl != &&
+                   coordinate.latitude != 0.0 &&
+                   coordinate.longitude != 0.0
         }
-        
+
         
         ZStack(alignment: .topLeading) {
-            
+
             Form {
                 Section(header: Text("座標(ベンチの場所をタップしてください)")){
                     MapReader{ proxy in
@@ -304,7 +294,7 @@ struct PostBenchInfoView: View {
 }
 
 
-//#Preview {
-//    //SettingView()
-//    PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false)
-//}
+#Preview {
+    //SettingView()
+    PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false)
+}
