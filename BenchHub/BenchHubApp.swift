@@ -10,6 +10,7 @@ import FirebaseCore
 import FirebaseAppCheck
 import FirebaseMessaging
 import UserNotifications
+import FirebaseFirestore
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
     func application(
@@ -41,6 +42,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
     
+    
     func application(_: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Oh no! Failed to register for remote notifications with error \(error)")
     }
@@ -52,11 +54,26 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         }
         print("Received an APNs device token: \(readableToken)")
     }
+    
+    // FCMトークンをFirestoreに保存するメソッドを追加
+     private func saveFCMTokenToFirestore(token: String) {
+         let db = Firestore.firestore()
+         db.collection("fcmTokens").document(token).setData([:]) { error in
+             if let error = error {
+                 print("Error saving FCM token: \(error)")
+             } else {
+                 print("FCM token saved successfully")
+             }
+         }
+     }
 }
 
     extension AppDelegate: MessagingDelegate {
         @objc func messaging(_: Messaging, didReceiveRegistrationToken fcmToken: String?) {
             print("Firebase token: \(String(describing: fcmToken))")
+            if let token = fcmToken {
+                saveFCMTokenToFirestore(token: token) // FCMトークンを保存
+            }
         }
     }
 
