@@ -3,3 +3,4 @@ BenchHub.xcodeproj/project.xcworkspace/xcuserdata/shun.xcuserdatad/UserInterface
 *.resolved
 BenchHub.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 BenchHub.xcodeproj/xcuserdata/shun.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
+.swiftpm/
