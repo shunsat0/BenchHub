@@ -55,7 +55,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         print("Received an APNs device token: \(readableToken)")
     }
     
-    // FCMトークンをFirestoreに保存するメソッドを追加
+    // FCMトークンをFirestoreに保存するメソッド
      private func saveFCMTokenToFirestore(token: String) {
          let db = Firestore.firestore()
          db.collection("fcmTokens").document(token).setData([:]) { error in
@@ -66,6 +66,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
              }
          }
      }
+
 }
 
     extension AppDelegate: MessagingDelegate {
