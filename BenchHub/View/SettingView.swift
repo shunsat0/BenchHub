@@ -77,7 +77,7 @@ struct SettingView: View {
             }
         }
         .systemNotification(isActive: $isNotificationOn) {
-            Text("ベンチが近くにある時、プッシュ通知でお知らせします🔔")
+            Text("新着情報をプッシュ通知でお知らせします🔔")
                 .padding()
                 .onDisappear {
                     print("消えます")
