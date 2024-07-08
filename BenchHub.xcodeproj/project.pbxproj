@@ -21,6 +21,7 @@
 		247EB06E2B728F4C0003CFD3 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247EB06D2B728F4C0003CFD3 /* DetailViewModel.swift */; };
 		248993062B821BE0006649BA /* MyAppCheckProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248993052B821BE0006649BA /* MyAppCheckProviderFactory.swift */; };
 		24910DB82B975BCA001311EF /* AnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24910DB72B975BCA001311EF /* AnimationView.swift */; };
+		2497B4382C3C485A0091D102 /* WebUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2497B4372C3C485A0091D102 /* WebUI */; };
 		24A71B382B3DCDEB0050A556 /* BenchHubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A71B372B3DCDEB0050A556 /* BenchHubApp.swift */; };
 		24A71B3C2B3DCDEC0050A556 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24A71B3B2B3DCDEC0050A556 /* Assets.xcassets */; };
 		24A71B3F2B3DCDEC0050A556 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24A71B3E2B3DCDEC0050A556 /* Preview Assets.xcassets */; };
@@ -86,6 +87,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24FA9CAD2C3AF9950037224F /* SystemNotification in Frameworks */,
+				2497B4382C3C485A0091D102 /* WebUI in Frameworks */,
 				243CD1F92C1B3FE7008DD245 /* FirebaseDatabase in Frameworks */,
 				24FA9CAF2C3AFAFE0037224F /* FirebaseMessaging in Frameworks */,
 				243CD1FB2C1B3FE7008DD245 /* FirebaseFirestore in Frameworks */,
@@ -238,6 +240,7 @@
 				243CD1FC2C1B4034008DD245 /* FirebaseStorage */,
 				24FA9CAC2C3AF9950037224F /* SystemNotification */,
 				24FA9CAE2C3AFAFE0037224F /* FirebaseMessaging */,
+				2497B4372C3C485A0091D102 /* WebUI */,
 			);
 			productName = BenchHub;
 			productReference = 24A71B342B3DCDEB0050A556 /* BenchHub.app */;
@@ -315,6 +318,7 @@
 			packageReferences = (
 				243CD1F32C1B3FE7008DD245 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				24FA9CAB2C3AF9950037224F /* XCRemoteSwiftPackageReference "SystemNotification" */,
+				2497B4362C3C485A0091D102 /* XCRemoteSwiftPackageReference "WebUI" */,
 			);
 			productRefGroup = 24A71B352B3DCDEB0050A556 /* Products */;
 			projectDirPath = "";
@@ -728,6 +732,14 @@
 				minimumVersion = 10.27.0;
 			};
 		};
+		2497B4362C3C485A0091D102 /* XCRemoteSwiftPackageReference "WebUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cybozu/WebUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.0;
+			};
+		};
 		24FA9CAB2C3AF9950037224F /* XCRemoteSwiftPackageReference "SystemNotification" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielsaidi/SystemNotification.git";
@@ -763,6 +775,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 243CD1F32C1B3FE7008DD245 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		2497B4372C3C485A0091D102 /* WebUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2497B4362C3C485A0091D102 /* XCRemoteSwiftPackageReference "WebUI" */;
+			productName = WebUI;
 		};
 		24FA9CAC2C3AF9950037224F /* SystemNotification */ = {
 			isa = XCSwiftPackageProductDependency;
