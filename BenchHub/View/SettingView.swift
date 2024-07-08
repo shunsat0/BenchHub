@@ -8,17 +8,19 @@
 import SwiftUI
 import MapKit
 import SystemNotification
+import WebUI
 
 struct SettingMenue: Identifiable, Hashable {
+    let id = UUID()
     let name: String
     let icon: String
-    let id = UUID()
+    let url: String
 }
 
 private var settings = [
-    SettingMenue(name: "よくある質問",icon: "questionmark.circle"),
-    SettingMenue(name: "利用規約",icon: "doc.plaintext"),
-    SettingMenue(name: "プライバシーポリシー",icon: "hand.raised")
+    SettingMenue(name: "よくある質問",icon: "questionmark.circle",url: "https://community.inkdrop.app/note/5f46d1d5c439602613e138872cde6149/note:K4XCCb5XR"),
+    SettingMenue(name: "利用規約",icon: "doc.plaintext",url: "https://community.inkdrop.app/note/5f46d1d5c439602613e138872cde6149/note:1ZbR7W81S"),
+    SettingMenue(name: "プライバシーポリシー",icon: "hand.raised",url: "https://community.inkdrop.app/note/5f46d1d5c439602613e138872cde6149/note:muqknPaYI")
 ]
 
 
@@ -34,14 +36,14 @@ struct SettingView: View {
                     HStack {
                         Image(systemName: "bell")
                             .foregroundColor(.accentColor)
-                        Toggle("通知", isOn: $isToggleOn)
+                        Toggle("お知らせ", isOn: $isToggleOn)
                     }
                     
                 }
                 Section(header: Text("その他")){
                     ForEach(settings) { setting in
                         NavigationLink(
-                            destination:  EmptyView(),
+                            destination: WebView(request: URLRequest(url: URL(string: setting.url)!)),
                             label: {
                                 HStack {
                                     Image(systemName: setting.icon)
@@ -50,7 +52,6 @@ struct SettingView: View {
                                 }
                             }
                         )
-                        
                     }
                 }
                 Section(header: Text("口コミ")){
