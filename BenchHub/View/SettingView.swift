@@ -24,7 +24,7 @@ private var settings = [
 
 struct SettingView: View {
     @Environment(\.dismiss) var dismiss
-    @State var isToggleOn = false
+    @State var isToggleOn = true
     @State var isNotificationOn = false
     
     var body: some View {
@@ -70,8 +70,10 @@ struct SettingView: View {
         .onChange(of: isToggleOn) {
             if(isToggleOn == true) {
                 isNotificationOn = true
+                UIApplication.shared.registerForRemoteNotifications()
             } else {
                 isNotificationOn = false
+                UIApplication.shared.unregisterForRemoteNotifications()
             }
         }
         .systemNotification(isActive: $isNotificationOn) {
