@@ -32,6 +32,8 @@ struct ContentView: View {
     
     @State var isPostCompleted:Bool = false
     
+    @FocusState var focus:Bool
+    
     var body: some View {
         
         ZStack() {
@@ -78,8 +80,13 @@ struct ContentView: View {
                                     .onSubmit {
                                         searchText = inputText
                                         inputText = ""
+                                        focus.toggle()
                                     }
                                     .submitLabel(.search)
+                                    .focused($focus)
+                                    .onTapGesture {
+                                        focus.toggle()
+                                    }
                                 
                                 // 検索文字が空ではない場合は、クリアボタンを表示
                                 if !inputText.isEmpty {
@@ -177,6 +184,9 @@ struct ContentView: View {
                 await mapDataViewModel.fetchData()
             }
         } // Map
+        .onTapGesture {
+            focus.toggle()
+        }
     }
 } // ZStack
 
