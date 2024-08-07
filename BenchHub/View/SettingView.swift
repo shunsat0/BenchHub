@@ -28,6 +28,7 @@ struct SettingView: View {
     @Environment(\.dismiss) var dismiss
     @State var isToggleOn = true
     @State var isNotificationOn = false
+    @FocusState var focus:Bool
     
     var body: some View {
         VStack {
@@ -107,7 +108,8 @@ struct PostBenchInfoView: View {
     @State var selectedImage: UIImage?
     @State var isGoodOrBad: Bool
     @State var imageUrl: String?
-    @FocusState var focus:Bool
+    @FocusState var focusInputPlaceName:Bool
+    @FocusState var focusInputReview:Bool
     
     @StateObject var post = NewReviewPostViewModel()
     @Environment(\.dismiss) var dismiss
@@ -182,6 +184,14 @@ struct PostBenchInfoView: View {
                     TextField(text: $placeName, prompt: Text("場所名")) {
                         Text("placeName")
                     }
+                    .submitLabel(.done)
+                    .focused($focusInputPlaceName)
+                    .onSubmit {
+                        focusInputPlaceName = false
+                    }
+                    .onTapGesture {
+                        focusInputPlaceName = true
+                    }
                 }
                 
                 Section(header: Text("レビュー")) {
@@ -223,13 +233,16 @@ struct PostBenchInfoView: View {
                     }
                     
                     TextEditor(text: $text)
-                        .textEditorStyle(PlainTextEditorStyle())
                         .frame(height: 80)
-                        .keyboardType(.twitter)
                         .font(.body)
                         .background(Color.background)
                         .cornerRadius(10.0)
-                        .focused($focus)
+                        .focused($focusInputReview)
+                        .submitLabel(.return)
+                        .onTapGesture {
+                            focusInputReview = true
+                        }
+
                     
                     HStack {
                         VStack {
@@ -302,6 +315,10 @@ struct PostBenchInfoView: View {
                     .modifier(ParticlesModifier())
                     .offset(x: 60, y : 70)
             }
+        }
+        .onTapGesture {
+            focusInputPlaceName = false
+            focusInputReview = false
         }
     }
 }
