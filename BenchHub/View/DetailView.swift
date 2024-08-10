@@ -14,25 +14,18 @@ struct DetailView: View {
     @State var isShowPostSheet: Bool
     var selectedMapInfo: MapModel
     @StateObject var viewModel = MapDataViewModel()
+    @StateObject var detailViewModel = DetailViewModel()
     @StateObject var post = PostViewModel()
-    
     @State private var evaluation: Int = 2
     @State private var text: String = ""
-    
     @Binding var isPostReview: Bool
     @Binding var isShowReviewSheet: Bool
     @State var selectedImage: UIImage?
-    
     @State var imageUrl: String?
-    
     @State var isGoodOrBad: Bool
     @State var showAlert = false
-    
     @Binding var getedData: Bool
-    
     @Binding var isPostCompleted: Bool
-    @State var isProgress: Bool = false
-    
     @State var isShowImagePicker: Bool = false
     
     var body: some View {
@@ -57,8 +50,7 @@ struct DetailView: View {
                 Button("\(Image(systemName: "square.and.pencil")) レビューを書く") {
                     isShowPostSheet = true
                 }
-                .fullScreenCover(isPresented: $isShowPostSheet) {
-                    
+                .fullScreenCover(isPresented: $isShowPostSheet) {                    
                     ZStack {
                         VStack {
                             HStack {
@@ -70,15 +62,13 @@ struct DetailView: View {
                                 Spacer()
                                 
                                 Button("完了") {
+                                    detailViewModel.isTapped = true
                                     getedData = true
-                                    print("ブール\(getedData)")
-                                    // 評価 or コメントテキストが空あらアラート表示
+                                    // 評価 or コメントテキストが空ならアラート表示
                                     if (!isGoodOrBad || text.isEmpty) {
                                         showAlert = true
-                                        print("評価が空です")
-                                        print(showAlert)
                                     } else {
-                                        isProgress = true
+                                        detailViewModel.isProgress = true
                                         Task {
                                             imageUrl = await post.uploadImage(name: selectedMapInfo.name, image: selectedImage)
                                             print("URL表示　\(String(describing: imageUrl))")
@@ -87,7 +77,7 @@ struct DetailView: View {
                                             
                                             try await Task.sleep(nanoseconds: 5_000_000_000)
                                             
-                                            isProgress = false
+                                            detailViewModel.isProgress = false
                                             getedData = false
                                             isPostCompleted.toggle()
                                         }
@@ -109,14 +99,14 @@ struct DetailView: View {
                             }
                             .padding()
                             
-                            PostReviewView(isShowImagePicker: $isShowImagePicker, evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo, selectedImage: $selectedImage, isGoodOrBad: $isGoodOrBad)
+                            PostReviewView(isShowImagePicker: $isShowImagePicker, evaluation: $evaluation, text: $text, selectedMapInfo: selectedMapInfo, selectedImage: $selectedImage, isGoodOrBad: $isGoodOrBad, detailViewModel: detailViewModel)
                             
                             Spacer()
                         }
                         .presentationDetents([.height(500)])
                         .presentationBackground(Color.background)
                         
-                        if (isProgress) {
+                        if (detailViewModel.isProgress) {
                             ProgressView()
                                 .scaleEffect(1.5)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -167,147 +157,6 @@ struct DetailView: View {
             .padding(16)
         }
         .padding(.bottom, -50)
-    }
-}
-
-struct PostReviewView: View {
-    @State var isPressedThumbsUp: Bool = false
-    @State var isPressedThumbsDown: Bool = false
-    @Binding var isShowImagePicker: Bool
-    @Binding var evaluation: Int
-    @Binding var text: String
-    var selectedMapInfo: MapModel
-    var post = PostViewModel()
-    @Binding var selectedImage: UIImage?
-    @Binding var isGoodOrBad: Bool
-    
-    @FocusState var focus: Bool
-    
-    @State private var selectedPhotoItem: PhotosPickerItem? = nil
-    @State private var image: UIImage? = nil
-    
-    var body: some View {
-        VStack {
-            HStack {
-                Text("居心地")
-                    .padding(.leading)
-                
-                Spacer()
-                
-                Group {
-                    Button(action: {
-                        isPressedThumbsUp.toggle()
-                        if isPressedThumbsUp {
-                            isPressedThumbsDown = false
-                        }
-                        
-                        isGoodOrBad = isPressedThumbsUp // ボタンが押されているかどうかの判別
-                        
-                        evaluation = 0 // good
-                        
-                    }, label: {
-                        Image(systemName: "hand.thumbsup.circle.fill")
-                            .foregroundColor(isPressedThumbsUp ? .accentColor : .secondary)
-                    })
-                    
-                    Button(action: {
-                        isPressedThumbsDown.toggle()
-                        if isPressedThumbsDown {
-                            isPressedThumbsUp = false
-                        }
-                        
-                        isGoodOrBad = isPressedThumbsDown // ボタンが押されているかどうかの判別
-                        
-                        evaluation = 1 // bad
-                    }, label: {
-                        Image(systemName: "hand.thumbsdown.circle.fill")
-                            .foregroundColor(isPressedThumbsDown ? .accentColor : .secondary)
-                    })
-                }
-                .foregroundColor(.secondary)
-                .imageScale(.large)
-            }
-            .padding()
-            
-            Divider()
-                .padding([.horizontal])
-            
-            HStack {
-                VStack {
-                    TextEditor(text: $text)
-                        .textEditorStyle(PlainTextEditorStyle())
-                        .frame(height: 120)
-                        .keyboardType(.twitter)
-                        .font(.body)
-                        .background(Color.background)
-                        .cornerRadius(10.0)
-                        .focused($focus)
-                }
-                Spacer()
-            }
-            .padding([.horizontal])
-            
-            HStack {
-                VStack {
-                    
-                    ZStack(alignment: .topTrailing) {
-                        if let image = selectedImage {
-                            Image(uiImage: image)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                            
-                        }
-                        
-                        if(selectedImage != nil) {
-                            Button(action: {
-                                selectedImage = nil
-                            }, label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.gray)
-                            })
-                            .padding(.top,20)
-                            .padding(.trailing,10)
-                        }
-                    }
-                    HStack {
-                        if (isShowImagePicker) {
-                            PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
-                                Label(
-                                    title: { Text("写真を選ぶ") },
-                                    icon: { Image(systemName: "photo") }
-                                )
-                            }
-                            .onChange(of: selectedPhotoItem) {
-                                Task {
-                                    guard let imageData = try await selectedPhotoItem?.loadTransferable(type: Data.self) else { return }
-                                    guard let uiImage = UIImage(data: imageData) else { return }
-                                    selectedImage = uiImage
-                                }
-                            }
-                        }
-                        
-                        Spacer()
-                    }
-                }
-                Spacer()
-            }
-            .padding()
-            
-            Divider()
-                .padding([.horizontal])
-        }
-        .frame(width: 350)
-        .background(Color.component)
-        .cornerRadius(10)
-        .padding()
-        .onTapGesture {
-            focus = false
-        }
-        .onAppear {
-            print("レビューシートが表示された")
-            isShowImagePicker = true
-        }
-        
     }
 }
 
