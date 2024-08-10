@@ -61,7 +61,7 @@ struct DetailView: View {
                                 
                                 Spacer()
                                 
-                                Button("完了") {
+                                Button("送信") {
                                     detailViewModel.isTapped = true
                                     getedData = true
                                     // 評価 or コメントテキストが空ならアラート表示
