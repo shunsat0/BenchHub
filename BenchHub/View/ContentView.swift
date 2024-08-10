@@ -8,6 +8,13 @@
 import SwiftUI
 import MapKit
 
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
+
 struct ContentView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var mapDataViewModel = MapDataViewModel()
@@ -83,9 +90,16 @@ struct ContentView: View {
                                         focus.toggle()
                                     }
                                     .submitLabel(.search)
-                                    .focused($focus)
-                                    .onTapGesture {
-                                        focus.toggle()
+                                    .toolbar {
+                                        ToolbarItemGroup(placement: .keyboard) {
+                                            HStack {
+                                                Spacer()
+                                                Button("閉じる") {
+                                                    UIApplication.shared.endEditing()
+                                                }
+                                                Spacer().frame(width: 16)
+                                            }
+                                        }
                                     }
                                 
                                 // 検索文字が空ではない場合は、クリアボタンを表示
@@ -184,9 +198,6 @@ struct ContentView: View {
                 await mapDataViewModel.fetchData()
             }
         } // Map
-        .onTapGesture {
-            focus.toggle()
-        }
     }
 } // ZStack
 
