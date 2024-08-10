@@ -38,8 +38,7 @@ struct ContentView: View {
                                                                   longitude: 0.00)
     
     @State var isPostCompleted:Bool = false
-    
-    @FocusState var focus:Bool
+
     
     var body: some View {
         
@@ -87,7 +86,6 @@ struct ContentView: View {
                                     .onSubmit {
                                         searchText = inputText
                                         inputText = ""
-                                        focus.toggle()
                                     }
                                     .submitLabel(.search)
                                     .toolbar {
