@@ -142,176 +142,199 @@ struct PostBenchInfoView: View {
         }
         
         ZStack(alignment: .top) {
-            VStack {
-                MapReader{ proxy in
-                    Map(position: $position) {
-                        Annotation("", coordinate: place[0].location) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .fill(.orange)
-                                Text("🪑")
-                                    .padding(5)
+            ScrollView(showsIndicators: false) {
+                VStack {
+                    
+                    HStack {
+                        Text("ベンチの位置をタップしてください")
+                            .font(.caption2)
+                            .padding([.leading,.top])
+                        Spacer()
+                    }
+                    
+                    MapReader{ proxy in
+                        Map(position: $position) {
+                            Annotation("", coordinate: place[0].location) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .fill(.orange)
+                                    Text("🪑")
+                                        .padding(5)
+                                }
                             }
                         }
-                    }
-                    .frame(width: 300,height: 200)
-                    .cornerRadius(10.0)
-                    .mapControls {
-                        MapUserLocationButton()
-                            .mapControlVisibility(.hidden)
-                    }
-                    .task {
-                        let manager = CLLocationManager()
-                        manager.requestWhenInUseAuthorization()
-                    }
-                    .onTapGesture { position in
-                        if let selectedCoordinate = proxy.convert(position, from: .local) {
-                            coordinate = selectedCoordinate
+                        .frame(width: 300,height: 200)
+                        .cornerRadius(10.0)
+                        .mapControls {
+                            MapUserLocationButton()
+                                .mapControlVisibility(.hidden)
                         }
-                    }
-                    .padding()
-                }
-                
-                Divider()
-                    .padding([.horizontal])
-                
-                
-                TextEditor(text: $placeName)
-                    .textEditorStyle(PlainTextEditorStyle())
-                    .frame(height: 40)
-                    .font(.body)
-                    .background(Color.background)
-                    .cornerRadius(10.0)
-                    .submitLabel(.done)
-                    .padding()
-                    .focused($focusInputPlaceName)
-                    .onSubmit {
-                        focusInputPlaceName = false
-                    }
-                    .onTapGesture {
-                        focusInputPlaceName = true
-                    }
-                
-                Divider()
-                    .padding([.horizontal])
-                
-                HStack {
-                    Text("居心地")
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        isPressedThumbsUp.toggle()
-                        if isPressedThumbsUp {
-                            isPressedThumbsDown = false
+                        .task {
+                            let manager = CLLocationManager()
+                            manager.requestWhenInUseAuthorization()
                         }
-                        
-                        isGoodOrBad = isPressedThumbsUp // ボタンが押されているかどうかの判別
-                        
-                        evaluation = 0 // good
-                        
-                    }, label: {
-                        Image(systemName: "hand.thumbsup.circle.fill")
-                            .foregroundColor(isPressedThumbsUp ? .accentColor : .secondary)
-                    })
-                    .buttonStyle(PlainButtonStyle())
-                    
-                    Button(action: {
-                        isPressedThumbsDown.toggle()
-                        if isPressedThumbsDown {
-                            isPressedThumbsUp = false
+                        .onTapGesture { position in
+                            if let selectedCoordinate = proxy.convert(position, from: .local) {
+                                coordinate = selectedCoordinate
+                            }
                         }
-                        
-                        isGoodOrBad = isPressedThumbsDown // ボタンが押されているかどうかの判別
-                        
-                        evaluation = 1 // bad
-                    }, label: {
-                        Image(systemName: "hand.thumbsdown.circle.fill")
-                            .foregroundColor(isPressedThumbsDown ? .accentColor : .secondary)
-                    })
-                    .buttonStyle(PlainButtonStyle())
-                    
-                }
-                .padding(.horizontal)
-                
-                Divider()
-                    .padding([.horizontal])
-                
-                TextEditor(text: $text)
-                    .textEditorStyle(PlainTextEditorStyle())
-                    .frame(height: 120)
-                    .font(.body)
-                    .background(Color.background)
-                    .cornerRadius(10.0)
-                    .padding()
-                    .focused($focusInputReview)
-                    .submitLabel(.return)
-                    .onTapGesture {
-                        focusInputReview = true
+                        .padding()
                     }
-                
-                Divider()
-                    .padding(.horizontal)
-                
-                VStack {
-                    ZStack(alignment: .topTrailing) {
-                        if let image = selectedImage {
-                            Image(uiImage: image)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
+                    
+                    Divider()
+                        .padding([.horizontal])
+                    
+                    HStack {
+                        Text("場所名を入力してください")
+                            .font(.caption2)
+                            .padding([.leading,.top])
+                        Spacer()
+                    }
+                    
+                    TextEditor(text: $placeName)
+                        .textEditorStyle(PlainTextEditorStyle())
+                        .frame(height: 40)
+                        .font(.body)
+                        .background(Color.background)
+                        .cornerRadius(10.0)
+                        .submitLabel(.done)
+                        .padding()
+                        .focused($focusInputPlaceName)
+                        .onSubmit {
+                            focusInputPlaceName = false
+                        }
+                        .onTapGesture {
+                            focusInputPlaceName = true
+                        }
+                    
+                    Divider()
+                        .padding([.horizontal])
+                    
+                    HStack {
+                        Text("居心地")
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            isPressedThumbsUp.toggle()
+                            if isPressedThumbsUp {
+                                isPressedThumbsDown = false
+                            }
                             
+                            isGoodOrBad = isPressedThumbsUp // ボタンが押されているかどうかの判別
+                            
+                            evaluation = 0 // good
+                            
+                        }, label: {
+                            Image(systemName: "hand.thumbsup.circle.fill")
+                                .foregroundColor(isPressedThumbsUp ? .accentColor : .secondary)
+                        })
+                        .buttonStyle(PlainButtonStyle())
+                        
+                        Button(action: {
+                            isPressedThumbsDown.toggle()
+                            if isPressedThumbsDown {
+                                isPressedThumbsUp = false
+                            }
+                            
+                            isGoodOrBad = isPressedThumbsDown // ボタンが押されているかどうかの判別
+                            
+                            evaluation = 1 // bad
+                        }, label: {
+                            Image(systemName: "hand.thumbsdown.circle.fill")
+                                .foregroundColor(isPressedThumbsDown ? .accentColor : .secondary)
+                        })
+                        .buttonStyle(PlainButtonStyle())
+                        
+                    }
+                    .padding(.horizontal)
+                    
+                    Divider()
+                        .padding([.horizontal])
+                    
+                    HStack {
+                        Text("口コミを入力してください")
+                            .font(.caption2)
+                            .padding([.leading,.top])
+                        Spacer()
+                    }
+                    
+                    TextEditor(text: $text)
+                        .textEditorStyle(PlainTextEditorStyle())
+                        .frame(height: 120)
+                        .font(.body)
+                        .background(Color.background)
+                        .cornerRadius(10.0)
+                        .padding()
+                        .focused($focusInputReview)
+                        .submitLabel(.return)
+                        .onTapGesture {
+                            focusInputReview = true
+                        }
+                    
+                    Divider()
+                        .padding(.horizontal)
+                    
+                    VStack {
+                        ZStack(alignment: .topTrailing) {
+                            if let image = selectedImage {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                
+                            }
+                            
+                            if(selectedImage != nil) {
+                                Button(action: {
+                                    selectedImage = nil
+                                }, label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.gray)
+                                })
+                                .padding(.top,20)
+                                .padding(.trailing,10)
+                            }
                         }
                         
-                        if(selectedImage != nil) {
-                            Button(action: {
-                                selectedImage = nil
-                            }, label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.gray)
-                            })
-                            .padding(.top,20)
-                            .padding(.trailing,10)
+                        
+                        HStack {
+                            PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+                                Label(
+                                    title: { Text("写真を選ぶ") },
+                                    icon: { Image(systemName: "photo") }
+                                )
+                                .padding(.leading)
+                            }
+                            .onChange(of: selectedPhotoItem) {
+                                Task {
+                                    guard let imageData = try await selectedPhotoItem?.loadTransferable(type: Data.self) else { return }
+                                    guard let uiImage = UIImage(data: imageData) else { return }
+                                    selectedImage = uiImage
+                                }
+                            }
+                            
+                            Spacer()
                         }
+                        .padding()
+                        
                     }
+                    
+                    Divider()
+                        .padding(.horizontal)
                     
                     
                     HStack {
-                        PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
-                            Label(
-                                title: { Text("写真を選ぶ") },
-                                icon: { Image(systemName: "photo") }
-                            )
-                            .padding(.leading)
+                        Spacer()
+                        
+                        Button("送信") {
+                            newPost()
                         }
-                        .onChange(of: selectedPhotoItem) {
-                            Task {
-                                guard let imageData = try await selectedPhotoItem?.loadTransferable(type: Data.self) else { return }
-                                guard let uiImage = UIImage(data: imageData) else { return }
-                                selectedImage = uiImage
-                            }
-                        }
+                        .disabled(!isInputAll)
                         
                         Spacer()
                     }
                     .padding()
-                    
                 }
-                
-                Divider()
-                    .padding(.horizontal)
-                
-                
-                HStack {
-                    Spacer()
-                    
-                    Button("送信") {
-                        newPost()
-                    }
-                    .disabled(!isInputAll)
-                    
-                    Spacer()
-                }
-                .padding()
             }
             
             if(isPosting) {
@@ -323,7 +346,7 @@ struct PostBenchInfoView: View {
             }
             
         }
-        .frame(width: 350)
+        .frame(width: 380)
         .background(Color.component)
         .cornerRadius(10)
         .padding()

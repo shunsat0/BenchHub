@@ -143,7 +143,6 @@ struct PostReviewView: View {
             isShowImagePicker = true
         }
         .onChange(of: detailViewModel.isTapped) {
-            print("タップ: \(detailViewModel.isTapped)")
             focus = false
         }
         .onTapGesture {
