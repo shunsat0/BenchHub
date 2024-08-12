@@ -10,5 +10,7 @@ import Foundation
 final class DetailViewModel: ObservableObject {
     
     var selectedFramework: MapModel?
+    var isProgress:Bool = false
+    @Published var isTapped : Bool = false
     
 }

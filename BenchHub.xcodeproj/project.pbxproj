@@ -35,6 +35,7 @@
 		24D759382B73D20100A426DC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 24D759372B73D20100A426DC /* GoogleService-Info.plist */; };
 		24FA9CAD2C3AF9950037224F /* SystemNotification in Frameworks */ = {isa = PBXBuildFile; productRef = 24FA9CAC2C3AF9950037224F /* SystemNotification */; };
 		24FA9CAF2C3AFAFE0037224F /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 24FA9CAE2C3AFAFE0037224F /* FirebaseMessaging */; };
+		B1AEB6A82C67FE4A0037C138 /* PostReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AEB6A72C67FE4A0037C138 /* PostReviewView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		24CD65C12B77F660006C5001 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
 		24CD65F92B7BB25E006C5001 /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
 		24D759372B73D20100A426DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "View/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B1AEB6A72C67FE4A0037C138 /* PostReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 				2404D98A2BA0B21E00A74221 /* SettingView.swift */,
 				24057C892B6F6FA000503984 /* ContentView.swift */,
 				24057C8D2B6FE08200503984 /* DetailView.swift */,
+				B1AEB6A72C67FE4A0037C138 /* PostReviewView.swift */,
 				24910DB72B975BCA001311EF /* AnimationView.swift */,
 			);
 			path = View;
@@ -366,6 +369,7 @@
 				24C441052BDF8B83009FDE55 /* NewPostModel.swift in Sources */,
 				241F6D462BC1553100BF3FF3 /* PostCoordinateModel.swift in Sources */,
 				24057C8A2B6F6FA000503984 /* ContentView.swift in Sources */,
+				B1AEB6A82C67FE4A0037C138 /* PostReviewView.swift in Sources */,
 				24CD65C22B77F660006C5001 /* PostModel.swift in Sources */,
 				247EB06E2B728F4C0003CFD3 /* DetailViewModel.swift in Sources */,
 				248993062B821BE0006649BA /* MyAppCheckProviderFactory.swift in Sources */,
