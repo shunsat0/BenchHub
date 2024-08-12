@@ -211,10 +211,13 @@ struct PostBenchInfoView: View {
                         .padding([.horizontal])
                     
                     HStack {
-                        Text("居心地")
-                        
+                        Text("居心地を選択してください")
+                            .font(.caption2)
+                            .padding([.leading,.top,.bottom])
                         Spacer()
-                        
+                    }
+                    
+                    HStack {
                         Button(action: {
                             isPressedThumbsUp.toggle()
                             if isPressedThumbsUp {
@@ -248,8 +251,10 @@ struct PostBenchInfoView: View {
                         })
                         .buttonStyle(PlainButtonStyle())
                         
+                        Spacer()
+                        
                     }
-                    .padding(.horizontal)
+                    .padding([.horizontal,.bottom])
                     
                     Divider()
                         .padding([.horizontal])
