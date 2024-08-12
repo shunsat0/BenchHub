@@ -8,6 +8,13 @@
 import SwiftUI
 import MapKit
 
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
+
 struct ContentView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var mapDataViewModel = MapDataViewModel()
@@ -31,8 +38,7 @@ struct ContentView: View {
                                                                   longitude: 0.00)
     
     @State var isPostCompleted:Bool = false
-    
-    @FocusState var focus:Bool
+
     
     var body: some View {
         
@@ -80,12 +86,18 @@ struct ContentView: View {
                                     .onSubmit {
                                         searchText = inputText
                                         inputText = ""
-                                        focus.toggle()
                                     }
                                     .submitLabel(.search)
-                                    .focused($focus)
-                                    .onTapGesture {
-                                        focus.toggle()
+                                    .toolbar {
+                                        ToolbarItemGroup(placement: .keyboard) {
+                                            HStack {
+                                                Spacer()
+                                                Button("閉じる") {
+                                                    UIApplication.shared.endEditing()
+                                                }
+                                                Spacer().frame(width: 16)
+                                            }
+                                        }
                                     }
                                 
                                 // 検索文字が空ではない場合は、クリアボタンを表示
@@ -112,18 +124,12 @@ struct ContentView: View {
                             .padding(12)
                             .background(Color.background, in: RoundedRectangle(cornerRadius: 8))
                     }
-                    .onDisappear {
-                        print("設定画面")
-                    }
                     .onAppear {
-                        print("ホーム画面")
-                        print("更新")
                         Task {
                             await mapDataViewModel.fetchData()
                         }
                     }
                     .simultaneousGesture(TapGesture().onEnded {
-                        // 検索バーを閉じる
                         showSearchSheet = false
                     })
                     
@@ -184,9 +190,6 @@ struct ContentView: View {
                 await mapDataViewModel.fetchData()
             }
         } // Map
-        .onTapGesture {
-            focus.toggle()
-        }
     }
 } // ZStack
 
