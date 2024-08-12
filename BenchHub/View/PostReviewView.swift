@@ -47,6 +47,7 @@ struct PostReviewView: View {
                     }, label: {
                         Image(systemName: "hand.thumbsup.circle.fill")
                             .foregroundColor(isPressedThumbsUp ? .accentColor : .secondary)
+                            .imageScale(.large)
                     })
                     
                     Button(action: {
@@ -61,6 +62,7 @@ struct PostReviewView: View {
                     }, label: {
                         Image(systemName: "hand.thumbsdown.circle.fill")
                             .foregroundColor(isPressedThumbsDown ? .accentColor : .secondary)
+                            .imageScale(.large)
                     })
                 }
                 .foregroundColor(.secondary)

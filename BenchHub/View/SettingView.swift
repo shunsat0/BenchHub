@@ -228,6 +228,7 @@ struct PostBenchInfoView: View {
                         }, label: {
                             Image(systemName: "hand.thumbsup.circle.fill")
                                 .foregroundColor(isPressedThumbsUp ? .accentColor : .secondary)
+                                .imageScale(.large)
                         })
                         .buttonStyle(PlainButtonStyle())
                         
@@ -243,6 +244,7 @@ struct PostBenchInfoView: View {
                         }, label: {
                             Image(systemName: "hand.thumbsdown.circle.fill")
                                 .foregroundColor(isPressedThumbsDown ? .accentColor : .secondary)
+                                .imageScale(.large)
                         })
                         .buttonStyle(PlainButtonStyle())
                         
