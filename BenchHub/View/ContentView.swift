@@ -43,7 +43,6 @@ struct ContentView: View {
     var body: some View {
         
         ZStack() {
-            NavigationView {
                 MapReader {  proxy in
                     Map(position: $cameraPosition) {
                         UserAnnotation(anchor: .center)
@@ -115,7 +114,7 @@ struct ContentView: View {
                     
                     .padding(.horizontal)
                 }
-            }
+            
             
             VStack {
                 HStack {
@@ -141,6 +140,7 @@ struct ContentView: View {
                 Spacer()
             }
         }
+        .navigationBarHidden(true)
         .sheet(isPresented: $isShowReviewSheet,onDismiss: {
             showSearchSheet = true
         }) {
