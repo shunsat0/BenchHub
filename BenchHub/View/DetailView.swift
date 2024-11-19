@@ -283,6 +283,8 @@ struct CommentView: View {
                         Button {
                             withAnimation { isExpanded.toggle() }
                         } label: {
+                            
+                            //TODO: 治す
                             Text(isExpanded ? "一部を表示" : "もっと見る")
                                 .fontWeight(.regular)
                         }

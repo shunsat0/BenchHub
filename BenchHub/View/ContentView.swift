@@ -91,6 +91,7 @@ struct ContentView: View {
                                         ToolbarItemGroup(placement: .keyboard) {
                                             HStack {
                                                 Spacer()
+                                                // Simulatorだとキーボードを開いて検証すること
                                                 Button("閉じる") {
                                                     UIApplication.shared.endEditing()
                                                 }
