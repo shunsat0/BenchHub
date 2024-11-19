@@ -33,7 +33,7 @@ struct DetailView: View {
             HStack {
                 Text(selectedMapInfo.name)
                     .font(.title)
-                    .padding()
+                    .padding(EdgeInsets(.init(top: 32, leading: 16.0, bottom: 0, trailing: 0)))
                 
                 Spacer()
             }
