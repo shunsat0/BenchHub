@@ -216,9 +216,6 @@ struct ImagesListView: View {
                         placeholder: {
                             ProgressView()
                         }
-                        .onTapGesture {
-                            // Tap action here
-                        }
                         } else {
                             EmptyView()
                         }
