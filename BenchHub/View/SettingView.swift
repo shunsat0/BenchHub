@@ -26,6 +26,7 @@ private var settings = [
 
 
 struct SettingView: View {
+    // TODO: backgroundcolorをAssetsの色に変更する
     @Environment(\.dismiss) var dismiss
     @State var isToggleOn = true
     @State var isNotificationOn = false
