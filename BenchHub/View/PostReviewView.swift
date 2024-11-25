@@ -26,67 +26,74 @@ struct PostReviewView: View {
     @ObservedObject var detailViewModel: DetailViewModel
     
     var body: some View {
-        VStack {
+        
+        ScrollView(showsIndicators: false) {
             HStack {
-                Text("居心地")
-                    .padding(.leading)
+                Text("居心地を選択してください")
+                    .font(.caption2)
+                    .padding([.leading,.top,.bottom])
+                Spacer()
+            }
+            
+            HStack {
+                Button(action: {
+                    isPressedThumbsUp.toggle()
+                    if isPressedThumbsUp {
+                        isPressedThumbsDown = false
+                    }
+                    
+                    isGoodOrBad = isPressedThumbsUp // ボタンが押されているかどうかの判別
+                    
+                    evaluation = 0 // good
+                    
+                }, label: {
+                    Image(systemName: "hand.thumbsup.circle.fill")
+                        .foregroundColor(isPressedThumbsUp ? .accentColor : .secondary)
+                        .imageScale(.large)
+                })
+                
+                Button(action: {
+                    isPressedThumbsDown.toggle()
+                    if isPressedThumbsDown {
+                        isPressedThumbsUp = false
+                    }
+                    
+                    isGoodOrBad = isPressedThumbsDown // ボタンが押されているかどうかの判別
+                    
+                    evaluation = 1 // bad
+                }, label: {
+                    Image(systemName: "hand.thumbsdown.circle.fill")
+                        .foregroundColor(isPressedThumbsDown ? .accentColor : .secondary)
+                        .imageScale(.large)
+                })
+                .buttonStyle(PlainButtonStyle())
                 
                 Spacer()
-                
-                Group {
-                    Button(action: {
-                        isPressedThumbsUp.toggle()
-                        if isPressedThumbsUp {
-                            isPressedThumbsDown = false
-                        }
-                        
-                        isGoodOrBad = isPressedThumbsUp // ボタンが押されているかどうかの判別
-                        
-                        evaluation = 0 // good
-                        
-                    }, label: {
-                        Image(systemName: "hand.thumbsup.circle.fill")
-                            .foregroundColor(isPressedThumbsUp ? .accentColor : .secondary)
-                            .imageScale(.large)
-                    })
-                    
-                    Button(action: {
-                        isPressedThumbsDown.toggle()
-                        if isPressedThumbsDown {
-                            isPressedThumbsUp = false
-                        }
-                        
-                        isGoodOrBad = isPressedThumbsDown // ボタンが押されているかどうかの判別
-                        
-                        evaluation = 1 // bad
-                    }, label: {
-                        Image(systemName: "hand.thumbsdown.circle.fill")
-                            .foregroundColor(isPressedThumbsDown ? .accentColor : .secondary)
-                            .imageScale(.large)
-                    })
-                }
-                .foregroundColor(.secondary)
-                .imageScale(.large)
             }
-            .padding()
+            .padding([.horizontal,.bottom])
+            
             
             Divider()
                 .padding([.horizontal])
             
             HStack {
-                VStack {
-                    TextEditor(text: $text)
-                        .textEditorStyle(PlainTextEditorStyle())
-                        .frame(height: 120)
-                        .keyboardType(.twitter)
-                        .font(.body)
-                        .background(Color.background)
-                        .cornerRadius(10.0)
-                        .focused($focus)
-                }
+                Text("口コミを入力してください")
+                    .font(.caption2)
+                    .padding([.leading,.top])
                 Spacer()
             }
-            .padding([.horizontal])
+            
+            TextEditor(text: $text)
+                .textEditorStyle(PlainTextEditorStyle())
+                .frame(height: 120)
+                .font(.body)
+                .background(Color.component)
+                .cornerRadius(10.0)
+                .padding()
+                .focused($focus)
+            
+            Divider()
+                .padding([.horizontal])
             
             HStack {
                 VStack {
@@ -137,10 +144,6 @@ struct PostReviewView: View {
             Divider()
                 .padding([.horizontal])
         }
-        .frame(width: 350)
-        .background(Color.component)
-        .cornerRadius(10)
-        .padding()
         .onAppear {
             isShowImagePicker = true
         }
@@ -150,7 +153,5 @@ struct PostReviewView: View {
         .onTapGesture {
             focus = false
         }
-        
-        
     }
 }
