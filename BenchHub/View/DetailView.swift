@@ -33,7 +33,7 @@ struct DetailView: View {
             HStack {
                 Text(selectedMapInfo.name)
                     .font(.title)
-                    .padding()
+                    .padding(EdgeInsets(.init(top: 32, leading: 16.0, bottom: 0, trailing: 0)))
                 
                 Spacer()
             }
@@ -216,9 +216,6 @@ struct ImagesListView: View {
                         placeholder: {
                             ProgressView()
                         }
-                        .onTapGesture {
-                            // Tap action here
-                        }
                         } else {
                             EmptyView()
                         }
@@ -283,6 +280,8 @@ struct CommentView: View {
                         Button {
                             withAnimation { isExpanded.toggle() }
                         } label: {
+                            
+                            //TODO: 治す
                             Text(isExpanded ? "一部を表示" : "もっと見る")
                                 .fontWeight(.regular)
                         }
