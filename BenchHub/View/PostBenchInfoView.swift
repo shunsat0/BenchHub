@@ -11,7 +11,7 @@ import SystemNotification
 import WebUI
 import _PhotosUI_SwiftUI
 
-//TODO: 背景色の色とコンポーネントの色が逆かも
+//TODO: 背景色の色とコンポーネントの色が逆かも　あと文字が小さい
 struct PostBenchInfoView: View {
     @State var position: MapCameraPosition = .userLocation(fallback: .automatic)
     @State var placeName: String = ""
@@ -121,7 +121,7 @@ struct PostBenchInfoView: View {
                         .textEditorStyle(PlainTextEditorStyle())
                         .frame(height: 40)
                         .font(.body)
-                        .background(Color.background)
+                        .background(Color.component)
                         .cornerRadius(10.0)
                         .submitLabel(.done)
                         .padding()
@@ -196,7 +196,7 @@ struct PostBenchInfoView: View {
                         .textEditorStyle(PlainTextEditorStyle())
                         .frame(height: 120)
                         .font(.body)
-                        .background(Color.background)
+                        .background(Color.component)
                         .cornerRadius(10.0)
                         .padding()
                         .focused($focusInputReview)
@@ -278,7 +278,7 @@ struct PostBenchInfoView: View {
                     .edgesIgnoringSafeArea(.all)
             }
         }
-        .background(Color.component)
+        .background(Color.background)
         .fullScreenCover(isPresented: $isPosted) {
             ZStack {
                 VStack {
