@@ -10,53 +10,61 @@ import FirebaseFirestore
 import FirebaseStorage
 import SwiftUI
 
-final class PostViewModel: ObservableObject {    
+final class PostViewModel: ObservableObject {
+    @Published private(set) var isLoading = false
+    @Published var error: Error?
+    
+    private let storage = Storage.storage()
+    private let db = Firestore.firestore()
+    
     func addData(postData: PostModel) async {
-        let db = Firestore.firestore()
-        let reviewRef = db.collection("benchData").document("\(postData.id)")
+        await MainActor.run { isLoading = true }
         
         do {
+            let reviewRef = db.collection("benchData").document(postData.id)
             let document = try await reviewRef.getDocument()
+            
             guard let documentData = document.data() else {
-                print("エラー: データを取得できませんでした")
-                return
+                throw NSError(domain: "PostViewModel", code: -1, userInfo: [NSLocalizedDescriptionKey: "Document data not found"])
             }
             
-            // 新しいレビューを作成
-            let newReview: [String: Any] = ["date": Timestamp(date: Date()), "description": postData.description ?? "", "evaluation": postData.evaluation,"image": postData.imageUrl ?? nil]
+            let newReview: [String: Any] = [
+                "date": Timestamp(date: Date()),
+                "description": postData.description ?? "",
+                "evaluation": postData.evaluation,
+                "image": postData.imageUrl ?? NSNull()
+            ]
             
-            // 既存の`reviews`フィールドを取得し、新しいレビューを追加
             var reviews = documentData["reviews"] as? [[String: Any]] ?? []
             reviews.append(newReview)
             
-            // Firestoreに更新したreviews配列を書き込み
             try await reviewRef.updateData(["reviews": reviews])
-            print("Document successfully updated")
+            
+            await MainActor.run { isLoading = false }
         } catch {
-            print("Error updating document: \(error)")
+            await MainActor.run {
+                self.error = error
+                self.isLoading = false
+            }
         }
     }
     
-    func uploadImage(name: String, image: UIImage?)async-> String? {
-        let id = UUID()
-        
-        guard let selectedImage = image, let imageData = selectedImage.jpegData(compressionQuality: 1.0) else {
-            print("画像が選択されていない、または画像データを取得できませんでした")
+    func uploadImage(name: String, image: UIImage?) async -> String? {
+        guard let image = image,
+              let imageData = image.jpegData(compressionQuality: 0.8) else {
             return nil
         }
         
-        let storageRef = Storage.storage().reference(forURL: "gs://benchhub-e9fca.appspot.com").child("\(name)/\(id)")
+        let id = UUID().uuidString
+        let storageRef = storage.reference(forURL: "gs://benchhub-e9fca.appspot.com")
+            .child("\(name)/\(id)")
         
         do {
-            // 画像データをアップロード
-            let _ = try await storageRef.putDataAsync(imageData)
-            // アップロード成功後、ダウンロードURLを取得
+            _ = try await storageRef.putDataAsync(imageData)
             let downloadURL = try await storageRef.downloadURL()
-            
-            print("ダウンロードURL: \(String(describing: downloadURL))")
             return downloadURL.absoluteString
         } catch {
-            print("アップロードまたはダウンロードURLの取得に失敗しました: \(error.localizedDescription)")
+            await MainActor.run { self.error = error }
             return nil
         }
     }
