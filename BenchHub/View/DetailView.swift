@@ -272,20 +272,24 @@ struct CommentView: View {
                         }
                         .padding([.leading, .trailing, .top])
                         
-                        Text(review.description)
-                            .lineLimit(isExpanded ? nil : lineLimit)
-                            .fixedSize(horizontal: false, vertical: isExpanded)
-                            .frame(maxWidth: 300, alignment: .leading)
-                        
-                        Button {
-                            withAnimation { isExpanded.toggle() }
-                        } label: {
+                        ScrollView {
+                            Text(review.description)
+                                .lineLimit(isExpanded ? nil : lineLimit)
+                                .fixedSize(horizontal: false, vertical: isExpanded)
+                                .frame(maxWidth: 300, alignment: .leading)
                             
-                            //TODO: 治す
-                            Text(isExpanded ? "一部を表示" : "もっと見る")
-                                .fontWeight(.regular)
+                            Spacer()
+                            
+                            Button {
+                                withAnimation { isExpanded.toggle() }
+                            } label: {
+                                
+                                //TODO: 治す
+                                Text(isExpanded ? "一部を表示" : "もっと見る")
+                                    .fontWeight(.regular)
+                            }
+                            .frame(minWidth:300, maxWidth: 300, alignment: .bottomTrailing)
                         }
-                        .frame(minWidth:300, maxWidth: 300, alignment: .bottomTrailing)
                         
                         Spacer()
                     }
