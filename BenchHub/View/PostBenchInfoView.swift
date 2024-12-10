@@ -278,7 +278,6 @@ struct PostBenchInfoView: View {
                     .edgesIgnoringSafeArea(.all)
             }
         }
-        .background(Color.background)
         .fullScreenCover(isPresented: $isPosted) {
             ZStack {
                 VStack {

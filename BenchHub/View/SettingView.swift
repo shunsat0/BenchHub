@@ -33,44 +33,43 @@ struct SettingView: View {
     @FocusState var focus:Bool
     
     var body: some View {
-        VStack {
-            List {
-                Section(header: Text("通知")){
-                    HStack {
-                        Image(systemName: "bell")
-                            .foregroundColor(.accentColor)
-                        Toggle("お知らせ", isOn: $isToggleOn)
-                    }
-                    
+        List {
+            Section(header: Text("通知")){
+                HStack {
+                    Image(systemName: "bell")
+                        .foregroundColor(.accentColor)
+                    Toggle("お知らせ", isOn: $isToggleOn)
                 }
-                Section(header: Text("その他")){
-                    ForEach(settings) { setting in
-                        NavigationLink(
-                            destination: WebView(request: URLRequest(url: URL(string: setting.url)!)),
-                            label: {
-                                HStack {
-                                    Image(systemName: setting.icon)
-                                        .foregroundColor(.accentColor)
-                                    Text(setting.name)
-                                }
-                            }
-                        )
-                    }
-                }
-                Section(header: Text("口コミ")){
+                
+            }
+            Section(header: Text("その他")){
+                ForEach(settings) { setting in
                     NavigationLink(
-                        destination: PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false),
+                        destination: WebView(request: URLRequest(url: URL(string: setting.url)!)),
                         label: {
                             HStack {
-                                Image(systemName: "chair")
+                                Image(systemName: setting.icon)
                                     .foregroundColor(.accentColor)
-                                Text("ベンチ情報を追加")
+                                Text(setting.name)
                             }
                         }
                     )
                 }
             }
+            Section(header: Text("口コミ")){
+                NavigationLink(
+                    destination: PostBenchInfoView(evaluation: 0, text: "", isGoodOrBad: false),
+                    label: {
+                        HStack {
+                            Image(systemName: "chair")
+                                .foregroundColor(.accentColor)
+                            Text("ベンチ情報を追加")
+                        }
+                    }
+                )
+            }
         }
+        .scrollContentBackground(.hidden)
         .onChange(of: isToggleOn) {
             if(isToggleOn == true) {
                 isNotificationOn = true
@@ -85,4 +84,8 @@ struct SettingView: View {
                 .padding()
         }
     }
+}
+
+#Preview {
+    SettingView()
 }
