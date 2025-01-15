@@ -43,13 +43,10 @@ struct PostBenchInfoView: View {
     func newPost() {
         isPosting = true
         Task {
-            // 先に画像をアップロード
             imageUrl = await post.uploadImage(name: placeName, image: selectedImage)
             
-            // データ全体をアップロード
             await post.postNewData(newPostData: NewPostModel(id: placeName, evaluation: evaluation, description: text, imageUrl: imageUrl, latitude: coordinate.latitude, longitude: coordinate.longitude))
             
-            // 5秒間の遅延を挿入
             try await Task.sleep(nanoseconds: 5_000_000_000)
             
             isPosting = false
