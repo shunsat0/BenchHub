@@ -7,8 +7,9 @@
 
 import Foundation
 
+@Observable
 final class DetailViewModel: ObservableObject {
-    @Published var selectedFramework: MapModel?
-    @Published var isProgress: Bool = false
-    @Published var isTapped: Bool = false
+    var selectedFramework: MapModel?
+    var isProgress: Bool = false
+    var isTapped: Bool = false
 }

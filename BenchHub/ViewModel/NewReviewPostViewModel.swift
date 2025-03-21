@@ -10,12 +10,13 @@ import FirebaseFirestore
 import FirebaseStorage
 import SwiftUI
 
+@Observable
 final class NewReviewPostViewModel: ObservableObject {
-    @Published private(set) var isLoading = false
-    @Published var error: Error?
+    var isLoading = false
+    var error: Error?
     
-    private let storage = Storage.storage()
-    private let db = Firestore.firestore()
+    let storage = Storage.storage()
+    let db = Firestore.firestore()
     
     func postNewData(newPostData: NewPostModel) async {
         await MainActor.run { isLoading = true }
