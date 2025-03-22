@@ -13,9 +13,9 @@ struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State var isShowPostSheet: Bool
     var selectedMapInfo: MapModel
-    @StateObject var viewModel = MapDataViewModel()
-    @StateObject var detailViewModel = DetailViewModel()
-    @StateObject var post = PostViewModel()
+    @State var viewModel = MapDataViewModel()
+    @State var detailViewModel = DetailViewModel()
+    @State var post = PostViewModel()
     @State private var evaluation: Int = 2
     @State private var text: String = ""
     @Binding var isPostReview: Bool
