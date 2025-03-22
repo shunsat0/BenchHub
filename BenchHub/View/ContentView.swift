@@ -17,9 +17,9 @@ extension UIApplication {
 
 struct ContentView: View {
     @Environment(\.dismiss) private var dismiss
-    @StateObject var mapDataViewModel = MapDataViewModel()
-    @StateObject var detailViewModel = DetailViewModel()
-    @StateObject var postViewModel = PostViewModel()
+    @State var mapDataViewModel = MapDataViewModel()
+    @State var detailViewModel = DetailViewModel()
+    @State var postViewModel = PostViewModel()
     
     @State var position: MapCameraPosition = .userLocation(fallback: .automatic)
     @State var isShowReviewSheet: Bool = false

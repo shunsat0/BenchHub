@@ -8,10 +8,11 @@
 import Foundation
 import FirebaseFirestore
 
+@Observable
 final class MapDataViewModel: ObservableObject {
-    @Published private(set) var mapData = [MapModel]()
-    @Published private(set) var isLoading = false
-    @Published var error: Error?
+    var mapData = [MapModel]()
+    var isLoading = false
+    var error: Error?
     
     private let db = Firestore.firestore()
     

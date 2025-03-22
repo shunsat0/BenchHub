@@ -31,7 +31,7 @@ struct PostBenchInfoView: View {
     @FocusState var focusInputPlaceName:Bool
     @FocusState var focusInputReview:Bool
     
-    @StateObject var post = NewReviewPostViewModel()
+    @State var post = NewReviewPostViewModel()
     @Environment(\.dismiss) var dismiss
     
     @State var isInputAll: Bool = false
